@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CurAItion Story Candidate Handoff (click-bait-scout variant)",
+  "description": "Output of the click-bait-scout skill. SUPERSET of the cultural-scout story-candidate contract: every field the renderers (longform-post, tweet-thread, carousel-producer, digest) already read is preserved, so this validates as a drop-in. Adds a `mode` discriminator, a per-candidate `virality` block, and source-credibility fields. For click-bait, the primary `the_signal_24h.citations` MUST be live web sources (WebSearch/web_fetch) inside the 24h window; any CurAItion facts are optional and live in `the_depth_90d` / `curaition_crossref`.",
+  "type": "object",
+  "required": ["generated_at", "mode", "candidates", "selected_candidate_id"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "mode": {
+      "type": "string",
+      "enum": ["click-bait", "cultural"],
+      "description": "Discriminator so renderers can adjust tone (urgent/topical vs evergreen/curious). click-bait-scout always emits 'click-bait'."
+    },
+    "window": {
+      "type": "object",
+      "description": "For click-bait, fresh_hours is a HARD filter (default 24, max 48 for a still-accelerating story).",
+      "properties": {
+        "fresh_hours": { "type": "integer", "default": 24 },
+        "fresh_hours_max": { "type": "integer", "default": 48 },
+        "window_start": { "type": "string", "format": "date-time" },
+        "window_end": { "type": "string", "format": "date-time" },
+        "depth_days_min": { "type": "integer", "default": 90, "description": "Only relevant when a CurAItion depth layer is attached." }
+      }
+    },
+    "scope_verification": {
+      "type": "object",
+      "description": "OPTIONAL for click-bait (web-first). Populate ONLY if CurAItion was queried as a cross-reference; proves the library-only scope held. Omit entirely on a pure-web run.",
+      "properties": {
+        "curaition_used": { "type": "boolean", "description": "false on a pure-web run; true if CurAItion cross-ref was called" },
+        "source_scope": { "type": "string", "const": "library" },
+        "effective_org_id_null": { "type": "boolean" },
+        "external_safe": { "type": "boolean" },
+        "checked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "rank", "headline_hypothesis", "domains", "scores", "the_signal_24h", "why_it_matters", "virality", "provenance"],
+        "properties": {
+          "id": { "type": "string" },
+          "rank": { "type": "integer" },
+          "headline_hypothesis": { "type": "string", "description": "The punchy, screenshot-ready angle in one line. Not a final headline." },
+          "domains": { "type": "array", "items": { "type": "string" }, "description": "Contexts/domains this signal spans (news, politics, markets, crypto, sport, tech, entertainment, internet_culture, etc.). 2+ is the stronger case." },
+          "entities": { "type": "array", "items": { "type": "string" } },
+          "the_signal_24h": {
+            "type": "object",
+            "description": "The live story. For click-bait, citations MUST be web sources inside the freshness window.",
+            "required": ["summary", "citations"],
+            "properties": {
+              "summary": { "type": "string" },
+              "metrics": { "type": "object", "description": "outlet count, platform spread, search-interest/share deltas, exact figures from the story, etc." },
+              "promotional_flag": { "type": "boolean", "description": "true if the source is a press release / promo dressed as news — should lower rank" },
+              "citations": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["url"],
+                  "properties": {
+                    "content_id": { "type": "string", "description": "Optional; present only for CurAItion-sourced items." },
+                    "url": { "type": "string" },
+                    "title": { "type": "string" },
+                    "outlet": { "type": "string", "description": "Publisher/source name — used by the two-source corroboration rule." },
+                    "domain": { "type": "string" },
+                    "published_at": { "type": "string", "description": "Timestamp; must fall inside the freshness window." },
+                    "source": { "type": "string", "enum": ["WebSearch", "WebFetch", "CurAItion"], "default": "WebFetch" }
+                  }
+                }
+              }
+            }
+          },
+          "virality": {
+            "type": "object",
+            "description": "click-bait-specific signal block. The reason this scout exists.",
+            "required": ["virality_signal", "headline_grab", "source_velocity", "corroboration", "brand_safety"],
+            "properties": {
+              "virality_signal": { "type": "integer", "minimum": 0, "maximum": 3, "description": "How fast + wide it is spreading right now (Velocity/spread score)." },
+              "headline_grab": { "type": "integer", "minimum": 0, "maximum": 3, "description": "Strength of the screenshot-ready hook." },
+              "source_velocity": { "type": "string", "description": "Human-readable spread, e.g. 'covered by 6+ outlets in 8h; trending on X & Reddit'." },
+              "platforms": { "type": "array", "items": { "type": "string" }, "description": "Where it is spreading: x, reddit, tiktok, news_wires, youtube, etc." },
+              "corroboration": {
+                "type": "string",
+                "enum": ["multi-source", "single-source", "unverified"],
+                "description": "multi-source (2+ independent reputable outlets) is REQUIRED for selection."
+              },
+              "brand_safety": {
+                "type": "string",
+                "enum": ["safe", "sensitive", "unsafe"],
+                "description": "sensitive = tragedy/private individuals → handle soberly; unsafe = hoax/defamation/exploitative → cannot be selected."
+              },
+              "freshness_hours": { "type": "number", "description": "Hours since the story broke/spiked. Must be <= window.fresh_hours_max." },
+              "still_accelerating": { "type": "boolean" }
+            }
+          },
+          "the_depth_90d": {
+            "type": "object",
+            "description": "OPTIONAL CurAItion depth layer — the slow build behind today's spike. The signature move that beats a pure-news take.",
+            "properties": {
+              "summary": { "type": "string" },
+              "connection_type": { "type": "string", "enum": ["recurrence", "echo", "inversion", "escalation", "absence", "slow-build", "other"] },
+              "citations": { "type": "array", "items": { "type": "object" } }
+            }
+          },
+          "curaition_crossref": {
+            "type": "object",
+            "description": "OPTIONAL. Result of the 'do we already track this?' check. Omit on a pure-web run.",
+            "properties": {
+              "library_sees_it": { "type": "boolean" },
+              "matched_entities": { "type": "array", "items": { "type": "string" } },
+              "note": { "type": "string" }
+            }
+          },
+          "why_now": { "type": "string", "description": "Causal hypothesis for the spike — what tripped it in the last 24h." },
+          "why_it_matters": { "type": "string", "description": "Interpretive lift, explicitly derived from the cited facts above." },
+          "surprise_factor": { "type": "string", "description": "The hook — what makes a reader stop and click/share." },
+          "scores": {
+            "type": "object",
+            "required": ["total"],
+            "properties": {
+              "velocity_spread": { "type": "integer" },
+              "headline_grab": { "type": "integer" },
+              "freshness": { "type": "integer" },
+              "cross_domain_reach": { "type": "integer" },
+              "curaition_depth": { "type": "integer" },
+              "evidence": { "type": "integer" },
+              "penalties": { "type": "integer" },
+              "total": { "type": "integer" }
+            }
+          },
+          "suggested_formats": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["longform-post", "tweet-thread", "carousel-producer", "digest"] }
+          },
+          "relationship_verifications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "claim": { "type": "string" },
+                "corroborating_outlet": { "type": "string" },
+                "evidence_url": { "type": "string" }
+              }
+            }
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["data_point", "tool"],
+              "properties": {
+                "data_point": { "type": "string" },
+                "tool": { "type": "string" },
+                "source": { "type": "string", "enum": ["WebSearch", "WebFetch", "CurAItion"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "selected_candidate_id": { "type": "string", "description": "The top pick: corroborated (multi-source), brand_safety != unsafe, inside the freshness window." }
+  }
+}

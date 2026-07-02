@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CurAItion Story Candidate Handoff",
+  "description": "Output of the cultural-scout skill. Consumed by renderer skills (longform-post, tweet-thread, carousel-producer, digest). All facts must be library-sourced (source_scope: 'library') and citation-backed.",
+  "type": "object",
+  "required": ["generated_at", "scope_verification", "candidates", "selected_candidate_id"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "window": {
+      "type": "object",
+      "properties": {
+        "fresh_hours": { "type": "integer", "default": 24 },
+        "depth_days_min": { "type": "integer", "default": 90 }
+      }
+    },
+    "scope_verification": {
+      "type": "object",
+      "description": "Proof the library-only scope contract held. A candidate is INVALID if either canary failed.",
+      "required": ["source_scope", "effective_org_id_null", "external_safe", "athlete_canary_count"],
+      "properties": {
+        "source_scope": { "type": "string", "const": "library" },
+        "effective_org_id_null": { "type": "boolean", "description": "envelope.scope.effective_org_id === null — must be true" },
+        "external_safe": { "type": "boolean", "description": "envelope.external_safe === true — must be true" },
+        "athlete_canary_handle": { "type": "string", "description": "the Partner-Ecosystem handle probed" },
+        "athlete_canary_count": { "type": "integer", "description": "items returned for the athlete-leak probe — must be 0" },
+        "checked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "rank", "headline_hypothesis", "domains", "scores", "the_signal_24h", "why_it_matters", "provenance"],
+        "properties": {
+          "id": { "type": "string" },
+          "rank": { "type": "integer" },
+          "headline_hypothesis": { "type": "string", "description": "The angle in one line. Not a final headline." },
+          "domains": { "type": "array", "items": { "type": "string" }, "description": "Library domains this signal spans. 2+ is the strong case." },
+          "entities": { "type": "array", "items": { "type": "string" } },
+          "the_signal_24h": {
+            "type": "object",
+            "required": ["summary", "citations"],
+            "properties": {
+              "summary": { "type": "string" },
+              "metrics": { "type": "object", "description": "trend delta %, quality scores, source counts, etc." },
+              "promotional_flag": { "type": "boolean", "description": "true if the source content is intent_class sale/product_benefit — should lower rank" },
+              "citations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["content_id", "url"],
+                  "properties": {
+                    "content_id": { "type": "string" },
+                    "url": { "type": "string" },
+                    "title": { "type": "string" },
+                    "domain": { "type": "string" },
+                    "published_at": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "the_depth_90d": {
+            "type": "object",
+            "description": "The 90d+ connection that gives the story depth. The CurAItion signature move.",
+            "properties": {
+              "summary": { "type": "string" },
+              "connection_type": { "type": "string", "enum": ["recurrence", "echo", "inversion", "escalation", "absence", "other"] },
+              "citations": { "type": "array", "items": { "type": "object" } }
+            }
+          },
+          "why_now": { "type": "string", "description": "Web-grounded causal hypothesis from why_now_analysis + WebSearch." },
+          "why_it_matters": { "type": "string", "description": "Interpretive lift, explicitly derived from the cited facts above." },
+          "surprise_factor": { "type": "string", "description": "What makes this non-obvious / why a human team would miss it." },
+          "scores": {
+            "type": "object",
+            "required": ["total"],
+            "properties": {
+              "cross_domain_bridge": { "type": "integer" },
+              "time_depth": { "type": "integer" },
+              "surprise": { "type": "integer" },
+              "novelty": { "type": "integer" },
+              "evidence": { "type": "integer" },
+              "penalties": { "type": "integer" },
+              "total": { "type": "integer" }
+            }
+          },
+          "suggested_formats": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["longform-post", "tweet-thread", "carousel-producer", "digest"] }
+          },
+          "relationship_verifications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entity": { "type": "string" },
+                "relationship": { "type": "string" },
+                "evidence_url": { "type": "string" }
+              }
+            }
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["data_point", "tool"],
+              "properties": {
+                "data_point": { "type": "string" },
+                "tool": { "type": "string" },
+                "source": { "type": "string", "enum": ["CurAItion", "WebSearch"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "selected_candidate_id": { "type": "string", "description": "The top pick for today's one-story-many-formats run." }
+  }
+}
