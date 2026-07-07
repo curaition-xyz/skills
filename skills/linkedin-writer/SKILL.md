@@ -1,0 +1,131 @@
+---
+name: linkedin-writer
+description: >-
+  Render a committed CurAItion Story Package into one on-voice LinkedIn post.
+  Stage 3 (rendering) of the daily publishing chain: consumes a
+  story-package.json from story-packager plus the bundled CurAItion
+  tone-of-voice, and emits a single dry, argument-led, 150-250 word LinkedIn
+  post that ends on a provocation. Facts are frozen (it may only assert claims
+  present in the package's facts[]); voice and framing are malleable. Ships a
+  voice-lint gate. Use when the user asks to "write the LinkedIn post", "render
+  this package for LinkedIn", "turn this story package into a LinkedIn post",
+  or names LinkedIn as the target channel for a packaged story. Consumes a
+  story-package; if given only a raw scout handoff, run story-packager first.
+---
+
+# CurAItion LinkedIn Writer
+
+The story-packager committed the story and froze its facts. This skill does one
+thing: render that package into a single LinkedIn post in CurAItion's voice.
+It is a **renderer** (Stage 3 of the daily publishing chain), downstream of
+story-packager. It writes prose; it never re-derives the story or invents a
+fact.
+
+The governing rule, inherited from the package: **facts are frozen, craft is
+malleable.** You may reorder, select by importance, compress and rephrase. You
+may never assert a claim that is not in the package's `facts[]`.
+
+## Inputs
+
+- **Required:** `story-package-<date>.json` (schema owned by story-packager:
+  `story-packager/references/story-package.schema.json`). Read:
+  - `editorial.thesis` — the one-sentence argument the post must land.
+  - `editorial.hooks` — candidate opening reframes.
+  - `editorial.narrative_spine` — the ordered beats. Each beat's `beat_type`
+    governs how you may use it:
+    - `grounded` — rests on cited facts; state it plainly, drawing only on the
+      `supports` fact ids.
+    - `lift` — interpretive bridge (the CurAItion "part the coverage skips").
+      Frame it as a read, never as flat fact ("the argument sat there for a
+      quarter" is analysis, not a datum).
+    - `structural` — mechanical (e.g. the comments CTA).
+  - `editorial.headline_options` — a pool to draw the hook's angle from (adapt,
+    don't originate).
+  - `editorial.tone` — `primary_need`, `primary_axis`, `register`. Let the need
+    steer emphasis (e.g. "Give me perspective" → lead with the reframe).
+  - `facts[]` — the frozen ground truth, each with `importance` (0-3) and a
+    `layer`. For a 150-250 word post, keep only importance 2-3 facts.
+  - `channel_plan["linkedin-writer"]` — per-channel steering when present:
+    `lead_with`, `length`, a `beats` subset of the spine, `use_assets`,
+    `need_emphasis`. This is steering, not copy. Honour it.
+- **Voice source (bundled):** `references/curaition-tone-of-voice.md`. This is
+  the authority on voice. The essentials below are a summary, not a substitute.
+
+## Voice (from the tone-of-voice guide)
+
+Dry, precise, direct. Authority without arrogance. One senior practitioner
+writing to another, never a vendor pitching.
+
+- **Short sentences.** One idea each. Split anything over two clauses.
+- **No filler openers.** Never "We're excited to…", "In today's evolving…".
+  Start with the thing.
+- **British English.** Colour, realise, organisation. No exceptions.
+- **No em dashes.** Use a full stop or a comma.
+- **Self-aware, not cringe.** A point of view on ourselves, without preciousness.
+
+LinkedIn calibration: **dry, argument-led, no product pitch, 150-250 words, end
+with a question or provocation.** No sign-off (the "Ben + Rick" sign-off is for
+DMs and email, not posts).
+
+## Structure (the shape that works)
+
+Derived from the calibrated reference post (`examples/`). Map the package's spine
+onto it; don't pad to fill it.
+
+1. **Reframe hook** (1-3 short lines). Flip the obvious read. State the headline
+   fact, then undercut it. *"Bitcoin went up while tech went down. That's the
+   headline. It's the least interesting thing that happened."*
+2. **What actually happened** — the core grounded facts, compressed. Cited facts
+   only; lead with specifics and numbers.
+3. **The part the coverage skips** — the `lift` beat. The CurAItion angle that
+   reframes the news (the depth layer, the pattern). Framed as interpretation.
+4. **The tension** — the `so_what`. Often a counter-fact that complicates the
+   easy read (price vs flows).
+5. **Provocation close** — one question that hands the argument to the reader.
+   *"Which one are you trading?"*
+6. **CTA** — `Full breakdown in the comments.` (drives to the longform / source;
+   this is the `structural` beat).
+
+## Rules (the guardrails)
+
+1. **Facts-only.** Every claim traces to `facts[]`. No new numbers, names, or
+   sources. If the post needs a fact the package lacks, stop and say so.
+2. **Lift stays interpretation.** Never state a `lift` beat as a flat fact.
+3. **150-250 words.** If it won't fit, cut, don't shrink the idea.
+4. **End on a question or provocation.** Never a summary, never a pitch.
+5. **British English, no em dashes, no filler opener.** Enforced by the lint.
+6. **No product pitch.** The intelligence is the case. Let it stand.
+7. **Hashtags:** none, or at most 1-3 tasteful. Never a stack.
+
+## Output, then validate
+
+Write the post to the package's staging folder as
+`<slug>-linkedin.md` — the post body only, no descriptive H1 (a LinkedIn post
+has no headline). Then run the gate:
+
+```
+python scripts/voice_lint.py <slug>-linkedin.md --channel linkedin \
+  --package story-package-<date>.json
+```
+
+It must exit 0 (no hard failures) before you present the draft. Hard failures:
+em dashes, US spelling, filler openers, word count outside 140-260. Warnings
+(numbers not traceable to `facts[]`, over-long sentences) are for review — read
+them; a warned number usually means a fact-fidelity slip to fix.
+
+## Reference files
+
+- `references/curaition-tone-of-voice.md` — the voice authority (bundled).
+- `scripts/voice_lint.py` — the "validate, don't hope" gate. Run every time.
+- `examples/` — a golden input/output pair: the source package
+  (`story-package-clickbait-withneeds-2026-07-02.json`) and the rendered post
+  (`linkedin-bitcoin-decoupling.md`) it produces. The post passes the lint with
+  zero warnings; use it as the calibration target.
+
+The story-package contract itself is owned by story-packager
+(`story-packager/references/story-package.schema.json`) — this skill consumes
+it, it does not redefine it.
+
+---
+
+*CurAItion Intelligence Desk · LinkedIn Writer · one package, one post, facts frozen · renderer stage of the daily publishing chain*
