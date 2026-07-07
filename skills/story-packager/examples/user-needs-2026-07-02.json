@@ -1,0 +1,121 @@
+{
+  "generated_at": "2026-07-02T23:35:00Z",
+  "framework": "smartocto / Shishkin User Needs Model 2.0",
+  "source_story_candidate_file": "clickbait-candidate-2026-07-02.json",
+  "classifications": [
+    {
+      "candidate_id": "bitcoin-decouples-from-tech",
+      "need_scores": {
+        "update_me": 2,
+        "keep_me_engaged": 1,
+        "give_me_perspective": 3,
+        "educate_me": 1,
+        "inspire_me": 0,
+        "divert_me": 0,
+        "help_me": 1,
+        "connect_me": 0
+      },
+      "primary_need": "give_me_perspective",
+      "primary_axis": "understand",
+      "primary_rationale": "The candidate's why_it_matters foregrounds interpretation, not the price: the real story is whether a decoupling the ETFs are selling into (~$296M outflows) actually means anything. That 'so what' layer over the fact is Give me perspective, not Update me.",
+      "secondary_need": "update_me",
+      "secondary_axis": "know",
+      "secondary_rationale": "It is still a fresh, dated market move (Bitcoin above $61K on 2 July as the Nasdaq fell) — a legitimate Update-me spine, but held as secondary since the flat recap is not where the value is.",
+      "format_vs_need_note": "suggested_formats are tweet-thread and longform-post. A longform could be reflexively tagged Give me perspective and a tweet-thread tagged Update me — but format is the container, not the need. The perspective angle can run as a 6-tweet thread; a longform could just as easily be a flat recap. Classify the job, not the shape.",
+      "brand_specific_flavour": "For a crypto-investor audience this sharpens to a WSJ-style 'Give me an edge' — the interpretation that tells a reader whether to trust the move — but it maps cleanly onto Give me perspective.",
+      "angle_guidance": {
+        "need": "give_me_perspective",
+        "questions_to_ask": [
+          "Has Bitcoin decoupled from equities before, and did it hold or snap back within weeks?",
+          "Historically, does a rally that spot-ETFs are selling into (~$296M out, ~$220M from IBIT) tend to continue or reverse?",
+          "Is a catalyst from a non-voting ex-Fed governor (Warsh, at Sintra) a durable driver or a one-day narrative peg?",
+          "CurAItion has tracked the decoupling thesis since March — is today the thesis confirming, or the same false dawn recurring?"
+        ],
+        "headline_options": [
+          "Bitcoin Broke From Tech for a Day. Here's Whether It Lasts.",
+          "The Decoupling Is Real. The Buyers Aren't."
+        ]
+      },
+      "secondary_angle_guidance": {
+        "need": "update_me",
+        "questions_to_ask": [
+          "What are the exact closing levels and the day's key macro prints (payrolls, Warsh remarks)?",
+          "What's the next dated catalyst — CPI, jobs, Fed speakers — that could confirm or kill the move?"
+        ],
+        "headline_options": [
+          "Bitcoin Holds Above $61K as the Nasdaq Slips: July 2 Market Recap"
+        ]
+      }
+    },
+    {
+      "candidate_id": "swift-kelce-msg-wedding",
+      "need_scores": {
+        "update_me": 2,
+        "keep_me_engaged": 3,
+        "give_me_perspective": 1,
+        "educate_me": 0,
+        "inspire_me": 1,
+        "divert_me": 2,
+        "help_me": 0,
+        "connect_me": 1
+      },
+      "primary_need": "keep_me_engaged",
+      "primary_axis": "know",
+      "primary_rationale": "The value is participating in the conversation everyone is already having — the MSG takeover, 1,000+ guests, the Krispy Kreme-truck detail. That's staying current with a live cultural current (Keep me engaged), more than a hard news update.",
+      "secondary_need": "divert_me",
+      "secondary_axis": "feel",
+      "secondary_rationale": "The spectacle detail (whole Krispy Kreme truck, lobster catering) is pure absorbing entertainment — Divert me — but it rides on the conversation rather than standing alone.",
+      "format_vs_need_note": "suggested_formats is tweet-thread; don't mistake the fast format for an Update-me need — the job here is joining the conversation, not breaking the fact.",
+      "angle_guidance": {
+        "need": "keep_me_engaged",
+        "questions_to_ask": [
+          "What's the single most screenshot-shared detail people are reacting to right now?",
+          "How is the coverage itself becoming the story (guest list, spend, secrecy)?",
+          "Is there a CurAItion-style angle on celebrity-wedding-as-content that adds something outlets aren't saying?"
+        ],
+        "headline_options": [
+          "Everything People Can't Stop Talking About in the MSG Wedding"
+        ]
+      }
+    },
+    {
+      "candidate_id": "alvarez-real-madrid-bid",
+      "need_scores": {
+        "update_me": 3,
+        "keep_me_engaged": 2,
+        "give_me_perspective": 1,
+        "educate_me": 0,
+        "inspire_me": 0,
+        "divert_me": 1,
+        "help_me": 0,
+        "connect_me": 0
+      },
+      "primary_need": "update_me",
+      "primary_axis": "know",
+      "primary_rationale": "A dated, corroborated development with a verbatim quote: Alvarez requested to leave, Real Madrid bid €150M, Atletico rejected it. This is a classic what/when Update-me spine.",
+      "secondary_need": "keep_me_engaged",
+      "secondary_axis": "know",
+      "secondary_rationale": "It feeds the ongoing transfer-saga conversation, but the primary payoff is the fact of the bid itself.",
+      "format_vs_need_note": "tweet-thread format suits the Update-me need here — for once format and need align, so no confusion to flag beyond noting they still aren't the same axis.",
+      "angle_guidance": {
+        "need": "update_me",
+        "questions_to_ask": [
+          "What are the confirmed numbers — bid, release clause, wage terms — and who has said what on record?",
+          "What is the next concrete step and its likely date (second bid, deadline, medical)?"
+        ],
+        "headline_options": [
+          "Real Madrid Bid €150M for Alvarez; Atletico Say No"
+        ]
+      }
+    }
+  ],
+  "portfolio_balance": {
+    "editions_scanned": 1,
+    "window_note": "No prior user-needs editions found in the staging folder — this is the first run (n=1).",
+    "primary_need_tally": { "give_me_perspective": 1 },
+    "skew_flag": false,
+    "skew_detail": "n=1 window: nothing to balance against yet. Reporting honestly rather than manufacturing a recommendation.",
+    "recommendation": "First edition — establish rotation going forward. Worth noting the selected story would default to Update me if reported flat, but its cited facts support Give me perspective; that's the healthier instinct given the research warns Update me is overproduced. Runners-up would have served Keep me engaged (wedding) and Update me (transfer), so the studio had a spread of needs available today."
+  },
+  "selected_candidate_id": "bitcoin-decouples-from-tech"
+}

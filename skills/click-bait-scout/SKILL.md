@@ -224,4 +224,4 @@ Default for a hot story: **tweet-thread first** (speed wins on a live wave), the
 - `references/story-candidate.schema.json` — the handoff contract every renderer reads (shared
   with cultural-scout; adds the `virality` block + `mode` discriminator).
 
-*CurAItion Intelligence Desk · Click-Bait Scout · immediacy over curiosity · corroborate before you amplify · fast-lane Stage 1 of the daily dog-food chain*
+*CurAItion Intelligence Desk · Click-Bait Scout · immediacy over curiosity · corroborate before you amplify · fast-lane Stage 1 of the daily publishing chain*

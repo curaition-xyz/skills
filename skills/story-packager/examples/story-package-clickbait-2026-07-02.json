@@ -1,0 +1,176 @@
+{
+  "schema_version": "curaition.story-package/v1",
+  "generated_at": "2026-07-02T23:20:00Z",
+  "package_id": "pkg-2026-07-02-bitcoin-decouples-from-tech",
+
+  "source": {
+    "story_candidate_file": "clickbait-candidate-2026-07-02.json",
+    "candidate_id": "bitcoin-decouples-from-tech",
+    "mode": "click-bait",
+    "scope_verification": {
+      "source_scope": "library",
+      "effective_org_id_null": true,
+      "external_safe": true,
+      "curaition_used": true,
+      "checked_at": "2026-07-02T22:58:45.240Z"
+    },
+    "virality": {
+      "brand_safety": "safe",
+      "still_accelerating": true,
+      "freshness_hours": 6
+    }
+  },
+
+  "facts": [
+    {
+      "id": "f1",
+      "claim": "On 2 July 2026 Bitcoin rose ~2% and held above $61,000 (intraday ~$61,430, +2.7% on the day), with Ethereum up ~5% to ~$1,696.",
+      "importance": 3,
+      "layer": "signal_24h",
+      "citations": [
+        { "url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/", "outlet": "The Motley Fool", "published_at": "2026-07-02T21:27:29Z" },
+        { "url": "https://coinpedia.org/news/why-is-crypto-market-going-up-today-july-2nd/", "outlet": "Coinpedia", "published_at": "2026-07-02T05:34:11Z" }
+      ],
+      "source": "WebFetch",
+      "confidence": "high",
+      "quotable_verbatim": true
+    },
+    {
+      "id": "f2",
+      "claim": "Crypto diverged from equities: lead tokens gained while the Nasdaq fell ~0.8%, a day after the S&P closed -0.22% on 1 July.",
+      "importance": 3,
+      "layer": "signal_24h",
+      "citations": [
+        { "url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/", "outlet": "The Motley Fool", "published_at": "2026-07-02T21:27:29Z" }
+      ],
+      "source": "WebFetch",
+      "confidence": "high",
+      "quotable_verbatim": true
+    },
+    {
+      "id": "f3",
+      "claim": "The move followed ex-Fed governor Kevin Warsh's ECB-Forum (Sintra) comments on AI-driven productivity gains and scope for future rate cuts, plus a weak June US payrolls print (+57,000 jobs).",
+      "importance": 2,
+      "layer": "why_now",
+      "citations": [
+        { "url": "https://coinpedia.org/news/why-is-crypto-market-going-up-today-july-2nd/", "outlet": "Coinpedia", "published_at": "2026-07-02T05:34:11Z" },
+        { "url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/", "outlet": "The Motley Fool", "published_at": "2026-07-02T21:27:29Z" }
+      ],
+      "source": "WebFetch",
+      "confidence": "medium"
+    },
+    {
+      "id": "f4",
+      "claim": "Even as prices rose, spot Bitcoin ETFs kept bleeding — ~$296M in total outflows, ~$220M from iShares Bitcoin Trust (IBIT) — indicating institutions have not returned.",
+      "importance": 2,
+      "layer": "signal_24h",
+      "citations": [
+        { "url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/", "outlet": "The Motley Fool", "published_at": "2026-07-02T21:27:29Z" }
+      ],
+      "source": "WebFetch",
+      "confidence": "high",
+      "quotable_verbatim": true
+    },
+    {
+      "id": "f5",
+      "claim": "Solana outperformed — up ~22% over the week — after launching a new on-chain governance mechanism.",
+      "importance": 1,
+      "layer": "signal_24h",
+      "citations": [
+        { "url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/", "outlet": "The Motley Fool", "published_at": "2026-07-02T21:27:29Z" }
+      ],
+      "source": "WebFetch",
+      "confidence": "medium"
+    },
+    {
+      "id": "f6",
+      "claim": "CurAItion's library has tracked the Bitcoin 'decoupling' thesis since at least March 2026, when Bitcoin Magazine Pro argued the macro environment gave Bitcoin its best chance yet to break correlation with equities.",
+      "importance": 2,
+      "layer": "depth_90d",
+      "citations": [
+        { "content_id": "894639ef-39d8-4dc3-91f5-788a3e4a6634", "url": "https://www.youtube.com/watch?v=0QNsBVobp2U", "title": "Why I think Now Is Bitcoin's Best Chance To Decouple", "published_at": "2026-03-18T17:31:32Z" }
+      ],
+      "source": "CurAItion",
+      "confidence": "medium"
+    }
+  ],
+
+  "editorial": {
+    "thesis": "Crypto finally did the thing bulls have promised for years — rise while tech fell — but the people with the most money still aren't buying it.",
+    "headline_options": [
+      "Crypto Just Unhooked From Tech Stocks. The Big Money Didn't Notice.",
+      "Bitcoin Rose While the Nasdaq Fell — On a Rate-Cut Hint From a Man Who Left the Fed",
+      "The Decoupling Crypto Always Promised Finally Showed Up",
+      "Bitcoin's Back Above $61K. The ETFs Are Still Bleeding."
+    ],
+    "dek": "Bitcoin held above $61,000 as equities slid — the decoupling crypto bulls have waited years for. But spot-ETF outflows say the institutions aren't validating it.",
+    "hooks": [
+      "For years the knock on crypto was 'it's just leveraged Nasdaq.' Today it wasn't.",
+      "Bitcoin went up. Tech stocks went down. The catalyst was a man who doesn't even work at the Fed anymore.",
+      "The green candle isn't the story. The money still walking out of Bitcoin ETFs is."
+    ],
+    "pull_quotes": [
+      "A decoupling nobody official is funding.",
+      "Prices up, ETFs out — the rally and the smart money disagree.",
+      "The thesis CurAItion has tracked since March finally met the price."
+    ],
+    "narrative_spine": [
+      { "beat": "hook", "beat_type": "grounded", "point": "Crypto rose while the Nasdaq fell — the 'leveraged Nasdaq' jibe broke for a day.", "supports": ["f1", "f2"] },
+      { "beat": "context", "beat_type": "grounded", "point": "What moved: Bitcoin above $61K, ETH +5%, Solana +22% on the week; equities red.", "supports": ["f1", "f2", "f5"] },
+      { "beat": "why_now", "beat_type": "grounded", "point": "Warsh's Sintra productivity/rate-cut comments plus a soft June payrolls print lifted rate-cut hopes and risk appetite.", "supports": ["f3"] },
+      { "beat": "depth", "beat_type": "grounded", "point": "This isn't a fresh idea — CurAItion has tracked the decoupling thesis since March; today the price finally matched the argument.", "supports": ["f6"] },
+      { "beat": "tension", "beat_type": "grounded", "point": "The catch: spot-BTC ETFs kept bleeding ~$296M, so institutions aren't validating the move — a retail/technical rally, not a mandate.", "supports": ["f4"] },
+      { "beat": "cta", "beat_type": "structural", "point": "Watch whether the decoupling survives the next equity down-day and whether ETF flows turn." }
+    ],
+    "tone": {
+      "register": "urgent-topical",
+      "primary_need": "update_me",
+      "primary_axis": "know",
+      "voice_notes": "Skeptical market-desk register: give the number, then puncture the hype with the ETF-outflow tension. Defer to my-writing-style. NB: a portfolio-balance check would likely push the lead toward give_me_perspective (the decoupling narrative) to avoid over-serving update_me — see backfill."
+    }
+  },
+
+  "assets": [],
+
+  "channel_plan": {
+    "tweet-thread": {
+      "lead_with": "hook",
+      "length": "6 tweets",
+      "beats": ["hook", "context", "why_now", "tension", "cta"]
+    },
+    "substack-writer": {
+      "lead_with": "tension",
+      "length": "longform",
+      "beats": ["hook", "context", "why_now", "depth", "tension", "cta"]
+    }
+  },
+
+  "format_readiness": {
+    "tweet-thread": { "ready": true },
+    "long-form-substack": { "ready": true },
+    "ig-carousel": { "ready": false, "reason": "no embeddable or generated visual asset — sources are news articles", "needs": ["generated hero image", "a BTC-vs-Nasdaq / ETF-flows chart"] }
+  },
+
+  "provenance": [
+    { "data_point": "BTC/ETH/SOL prices, Nasdaq move, ETF outflows", "tool": "web_fetch", "source": "WebFetch" },
+    { "data_point": "Warsh Sintra comments + June payrolls trigger", "tool": "web_fetch", "source": "WebFetch" },
+    { "data_point": "Library decoupling-thesis depth layer", "tool": "curaition_semantic_search", "source": "CurAItion" },
+    { "data_point": "User-need classification (inferred; no user-needs file supplied)", "tool": "story-packager", "source": "story-packager" },
+    { "data_point": "Narrative spine, hook pool, headline pool (generated)", "tool": "story-packager", "source": "story-packager" }
+  ],
+
+  "compliance": {
+    "brand_safety": "safe",
+    "promotional_flag": false,
+    "fabrication_guard": "Every facts[].id carries >=1 citation; the depth beat is grounded (f6, cited CurAItion) not lift; two-source corroboration on the core decoupling claim (Motley Fool + Coinpedia); every grounded beat's supports id exists in facts[]."
+  },
+
+  "backfill": [
+    { "field": "editorial.tone.primary_need", "method": "inferred", "derived_from": ["mode", "the_signal_24h"], "confidence": "medium", "note": "No user-needs file. Breaking market move -> update_me (know axis); secondary give_me_perspective from the decoupling narrative." },
+    { "field": "editorial.tone.voice_notes", "method": "inferred", "derived_from": ["portfolio_balance (absent)"], "confidence": "low", "note": "Flagged that update_me is easily over-served; a real portfolio check may re-lead on the perspective angle. Cannot decide without a user-needs / recent-editions file." },
+    { "field": "editorial.headline_options", "method": "generated", "derived_from": ["headline_hypothesis", "surprise_factor", "why_it_matters"], "confidence": "high", "note": "Pool seeded from the candidate; leans into the ETF-outflow tension as the differentiator." },
+    { "field": "editorial.narrative_spine", "method": "generated", "derived_from": ["the_signal_24h", "why_now", "the_depth_90d", "why_it_matters"], "confidence": "high", "note": "the_depth_90d carried as beat_type=grounded here because it IS cited (f6) — contrast with the cultural example where depth was uncited lift." },
+    { "field": "facts", "method": "carried-transformed", "derived_from": ["the_signal_24h.summary", "the_depth_90d", "why_now"], "confidence": "high", "note": "Signal summary split into atomic facts; corroboration folded into f1/f3; depth promoted to a cited fact f6." },
+    { "field": "assets", "method": "default", "derived_from": ["the_signal_24h.citations"], "confidence": "high", "note": "EMPTY: the only sources are news articles, not embeddable social posts. Text formats are ready; any visual format (carousel) needs a generated hero + chart asset downstream." }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User Needs Classification Handoff",
+  "description": "Output of the user-needs-classifier skill. Enriches a cultural-scout / click-bait-scout story-candidate handoff with User Needs Model 2.0 classification, angle guidance, and a portfolio-balance check. Renderer skills (longform-post, tweet-thread, carousel-producer, digest) should read this alongside the source story-candidate file.",
+  "type": "object",
+  "required": ["generated_at", "framework", "source_story_candidate_file", "classifications", "selected_candidate_id"],
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "framework": { "type": "string", "const": "smartocto / Shishkin User Needs Model 2.0" },
+    "source_story_candidate_file": { "type": "string", "description": "Path or filename of the story-candidate-<date>.json this classification was built from" },
+    "classifications": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "need_scores", "primary_need", "primary_axis", "primary_rationale", "angle_guidance"],
+        "properties": {
+          "candidate_id": { "type": "string", "description": "Must match a candidate id from the source story-candidate file" },
+          "need_scores": {
+            "type": "object",
+            "description": "0-3 fit score for each of the eight needs",
+            "required": ["update_me", "keep_me_engaged", "give_me_perspective", "educate_me", "inspire_me", "divert_me", "help_me", "connect_me"],
+            "properties": {
+              "update_me": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "keep_me_engaged": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "give_me_perspective": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "educate_me": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "inspire_me": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "divert_me": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "help_me": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "connect_me": { "type": "integer", "minimum": 0, "maximum": 3 }
+            }
+          },
+          "primary_need": { "type": "string", "enum": ["update_me", "keep_me_engaged", "give_me_perspective", "educate_me", "inspire_me", "divert_me", "help_me", "connect_me"] },
+          "primary_axis": { "type": "string", "enum": ["know", "understand", "feel", "do"] },
+          "primary_rationale": { "type": "string", "description": "One line, grounded in a specific fact from the source candidate" },
+          "secondary_need": { "type": "string", "enum": ["update_me", "keep_me_engaged", "give_me_perspective", "educate_me", "inspire_me", "divert_me", "help_me", "connect_me"] },
+          "secondary_axis": { "type": "string", "enum": ["know", "understand", "feel", "do"] },
+          "secondary_rationale": { "type": "string" },
+          "format_vs_need_note": { "type": "string", "description": "Optional: flag if the candidate's suggested_formats could be mistaken for the need itself, and clarify the distinction" },
+          "brand_specific_flavour": { "type": "string", "description": "Optional sharper naming of the need in this candidate's own voice, e.g. 'Give me an edge' style framing, still mapped to one of the core eight" },
+          "angle_guidance": {
+            "type": "object",
+            "required": ["need", "questions_to_ask", "headline_options"],
+            "properties": {
+              "need": { "type": "string" },
+              "questions_to_ask": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+              "headline_options": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+            }
+          },
+          "secondary_angle_guidance": {
+            "type": "object",
+            "properties": {
+              "need": { "type": "string" },
+              "questions_to_ask": { "type": "array", "items": { "type": "string" } },
+              "headline_options": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "portfolio_balance": {
+      "type": "object",
+      "properties": {
+        "editions_scanned": { "type": "integer" },
+        "window_note": { "type": "string", "description": "e.g. 'no prior editions found' or '7 of last 7 requested editions available'" },
+        "primary_need_tally": {
+          "type": "object",
+          "description": "Count of times each need was the primary_need of the selected_candidate_id across scanned editions, including today"
+        },
+        "skew_flag": { "type": "boolean" },
+        "skew_detail": { "type": "string" },
+        "recommendation": { "type": "string" }
+      }
+    },
+    "selected_candidate_id": { "type": "string", "description": "Carried over unchanged from the source story-candidate file — this skill does not re-rank" }
+  }
+}

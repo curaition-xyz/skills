@@ -1,0 +1,19 @@
+{
+  "slug": "example",
+  "slides": [
+    {"type":"content","copy":"Mushrooms don't\ncompete for space.\nThey trade for it."},
+    {"type":"content","copy":"Beneath every forest\nis a network older\nthan the trees."},
+    {"type":"chart","title":"Share of forest carbon routed\nthrough fungal networks","unit":"%","source":"Source: illustrative — replace with cited CurAItion data","bars":[
+      {"label":"Boreal","value":58},
+      {"label":"Temperate","value":41},
+      {"label":"Tropical","value":33},
+      {"label":"Savanna","value":19}
+    ]},
+    {"type":"content","copy":"A single teaspoon\nof soil holds miles\nof living thread."},
+    {"type":"content","copy":"Trees pay the\nnetwork in sugar."},
+    {"type":"content","copy":"The network answers\nin nitrogen, water,\nand warning signals."},
+    {"type":"content","copy":"Cut one tree\nand the whole\ngrid feels it."},
+    {"type":"content","copy":"Intelligence, it turns out,\ndoesn't need a brain.\nJust a network."},
+    {"type":"final"}
+  ]
+}

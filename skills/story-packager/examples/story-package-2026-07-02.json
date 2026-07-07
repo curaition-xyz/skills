@@ -1,0 +1,176 @@
+{
+  "schema_version": "curaition.story-package/v1",
+  "generated_at": "2026-07-02T11:30:00Z",
+  "package_id": "pkg-2026-07-02-national-identity-sportswear",
+
+  "source": {
+    "story_candidate_file": "story-candidate-2026-07-02.json",
+    "candidate_id": "national-identity-sportswear",
+    "mode": "cultural",
+    "scope_verification": {
+      "source_scope": "library",
+      "effective_org_id_null": true,
+      "external_safe": true,
+      "curaition_used": true,
+      "checked_at": "2026-07-02T10:52:27.815Z"
+    }
+  },
+
+  "facts": [
+    {
+      "id": "f1",
+      "claim": "England's Nike 2026 World Cup home shirt hides the line 'Happy and Glorious' (from 'God Save the King') inside the collar, alongside the Three Lions, the World Cup star, and a Saint George's Cross woven throughout.",
+      "importance": 3,
+      "layer": "signal_24h",
+      "citations": [
+        { "content_id": "08eeafcd-f428-4445-8565-0cfc1fc2cbb6", "url": "https://www.instagram.com/p/DWHbrNDDERP/", "title": "A deeper look into the brand new Nike x England World Cup kits", "domain": "fashion" },
+        { "url": "https://www.dezeen.com/2026/03/20/england-world-cup-kit-2026-nike-all-white/", "outlet": "Dezeen", "title": "England World Cup kit 2026" }
+      ],
+      "source": "CurAItion",
+      "confidence": "high",
+      "quotable_verbatim": true
+    },
+    {
+      "id": "f2",
+      "claim": "Canada's 2026 home/away kits use the maple leaf and a 'black ice' pattern tied explicitly to the country's winter landscape and a 'stealthily dangerous' competitive identity.",
+      "importance": 2,
+      "layer": "signal_24h",
+      "citations": [
+        { "content_id": "c52826b3-51bf-4ee3-8e95-45070eaf8e29", "url": "https://www.instagram.com/p/DV84O2jjFbG/", "title": "SHIRT ALERT: The new Canada Home & Away", "domain": "fashion" }
+      ],
+      "source": "CurAItion",
+      "confidence": "high",
+      "quotable_verbatim": true
+    },
+    {
+      "id": "f3",
+      "claim": "The England shirt also carries a jacquard lion pattern and Nike 'Aero-Fit' fabric technology, per independent design coverage.",
+      "importance": 1,
+      "layer": "verification",
+      "citations": [
+        { "url": "https://www.dezeen.com/2026/03/20/england-world-cup-kit-2026-nike-all-white/", "outlet": "Dezeen" }
+      ],
+      "source": "WebSearch",
+      "confidence": "high"
+    },
+    {
+      "id": "f4",
+      "claim": "2026 World Cup federation kit reveals are rolling out through June-July 2026, ahead of the tournament window.",
+      "importance": 2,
+      "layer": "why_now",
+      "citations": [
+        { "url": "https://www.dezeen.com/2026/03/20/england-world-cup-kit-2026-nike-all-white/", "outlet": "Dezeen" }
+      ],
+      "source": "WebSearch",
+      "confidence": "medium"
+    }
+  ],
+
+  "editorial": {
+    "thesis": "The 2026 World Cup kit has quietly become a text: brands are stitching national mythology into shirts that most fans only ever decode through slowed-down social content.",
+    "headline_options": [
+      "World Cup Kits Are Heraldry With a Swoosh",
+      "The Anthem Is Hidden in the Collar",
+      "Nobody Reads the Shirt — Until Someone Points a Camera at It",
+      "Your Country's Kit Is a Coat of Arms Now"
+    ],
+    "dek": "Nike and Adidas are encoding anthem lyrics, saints' crosses and winter landscapes into 2026 World Cup shirts — turning kit design into a national literacy test.",
+    "hooks": [
+      "You've worn the shirt. Have you ever actually read it?",
+      "There's a line from the national anthem hidden inside England's collar. Almost nobody has noticed.",
+      "A World Cup kit is now a coat of arms you can buy in a size medium."
+    ],
+    "pull_quotes": [
+      "'Happy and Glorious' — the anthem, printed where only the player can see it.",
+      "Kit design has become a literacy test.",
+      "Heraldry with a design studio instead of a herald's office."
+    ],
+    "narrative_spine": [
+      { "beat": "hook", "beat_type": "grounded", "point": "There's an anthem lyric hidden in England's collar that most fans never notice.", "supports": ["f1"] },
+      { "beat": "context", "beat_type": "grounded", "point": "What is actually woven into the England and Canada kits: anthem line, Three Lions, St George's Cross; maple leaf and a 'black ice' winter pattern.", "supports": ["f1", "f2"] },
+      { "beat": "depth", "beat_type": "lift", "point": "This is heraldry by another name — coats of arms, regimental colours and national dress have encoded identity into cloth for centuries; a collar quoting the anthem is the same logic run through a kit studio instead of a herald's office." },
+      { "beat": "why_now", "beat_type": "grounded", "point": "Kit-reveal season is landing now, ahead of the 2026 tournament, so the close-read decoding content is peaking.", "supports": ["f4"] },
+      { "beat": "so_what", "beat_type": "grounded", "point": "Kit design has become a literacy test: national identity is now transmitted through close-read content, not just the badge on the chest.", "supports": ["f1", "f2"] },
+      { "beat": "cta", "beat_type": "structural", "point": "Invite readers to look again at their own team's kit — what is hidden in yours?" }
+    ],
+    "tone": {
+      "register": "evergreen-curious",
+      "primary_need": "give_me_perspective",
+      "primary_axis": "understand",
+      "voice_notes": "Reframe-the-familiar register: take an object everyone owns and reveal the encoding they missed. Defer to my-writing-style for house voice."
+    }
+  },
+
+  "assets": [
+    {
+      "id": "a1_england_ig",
+      "role": "inline",
+      "kind": "embed",
+      "origin": "source_url",
+      "uri": "https://www.instagram.com/p/DWHbrNDDERP/",
+      "durable": true,
+      "rehost_required": false,
+      "embed_provider": "instagram",
+      "caption": "Nike x England 2026 World Cup kit — collar detail",
+      "channels": ["substack", "carousel"]
+    },
+    {
+      "id": "a2_canada_ig",
+      "role": "inline",
+      "kind": "embed",
+      "origin": "source_url",
+      "uri": "https://www.instagram.com/p/DV84O2jjFbG/",
+      "durable": true,
+      "rehost_required": false,
+      "embed_provider": "instagram",
+      "caption": "Canada 2026 Home & Away — maple leaf / 'black ice'",
+      "channels": ["substack", "carousel"]
+    }
+  ],
+
+  "channel_plan": {
+    "substack-writer": {
+      "lead_with": "hook",
+      "length": "longform",
+      "use_assets": ["a1_england_ig", "a2_canada_ig"],
+      "beats": ["hook", "context", "depth", "why_now", "so_what", "cta"]
+    },
+    "carousel-producer": {
+      "lead_with": "hook",
+      "length": "7 slides",
+      "use_assets": ["a1_england_ig", "a2_canada_ig"],
+      "beats": ["hook", "context", "depth", "so_what", "cta"]
+    }
+  },
+
+  "format_readiness": {
+    "user_needs": { "ready": true },
+    "linkedin-article": { "ready": true },
+    "tweet-thread": { "ready": true },
+    "ig-carousel": { "ready": true, "needs": ["generated hero image", "consistent visual motif for slides"] },
+    "long-form-substack": { "ready": false, "reason": "4 facts / 2 primary sources — essay-length, not feature-length", "enrichment": ["more nations' kits (Adidas named but only England + Canada evidenced)", "cited history for the heraldry beat so depth stops being uncited lift"] }
+  },
+
+  "provenance": [
+    { "data_point": "England kit collar/crest/jacquard details", "tool": "curaition_get_cited_themes", "source": "CurAItion" },
+    { "data_point": "Canada kit maple leaf / black ice symbolism", "tool": "curaition_get_cited_themes", "source": "CurAItion" },
+    { "data_point": "Independent corroboration of England kit collar detail", "tool": "WebSearch", "source": "WebSearch" },
+    { "data_point": "User-need classification (inferred; no user-needs file supplied)", "tool": "story-packager", "source": "story-packager" },
+    { "data_point": "Narrative spine, hook pool, headline pool (generated)", "tool": "story-packager", "source": "story-packager" }
+  ],
+
+  "compliance": {
+    "brand_safety": "safe",
+    "promotional_flag": false,
+    "fabrication_guard": "Every facts[].id carries >=1 citation; the heraldry bridge is marked beat_type=lift (uncited, not a fact); every grounded narrative_spine beat's supports id exists in facts[]."
+  },
+
+  "backfill": [
+    { "field": "editorial.tone.primary_need", "method": "inferred", "derived_from": ["why_it_matters", "surprise_factor"], "confidence": "medium", "note": "No user-needs file supplied. Story reframes a familiar object rather than breaking news -> give_me_perspective." },
+    { "field": "editorial.tone.primary_axis", "method": "inferred", "derived_from": ["why_it_matters"], "confidence": "medium", "note": "Understanding, not know/do/feel." },
+    { "field": "editorial.headline_options", "method": "generated", "derived_from": ["headline_hypothesis", "surprise_factor"], "confidence": "high", "note": "Pool seeded from the candidate's headline_hypothesis; classifier headline_options were unavailable." },
+    { "field": "editorial.narrative_spine", "method": "generated", "derived_from": ["the_signal_24h", "the_depth_90d", "why_now", "why_it_matters"], "confidence": "high", "note": "Beats assembled from the candidate; the_depth_90d carried as beat_type=lift because it is explicitly uncited interpretation." },
+    { "field": "facts", "method": "carried-transformed", "derived_from": ["the_signal_24h.summary", "relationship_verifications", "why_now"], "confidence": "high", "note": "Signal summary split into atomic facts; WebSearch corroboration folded into f1 citations; f3/f4 drawn from verification + why_now layers." },
+    { "field": "assets", "method": "carried-transformed", "derived_from": ["the_signal_24h.citations"], "confidence": "high", "note": "Two Instagram source citations promoted to oEmbed assets (embed_provider=instagram). No generated hero image exists yet — carousel-producer must supply one downstream." }
+  ]
+}
