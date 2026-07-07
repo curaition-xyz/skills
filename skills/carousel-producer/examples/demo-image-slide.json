@@ -1,0 +1,20 @@
+{
+  "slug": "imgdemo",
+  "slides": [
+    {"type":"content","copy":"Brand text card.\nNo image. Pure system."},
+    {"type":"content",
+     "copy":"Text composited\nover a generated image.",
+     "background":{
+       "image":"file:///sessions/busy-gracious-dirac/mnt/test/youtube-frame-extractor/frames/SDMdkgEJsRs_25s.jpg",
+       "fit":"cover","focal":"50% 40%",
+       "treatments":["duotone","scrim-bottom","dim:0.15"]
+     }},
+    {"type":"content",
+     "copy":"Same image,\nblurred + darkened.",
+     "background":{
+       "image":"file:///sessions/busy-gracious-dirac/mnt/test/youtube-frame-extractor/frames/SDMdkgEJsRs_25s.jpg",
+       "fit":"cover","focal":"50% 40%",
+       "treatments":["grayscale","blur:8","scrim-full"]
+     }}
+  ]
+}

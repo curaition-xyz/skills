@@ -1,0 +1,395 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://curaition.xyz/schemas/story-package/v1",
+  "title": "CurAItion Story Package",
+  "description": "Output of the story-packager skill. Sits between the framing stage (user-needs-classifier) and the channel writers (substack-writer, linkedin-writer, tweet-thread, carousel-producer). It COMMITS to a single story (the selected candidate), CONSOLIDATES the story-candidate handoff + user-needs classification into one self-contained artifact so no downstream writer calls back upstream or re-derives, and SEPARATES a frozen cited-facts layer from a malleable craft layer. The fact/craft split mirrors the CurAItion MCP 'grounded facts vs interpretive lift' rule and is what makes the no-fabrication guarantee enforceable at render/publish time: a writer may rephrase `facts[]` and elaborate `editorial`, but may not introduce a claim absent from `facts[]`.",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "package_id", "source", "facts", "editorial", "assets"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "curaition.story-package/v1"
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "package_id": {
+      "type": "string",
+      "description": "Stable id for this package, e.g. 'pkg-2026-07-02-<slug>'. Used by writers and publishers to correlate outputs back to the source story."
+    },
+
+    "source": {
+      "type": "object",
+      "description": "Provenance of the package itself — which upstream files and which single candidate it was built from. This is the COMMIT record: many candidates in, one story out.",
+      "required": ["story_candidate_file", "candidate_id", "mode"],
+      "additionalProperties": false,
+      "properties": {
+        "story_candidate_file": {
+          "type": "string",
+          "description": "Path/filename of the story-candidate-<date>.json this package committed to."
+        },
+        "user_needs_file": {
+          "type": "string",
+          "description": "Path/filename of the user-needs-<date>.json classification. Optional but strongly recommended — its absence means the tone/need block was inferred, not classified."
+        },
+        "candidate_id": {
+          "type": "string",
+          "description": "The single candidate id (from the source handoff's selected_candidate_id) this package was built from. The packager never carries an array of candidates."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["cultural", "click-bait"],
+          "description": "Carried from the scout. Sets the default register: 'cultural' -> evergreen/curious, 'click-bait' -> urgent/topical."
+        },
+        "scope_verification": {
+          "type": "object",
+          "description": "Carried through UNCHANGED from the scout handoff — the library-scope compliance receipt. Required-shape for cultural mode; may be omitted/curaition_used:false for a pure-web click-bait run.",
+          "additionalProperties": true,
+          "properties": {
+            "source_scope": { "type": "string" },
+            "effective_org_id_null": { "type": "boolean" },
+            "external_safe": { "type": "boolean" },
+            "curaition_used": { "type": "boolean" },
+            "checked_at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "virality": {
+          "type": "object",
+          "description": "Carried from click-bait-scout when present. Omit on a cultural run.",
+          "additionalProperties": true,
+          "properties": {
+            "brand_safety": { "type": "string", "enum": ["safe", "sensitive", "unsafe"] },
+            "still_accelerating": { "type": "boolean" },
+            "freshness_hours": { "type": "number" }
+          }
+        }
+      }
+    },
+
+    "facts": {
+      "type": "array",
+      "minItems": 1,
+      "description": "GROUND-TRUTH LAYER. Frozen, canonical, every item citation-backed. Consolidated from the candidate's the_signal_24h, the_depth_90d, why_now and any relationship_verifications. Writers may reorder, select by importance, and rephrase these, but may NOT assert anything not represented here. This array is what a publish-time QA gate diffs rendered claims against.",
+      "items": {
+        "type": "object",
+        "required": ["id", "claim", "importance", "citations", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^f[0-9]+$",
+            "description": "Stable fact id (f1, f2, ...). Referenced by editorial.narrative_spine[].supports."
+          },
+          "claim": {
+            "type": "string",
+            "description": "A single atomic, verifiable statement. One fact = one claim; do not bundle."
+          },
+          "importance": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3,
+            "description": "0-3. Lets short formats degrade gracefully: a tweet thread may keep only importance>=3; longform uses all."
+          },
+          "layer": {
+            "type": "string",
+            "enum": ["signal_24h", "depth_90d", "why_now", "verification"],
+            "description": "Which part of the source candidate this fact came from — preserves the CurAItion signal-vs-depth structure."
+          },
+          "citations": {
+            "type": "array",
+            "minItems": 1,
+            "description": "At least one citation per fact — this is the fabrication guard. content_id present only for CurAItion-sourced items.",
+            "items": {
+              "type": "object",
+              "required": ["url"],
+              "additionalProperties": false,
+              "properties": {
+                "content_id": { "type": "string" },
+                "url": { "type": "string" },
+                "title": { "type": "string" },
+                "outlet": { "type": "string" },
+                "domain": { "type": "string" },
+                "published_at": { "type": "string" }
+              }
+            }
+          },
+          "source": {
+            "type": "string",
+            "enum": ["CurAItion", "WebSearch", "WebFetch"],
+            "description": "Origin tool, matching the scout provenance vocabulary."
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Optional. Writers should hedge low-confidence facts, not state them flatly."
+          },
+          "quotable_verbatim": {
+            "type": "boolean",
+            "description": "True if the claim wording is safe to reproduce as-is (e.g. an exact figure or a checked quote)."
+          }
+        }
+      }
+    },
+
+    "editorial": {
+      "type": "object",
+      "description": "CRAFT LAYER. Model-owned interpretation, seeded from the candidate (headline_hypothesis, why_it_matters, surprise_factor) and the classifier (angle_guidance, primary_need). Every substantive beat references facts by id so the through-line stays provably grounded. Headlines and hooks are generated HERE as a shared pool, so all channels share one voice rather than inventing four unrelated takes.",
+      "required": ["thesis", "headline_options", "narrative_spine", "tone"],
+      "additionalProperties": false,
+      "properties": {
+        "thesis": {
+          "type": "string",
+          "description": "The one-sentence argument the whole story makes. The spine serves this."
+        },
+        "headline_options": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Channel-agnostic headline pool. Seeded from user-needs angle_guidance.headline_options and refined. Writers select + adapt; they do not originate."
+        },
+        "dek": {
+          "type": "string",
+          "description": "Standfirst / one-line summary. Doubles as the Substack subtitle candidate (note Substack truncates ~250 chars at a sentence boundary)."
+        },
+        "hooks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Pool of opening hooks, seeded from surprise_factor. tweet-thread and carousel lead with one of these."
+        },
+        "pull_quotes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Quotable lines for pull-quotes / carousel slides / social cards. Must be consistent with facts[]."
+        },
+        "narrative_spine": {
+          "type": "array",
+          "minItems": 1,
+          "description": "THE reuse engine. One ordered set of beats; every channel maps it (longform -> sections, tweet-thread -> tweets, carousel -> slides). Because all channels share this spine, they provably tell the same story in the same order.",
+          "items": {
+            "type": "object",
+            "required": ["beat", "point"],
+            "additionalProperties": false,
+            "properties": {
+              "beat": {
+                "type": "string",
+                "description": "Role of this beat. Common values: hook, context, tension, depth, why_now, so_what, cta. Not locked — a story may need its own beat.",
+                "examples": ["hook", "context", "tension", "depth", "why_now", "so_what", "cta"]
+              },
+              "point": {
+                "type": "string",
+                "description": "The single idea this beat conveys, in plain language (not final copy)."
+              },
+              "beat_type": {
+                "type": "string",
+                "enum": ["grounded", "lift", "structural"],
+                "default": "grounded",
+                "description": "grounded = rests on cited facts (supports required, non-empty). lift = interpretive/analytical bridge with NO citation — the CurAItion 'lift' (e.g. a historical rhyme). Must be marked so a writer never mistakes it for a cited fact and never states it as flat fact. structural = mechanical beat with no claim (e.g. cta)."
+              },
+              "supports": {
+                "type": "array",
+                "items": { "type": "string", "pattern": "^f[0-9]+$" },
+                "description": "fact ids this beat rests on. REQUIRED and non-empty when beat_type=grounded; MUST be empty/omitted when beat_type=lift or structural. Every id here MUST exist in facts[] (cross-check enforced by the skill, not by JSON Schema)."
+              }
+            }
+          }
+        },
+        "tone": {
+          "type": "object",
+          "required": ["register", "primary_need", "primary_axis"],
+          "additionalProperties": false,
+          "properties": {
+            "register": {
+              "type": "string",
+              "enum": ["urgent-topical", "evergreen-curious"],
+              "description": "Default from source.mode; may be overridden."
+            },
+            "primary_need": {
+              "type": "string",
+              "enum": ["update_me", "keep_me_engaged", "give_me_perspective", "educate_me", "inspire_me", "divert_me", "help_me", "connect_me"],
+              "description": "Carried from user-needs-classifier primary_need. All channels serve this need unless channel_plan overrides."
+            },
+            "primary_axis": {
+              "type": "string",
+              "enum": ["know", "understand", "feel", "do"],
+              "description": "Carried from user-needs-classifier primary_axis."
+            },
+            "voice_notes": {
+              "type": "string",
+              "description": "Free-text steering. Should defer to the my-writing-style profile for house voice rather than restate it."
+            }
+          }
+        }
+      }
+    },
+
+    "assets": {
+      "type": "array",
+      "description": "MEDIA MANIFEST. The single source of truth for every image, animation, video, and embeddable URL the story can use — the same manifest a Substack/publisher QA gate diffs the rendered output against. This is where SPEC-2026-004 asset metadata and Replicate-ephemerality flags originate. May be empty for a text-only story.",
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "kind", "origin", "uri"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "description": "Stable asset id (e.g. 'hero', 'slide_3', 'clip1'). Referenced by channel_plan[].use_assets." },
+          "role": {
+            "type": "string",
+            "enum": ["hero", "inline", "slide", "thumbnail", "background"],
+            "description": "Intended placement role."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["image", "animation", "video", "embed"],
+            "description": "'embed' = an oEmbed-able external post (TikTok/IG/YouTube/X); everything else is a file we host."
+          },
+          "origin": {
+            "type": "string",
+            "enum": ["replicate", "curaition", "source_url", "upload", "other"],
+            "description": "Where the asset came from. 'replicate' and any non-hosted origin are ephemeral risk."
+          },
+          "uri": {
+            "type": "string",
+            "description": "Current location. For origin=replicate this is typically a short-lived replicate.delivery URL — see durable/rehost_required."
+          },
+          "durable": {
+            "type": "boolean",
+            "description": "True only if uri is on a permanent host (Substack CDN, S3, a stable oEmbed source). Replicate/temp URLs are false."
+          },
+          "rehost_required": {
+            "type": "boolean",
+            "description": "True if the asset MUST be re-uploaded to the target platform's CDN before publish (the Replicate-URL-expiry guard). The publisher/QA layer acts on this flag."
+          },
+          "embed_provider": {
+            "type": "string",
+            "enum": ["tiktok", "instagram", "youtube", "vimeo", "x", "spotify", "soundcloud", "bluesky"],
+            "description": "For kind=embed only. Tells the writer to emit a bare URL for the platform to oEmbed. Providers NOT on a target platform's oEmbed list need a fallback (poster image + link)."
+          },
+          "fallback_asset_id": {
+            "type": "string",
+            "description": "For content a target platform cannot embed (e.g. Replicate video on Substack, custom iframes): the id of a static poster/still asset to use instead. Enforces 'a fallback exists' rather than silent drop."
+          },
+          "alt": { "type": "string", "description": "Accessibility text. Required in practice for images; validated by the writer, not the schema." },
+          "caption": { "type": "string" },
+          "prompt": { "type": "string", "description": "For generated assets: the generation prompt, kept for reproducibility." },
+          "channels": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Which channels this asset is intended for (e.g. ['substack','carousel']). A hint, not a hard limit."
+          }
+        }
+      }
+    },
+
+    "channel_plan": {
+      "type": "object",
+      "description": "LATE-DIVERGENCE steering. Declares WHAT each channel should lead with and how far to lean; it never contains rendered copy. Writers decide HOW. Keys are writer skill names; unknown keys are allowed so new writers can be added without a schema change.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "lead_with": {
+            "type": "string",
+            "description": "Which beat/element to open on (e.g. 'depth', 'so_what', 'hook')."
+          },
+          "length": {
+            "type": "string",
+            "description": "Target length hint (e.g. 'longform', '~200w', '5 tweets', '7 slides')."
+          },
+          "register": {
+            "type": "string",
+            "description": "Optional per-channel override of editorial.tone.register (e.g. LinkedIn 'professional')."
+          },
+          "need_emphasis": {
+            "type": "string",
+            "description": "Optional per-channel override of the primary_need served."
+          },
+          "use_assets": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "asset ids to use on this channel (must exist in assets[])."
+          },
+          "beats": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Ordered subset of narrative_spine beats to include on this channel."
+          }
+        }
+      }
+    },
+
+    "format_readiness": {
+      "type": "object",
+      "description": "Per-target-format sufficiency signal, so a writer acts on the substance ceiling instead of discovering it mid-draft. Keys are format/writer names (e.g. 'long-form-substack', 'ig-carousel'); unknown keys allowed so new writers need no schema change. The packager reports how much substance exists — it does not pad to hit a length.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ready"],
+        "properties": {
+          "ready": { "type": "boolean" },
+          "reason": { "type": "string", "description": "Why it's not ready (present when ready=false)." },
+          "needs": { "type": "array", "items": { "type": "string" }, "description": "What must be added to make it ready (e.g. 'generated hero', 'price chart')." },
+          "enrichment": { "type": "array", "items": { "type": "string" }, "description": "Concrete substance to fetch before drafting (e.g. 'more nations' kits', 'cited history for the heraldry beat')." }
+        }
+      }
+    },
+
+    "provenance": {
+      "type": "array",
+      "description": "Carried through end-to-end from the scout handoff, plus any enrichment the packager itself did. Every data_point traces to a tool.",
+      "items": {
+        "type": "object",
+        "required": ["data_point", "tool"],
+        "additionalProperties": false,
+        "properties": {
+          "data_point": { "type": "string" },
+          "tool": { "type": "string" },
+          "source": { "type": "string", "enum": ["CurAItion", "WebSearch", "WebFetch", "story-packager", "user-needs-classifier"], "description": "Originating tool OR pipeline stage. Research tools (CurAItion/WebSearch/WebFetch) originate facts; 'user-needs-classifier' marks a value carried from the need-classification stage; 'story-packager' marks a value the packager itself derived/inferred (backfill). facts[].source deliberately allows ONLY the three research tools — a fact must trace to real evidence, never to a pipeline stage." }
+        }
+      }
+    },
+
+    "compliance": {
+      "type": "object",
+      "description": "Assertible invariants a publisher/QA gate can check before anything goes live.",
+      "additionalProperties": false,
+      "properties": {
+        "brand_safety": {
+          "type": "string",
+          "enum": ["safe", "sensitive", "unsafe"],
+          "description": "Carried from click-bait virality.brand_safety; default 'safe' for cultural. 'unsafe' must never be packaged."
+        },
+        "promotional_flag": {
+          "type": "boolean",
+          "description": "True if the source content was promo/sale intent — writers should not amplify it as editorial."
+        },
+        "fabrication_guard": {
+          "type": "string",
+          "description": "Human-readable statement of the invariant the packager asserts, e.g. 'every facts[].id has >=1 citation; every narrative_spine[].supports id exists in facts[]'."
+        }
+      }
+    },
+
+    "backfill": {
+      "type": "array",
+      "description": "Audit trail of every field the packager DERIVED rather than carried from upstream — populated whenever an input (especially the user-needs classification) was absent or incomplete. Makes gap-filling transparent and reversible: nothing is silently invented, and a reviewer can see exactly what was inferred and from what. Empty/omitted when the package was built from a complete story-candidate + user-needs pair.",
+      "items": {
+        "type": "object",
+        "required": ["field", "method", "note"],
+        "additionalProperties": false,
+        "properties": {
+          "field": { "type": "string", "description": "Dotted path of the derived field, e.g. 'editorial.tone.primary_need'." },
+          "method": {
+            "type": "string",
+            "enum": ["inferred", "generated", "carried-transformed", "default"],
+            "description": "inferred = reasoned from candidate content; generated = net-new craft (hooks, headlines, spine); carried-transformed = reshaped from an upstream field; default = fell back to a schema/house default."
+          },
+          "derived_from": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Source fields or fact ids the value was derived from."
+          },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "note": { "type": "string", "description": "One line on the reasoning." }
+        }
+      }
+    }
+  }
+}

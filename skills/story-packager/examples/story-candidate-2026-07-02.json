@@ -1,0 +1,154 @@
+{
+  "generated_at": "2026-07-02T10:55:00.000Z",
+  "window": {
+    "fresh_hours": 24,
+    "depth_days_min": 90
+  },
+  "scope_verification": {
+    "source_scope": "library",
+    "effective_org_id_null": true,
+    "external_safe": true,
+    "athlete_canary_handle": "alphaleteathletics",
+    "athlete_canary_count": 0,
+    "checked_at": "2026-07-02T10:52:27.815Z"
+  },
+  "sweep_scope_note": "Run scoped to sport domain per user request (domain: 'sport' on curaition_get_cited_themes / curaition_absence_scan). curaition_detect_patterns does not accept a domain filter (params_echo confirmed it was silently dropped), so that call returned cross-library patterns; only the sport-relevant, non-excluded pattern was investigated and it was discarded — see discarded_candidates below.",
+  "candidates": [
+    {
+      "id": "national-identity-sportswear",
+      "rank": 1,
+      "headline_hypothesis": "World Cup kits are heraldry with a swoosh: Nike and Adidas are stitching national mythology — anthem lyrics, saints' crosses, winter landscapes — directly into 2026 World Cup shirts.",
+      "domains": ["sport", "fashion", "culture"],
+      "entities": ["Nike", "England National Team", "Canada National Team", "Adidas"],
+      "the_signal_24h": {
+        "summary": "Two independent library items dissect national federation kits for the 2026 World Cup as encoded identity documents: England's Nike home shirt hides the line 'Happy and Glorious' (from 'God Save the King') inside the collar alongside the Three Lions, the World Cup star and a Saint George's Cross woven throughout; Canada's home/away pair uses the maple leaf and a 'black ice' pattern explicitly tied to the country's winter landscape and a 'stealthily dangerous' competitive identity.",
+        "metrics": { "content_count": 2, "total_citations": 14, "avg_weight": 1.0 },
+        "promotional_flag": false,
+        "citations": [
+          {
+            "content_id": "08eeafcd-f428-4445-8565-0cfc1fc2cbb6",
+            "url": "https://www.instagram.com/p/DWHbrNDDERP/",
+            "title": "A deeper look into the brand new @nikefootball x @england World Cup kits",
+            "domain": "fashion",
+            "published_at": "2026-06-2X"
+          },
+          {
+            "content_id": "c52826b3-51bf-4ee3-8e95-45070eaf8e29",
+            "url": "https://www.instagram.com/p/DV84O2jjFbG/",
+            "title": "SHIRT ALERT: The new Canada Home & Away",
+            "domain": "fashion",
+            "published_at": "2026-06-2X"
+          }
+        ]
+      },
+      "the_depth_90d": {
+        "summary": "Interpretive lift (not CurAItion-sourced): this is the modern continuation of a much older practice — heraldry and military/ceremonial dress have encoded national and clan identity into cloth and colour for centuries (coats of arms, regimental colours, national dress). A World Cup shirt with an anthem lyric hidden in the collar is the same design logic as a regimental crest sewn into a tunic, just run through a kit-design studio instead of a herald's office. This bridge is general historical knowledge, not a CurAItion citation — flagged as such per the ground-before-lift rule.",
+        "connection_type": "echo",
+        "citations": []
+      },
+      "why_now": "World Cup 2026 kit reveals are landing through June–July 2026 as federations unveil tournament kits ahead of the June 2026 tournament window; WebSearch corroborates the England shirt detail independently (Dezeen, Footy Headlines both confirm the 'Happy and Glorious' collar print, jacquard lion pattern, and Aero-Fit fabric tech), so the CurAItion citation is not a hallucination.",
+      "why_it_matters": "Based on the two citations above: kit design has quietly become a literacy test. Brands aren't just badging teams anymore, they're writing short-form national mythology into garments most fans will only decode via a slowed-down Instagram carousel — which is itself telling about how national identity gets transmitted now (via close-read content, not just the badge on the shirt).",
+      "surprise_factor": "Most fans register a kit as 'nice colours, weird pattern' — almost nobody clocks that the collar is quoting the national anthem verbatim until someone points a camera at it. That gap between what's designed and what's actually noticed is the hook.",
+      "scores": {
+        "cross_domain_bridge": 2,
+        "time_depth": 2,
+        "surprise": 3,
+        "novelty": 1,
+        "evidence": 2,
+        "penalties": 0,
+        "total": 10
+      },
+      "suggested_formats": ["longform-post", "carousel-producer"],
+      "relationship_verifications": [
+        {
+          "entity": "Nike / England National Team kit",
+          "relationship": "2026 World Cup home kit features 'Happy and Glorious' printed inside the collar",
+          "evidence_url": "https://www.dezeen.com/2026/03/20/england-world-cup-kit-2026-nike-all-white/"
+        }
+      ],
+      "provenance": [
+        { "data_point": "England kit collar/crest/jacquard details", "tool": "curaition_get_cited_themes", "source": "CurAItion" },
+        { "data_point": "Canada kit maple leaf / black ice symbolism", "tool": "curaition_get_cited_themes", "source": "CurAItion" },
+        { "data_point": "Independent corroboration of England kit collar detail", "tool": "WebSearch", "source": "WebSearch" }
+      ]
+    },
+    {
+      "id": "athlete-as-fashion-icon",
+      "rank": 2,
+      "headline_hypothesis": "The 'drip check' has replaced the post-match interview: footballers' off-pitch fits are now doing as much brand work as their on-pitch performance.",
+      "domains": ["sport", "fashion"],
+      "entities": ["Alexia Putellas", "Jules Kounde", "Kylian Mbappe"],
+      "the_signal_24h": {
+        "summary": "Four library items across two platforms frame elite footballers (Putellas, Kounde, Mbappe, unnamed Liverpool players) explicitly as style icons — 'arrival showcases,' 'celebrity style galleries' — with captions directly linking fit to on-field confidence ('Three points minimum when you look that fly').",
+        "metrics": { "content_count": 4, "total_citations": 20, "avg_weight": 1.0 },
+        "promotional_flag": false,
+        "citations": [
+          { "content_id": "42baaf90-1c8a-4a2a-9fec-c8b897e393be", "url": "https://www.instagram.com/p/DVjPNS2DJQd/", "title": "@alexiaputellas drip check off the pitch", "domain": "fashion" },
+          { "content_id": "b57b73f5-8f9c-4aec-b00e-d1f1237464a0", "url": "https://www.instagram.com/p/C4crozWNtZK/", "title": "ADIDAS /// JULES KOUNDE", "domain": "fashion" },
+          { "content_id": "97549779-8822-437e-b6e4-0f973f4a52c4", "url": "https://www.instagram.com/p/DWOwqTejCy2/", "title": "The France squad pull up to Clairefontaine", "domain": "fashion" },
+          { "content_id": "7a463df8-39f6-4782-ae61-fe03ee355ea5", "url": "https://www.instagram.com/p/DVY0CB8iBc5/", "title": "A behind the scenes look at the Liverpool ballers picking out their Tommy Hilfiger-inspired tunnel fits", "domain": "fashion" }
+        ]
+      },
+      "why_it_matters": "Based on the citations above: the 'arrival photo' has become its own content genre with its own grammar (nonchalance, tailoring, archive-referencing pieces), independent of match performance — a parallel athlete economy running on aesthetics rather than results.",
+      "surprise_factor": "The confidence-to-clothing pipeline is stated outright in the captions themselves ('three points minimum when you look that fly') — players and brands are naming the mechanism, not hiding it.",
+      "scores": { "cross_domain_bridge": 2, "time_depth": 1, "surprise": 2, "novelty": 1, "evidence": 2, "penalties": 0, "total": 8 },
+      "suggested_formats": ["tweet-thread", "carousel-producer"],
+      "provenance": [
+        { "data_point": "Athlete-as-fashion-icon theme, 4 sources / 20 citations", "tool": "curaition_get_cited_themes", "source": "CurAItion" }
+      ]
+    },
+    {
+      "id": "finsta-authenticity-tax",
+      "rank": 3,
+      "headline_hypothesis": "Footballers are running secret 'finsta' accounts because their main profiles have become too commercially polished to feel like their own.",
+      "domains": ["sport", "social_commentary", "culture"],
+      "entities": ["Football (concept)"],
+      "the_signal_24h": {
+        "summary": "One library item argues footballers' main Instagram accounts have become so brand-and-sponsorship-curated that they no longer 'feel like theirs,' driving a finsta (fake/private Instagram) culture — with the explicit warning that finstas only stay valuable as long as brands don't colonise them too.",
+        "metrics": { "content_count": 2, "total_citations": 12, "avg_weight": 1.0 },
+        "promotional_flag": false,
+        "citations": [
+          { "content_id": "b91100fe-149b-470e-ab2d-4e4253269c56", "url": "https://www.instagram.com/p/DWBrC4pDAu5/", "title": "Protect footballer finstas at all costs", "domain": "social_commentary" }
+        ]
+      },
+      "why_it_matters": "Based on the citation above: this is a small, specific instance of a larger authenticity-arbitrage pattern (private, unpolished channels emerging wherever a public channel gets over-monetised) — worth watching as brands try to close the gap.",
+      "surprise_factor": "The idea that top-tier footballers feel alienated from their own official social presence — enough to run a second, hidden account — inverts the assumption that athletes control their platforms.",
+      "scores": { "cross_domain_bridge": 1, "time_depth": 1, "surprise": 3, "novelty": 1, "evidence": 1, "penalties": 0, "total": 7 },
+      "suggested_formats": ["tweet-thread"],
+      "provenance": [
+        { "data_point": "Authenticity vs Commercialization theme (finsta)", "tool": "curaition_get_cited_themes", "source": "CurAItion" }
+      ]
+    },
+    {
+      "id": "urbanization-of-action-sports",
+      "rank": 4,
+      "headline_hypothesis": "Snow sports are colonising city centres — snowparks built from trucked-in snow, rail grinds down civic staircases — turning municipal plazas into temporary mountains.",
+      "domains": ["sport", "lifestyle"],
+      "entities": [],
+      "the_signal_24h": {
+        "summary": "Two library items show snow-sport events staged inside urban plazas: a snowpark built from trucked-in snow in a city square, and snowboarding through city streets including a night rail grind down a public staircase.",
+        "metrics": { "content_count": 2, "total_citations": 10, "avg_weight": 1.0 },
+        "promotional_flag": false,
+        "citations": [
+          { "content_id": "b337230a-8f8e-44b8-a1ec-cf26b63da249", "url": "https://www.youtube.com/shorts/jjggVJt4ZGY", "title": "A Snowpark In The City?", "domain": "sport" },
+          { "content_id": "d6c7798f-a547-437c-8a7c-e1f3fa567108", "url": "https://www.youtube.com/shorts/M9pYG-b3s_g", "title": "Snowboarding Through The City", "domain": "sport" }
+        ]
+      },
+      "why_it_matters": "Based on the citations above: action sports keep finding ways to borrow terrain never designed for them — a low-cost, high-spectacle format that works for brands and city marketing alike. Evidence base is thin (2 sources), so this is a weaker, lower-confidence pick relative to the others.",
+      "surprise_factor": "A literal snow mountain trucked into a city plaza is an immediately strange, delightful image with no news-cycle attachment.",
+      "scores": { "cross_domain_bridge": 1, "time_depth": 0, "surprise": 3, "novelty": 1, "evidence": 1, "penalties": 0, "total": 6 },
+      "suggested_formats": ["carousel-producer"],
+      "provenance": [
+        { "data_point": "Urbanization of Action Sports theme", "tool": "curaition_get_cited_themes", "source": "CurAItion" }
+      ]
+    }
+  ],
+  "discarded_candidates": [
+    {
+      "id": "post-hype-subcultural-athleticism",
+      "source_tool": "curaition_detect_patterns",
+      "reason_discarded": "detect_patterns' narrative synthesis referenced a 'Goth Norway team' aesthetic that does not appear in either of the two supporting_content_ids checked via curaition_get_content (one is a Haaland/Travis Scott Nike Phantom 6 boot-drop story, the other a nostalgic football hydration carousel — neither mentions a goth aesthetic or Norway kit styling). Per the ground-before-lift rule, an unverifiable claim was not promoted to a candidate. The underlying grounded facts (Nike's Haaland-lookalike World Cup marketing stunt backfiring, but the Travis Scott boot still selling out) are real and citable, but the 'post-hype subcultural' framing built on top of them was not, so the item was dropped rather than laundered into a cleaner-sounding candidate."
+    }
+  ],
+  "selected_candidate_id": "national-identity-sportswear"
+}

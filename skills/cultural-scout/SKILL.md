@@ -226,4 +226,4 @@ Default: **one story, many formats** (repurpose the day's top curiosity across c
 - `references/curaition-playbook.md` — CurAItion MCP toolset: what each tool does + scout recipes.
 - `references/story-candidate.schema.json` — the handoff contract every renderer reads.
 
-*CurAItion Intelligence Desk · Cultural Scout · curiosity over immediacy · Stage 1 of the daily dog-food chain*
+*CurAItion Intelligence Desk · Cultural Scout · curiosity over immediacy · Stage 1 of the daily publishing chain*

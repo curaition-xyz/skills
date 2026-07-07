@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://curaition.xyz/schemas/story-candidate/v1",
   "title": "CurAItion Story Candidate Handoff",
   "description": "Output of the cultural-scout skill. Consumed by renderer skills (longform-post, tweet-thread, carousel-producer, digest). All facts must be library-sourced (source_scope: 'library') and citation-backed.",
   "type": "object",

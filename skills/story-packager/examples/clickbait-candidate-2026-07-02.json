@@ -1,0 +1,139 @@
+{
+  "generated_at": "2026-07-02T23:05:00.000Z",
+  "mode": "click-bait",
+  "window": {
+    "fresh_hours": 24,
+    "fresh_hours_max": 48,
+    "window_start": "2026-07-01T23:05:00.000Z",
+    "window_end": "2026-07-02T23:05:00.000Z",
+    "depth_days_min": 90
+  },
+  "scope_verification": {
+    "curaition_used": true,
+    "source_scope": "library",
+    "effective_org_id_null": true,
+    "external_safe": true,
+    "checked_at": "2026-07-02T22:58:45.240Z"
+  },
+  "candidates": [
+    {
+      "id": "bitcoin-decouples-from-tech",
+      "rank": 1,
+      "headline_hypothesis": "Crypto just unhooked from tech stocks: Bitcoin pushed back above $61K while the Nasdaq fell — powered by a rate-cut hint from a man who no longer works at the Fed, and with ETF money still walking out the door.",
+      "domains": ["crypto", "markets", "macro"],
+      "entities": ["Bitcoin", "Ethereum", "Solana", "Kevin Warsh", "Federal Reserve", "Nasdaq"],
+      "the_signal_24h": {
+        "summary": "On 2 July 2026 lead cryptocurrencies rose while equities fell: Bitcoin gained ~2% to hold above $61,000 (intraday ~$61,430, +2.7% on the day), Ethereum +~5% to ~$1,696, and Solana +~5% on the day / +~22% on the week after launching a new on-chain governance mechanism. The move explicitly diverged from tech stocks — the Nasdaq fell ~0.8% and the S&P had closed -0.22% on 1 July. Drivers: ex-Fed governor Kevin Warsh's ECB-Forum (Sintra) comments on AI-driven productivity and room for future rate cuts, plus a weak June US payrolls print (+57k). Yet spot Bitcoin ETFs kept bleeding (~$296M in outflows, ~$220M from IBIT), so institutions have not returned.",
+        "metrics": { "btc_price": 61430, "btc_24h_pct": 2.7, "eth_24h_pct": 5.6, "sol_7d_pct": 22.5, "nasdaq_pct": -0.8, "total_mcap_usd_trillions": 2.05, "june_payrolls": 57000, "btc_etf_outflows_usd_m": 296 },
+        "promotional_flag": false,
+        "citations": [
+          { "url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/", "title": "Crypto Market Today, July 2: Bitcoin Breaks Away from Tech Stocks to Surge Above $61,000", "outlet": "The Motley Fool", "domain": "markets", "published_at": "2026-07-02T21:27:29Z", "source": "WebFetch" },
+          { "url": "https://coinpedia.org/news/why-is-crypto-market-going-up-today-july-2nd/", "title": "Why Is the Crypto Market Going Up Today?", "outlet": "Coinpedia", "domain": "crypto", "published_at": "2026-07-02T05:34:11Z", "source": "WebFetch" }
+        ]
+      },
+      "virality": {
+        "virality_signal": 2,
+        "headline_grab": 2,
+        "source_velocity": "Covered by The Motley Fool, Yahoo Finance and Coinpedia plus the daily crypto desks through 2 July; a recurring 'why is crypto up today' explainer wave rather than a single breaking bombshell.",
+        "platforms": ["news_wires", "x"],
+        "corroboration": "multi-source",
+        "brand_safety": "safe",
+        "freshness_hours": 6,
+        "still_accelerating": true
+      },
+      "the_depth_90d": {
+        "summary": "The 'decoupling' framing is not new to CurAItion's library — it has tracked the thesis since at least March 2026, when Bitcoin Magazine Pro argued the macro environment gave Bitcoin its best chance yet to break correlation with equities. Today is the first time in a while the price action actually matches the thesis.",
+        "connection_type": "slow-build",
+        "citations": [
+          { "content_id": "894639ef-39d8-4dc3-91f5-788a3e4a6634", "url": "https://www.youtube.com/watch?v=0QNsBVobp2U", "title": "Why I think Now Is Bitcoin's Best Chance To Decouple", "domain": "crypto", "published_at": "2026-03-18T17:31:32Z", "source": "CurAItion" }
+        ]
+      },
+      "curaition_crossref": {
+        "library_sees_it": true,
+        "matched_entities": ["Bitcoin decoupling thesis", "Bitcoin-equity correlation"],
+        "note": "Library has a standing decoupling narrative (Bitcoin Magazine Pro, Mar 2026). Gives the hot take a depth competitors' pure-news write-ups lack."
+      },
+      "why_now": "Ex-Fed governor Kevin Warsh's comments at the ECB Forum in Sintra (1 July) on four straight quarters of AI-driven productivity gains and scope for eventual rate cuts, amplified by a soft June payrolls print (+57k), lifted rate-cut hopes and pushed capital toward risk assets — while tech equities fell.",
+      "why_it_matters": "Based on the citations above: 'crypto is just leveraged Nasdaq' has been the bear's favourite jibe for years. A day where Bitcoin rises as tech falls is exactly the counter-example bulls have wanted — but the simultaneous ETF outflows say the smart, slow money isn't validating it yet. That tension (retail/technical rally vs absent institutions) is the real story, not the green candle.",
+      "surprise_factor": "The rally's named catalyst is a man who isn't even a current Fed policymaker, and it happened while ETF money kept leaving — a decoupling nobody 'official' is funding.",
+      "scores": { "velocity_spread": 2, "headline_grab": 2, "freshness": 2, "cross_domain_reach": 1, "curaition_depth": 1, "evidence": 2, "penalties": 0, "total": 10 },
+      "suggested_formats": ["tweet-thread", "longform-post"],
+      "relationship_verifications": [
+        { "claim": "Crypto rose while the Nasdaq fell on 2 July 2026 (decoupling)", "corroborating_outlet": "The Motley Fool", "evidence_url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/" },
+        { "claim": "Rally attributed to Warsh's Sintra comments + rate-cut hopes", "corroborating_outlet": "Coinpedia", "evidence_url": "https://coinpedia.org/news/why-is-crypto-market-going-up-today-july-2nd/" }
+      ],
+      "provenance": [
+        { "data_point": "BTC/ETH/SOL prices, Nasdaq move, ETF outflows", "tool": "web_fetch", "source": "WebFetch" },
+        { "data_point": "Warsh Sintra comments + June payrolls as trigger", "tool": "web_fetch", "source": "WebFetch" },
+        { "data_point": "Library decoupling-thesis depth layer", "tool": "curaition_semantic_search", "source": "CurAItion" }
+      ]
+    },
+    {
+      "id": "swift-kelce-msg-wedding",
+      "rank": 2,
+      "headline_hypothesis": "The wedding of the century is a logistics operation: Taylor Swift and Travis Kelce are reportedly taking over Madison Square Garden for 1,000+ guests — and donating $26M on the way in.",
+      "domains": ["entertainment", "celebrity", "internet_culture"],
+      "entities": ["Taylor Swift", "Travis Kelce", "Madison Square Garden"],
+      "the_signal_24h": {
+        "summary": "Taylor Swift arrived at Madison Square Garden ahead of rehearsal for a reported Friday wedding to Travis Kelce with 1,000+ guests; coverage notes a $26M charitable donation and heavy catering logistics.",
+        "metrics": { "guests": 1000, "donation_usd_m": 26 },
+        "promotional_flag": false,
+        "citations": [
+          { "url": "https://www.tmz.com/", "title": "Taylor Swift arrives at MSG ahead of wedding", "outlet": "TMZ", "domain": "entertainment", "published_at": "2026-07-02", "source": "WebSearch" },
+          { "url": "https://www.cbsnews.com/entertainment/", "title": "Swift-Kelce wedding coverage", "outlet": "CBS News", "domain": "entertainment", "published_at": "2026-07-02", "source": "WebSearch" }
+        ]
+      },
+      "virality": {
+        "virality_signal": 3,
+        "headline_grab": 3,
+        "source_velocity": "Saturating entertainment desks and social platforms on 2 July.",
+        "platforms": ["x", "tiktok", "news_wires"],
+        "corroboration": "multi-source",
+        "brand_safety": "safe",
+        "freshness_hours": 8,
+        "still_accelerating": true
+      },
+      "why_it_matters": "Highest raw velocity of the day, but for a cultural-intelligence brand it is thin: no CurAItion library depth, limited cross-domain reach beyond celebrity, and easy to look like every other outlet. Selected against for that reason, not for safety.",
+      "surprise_factor": "A whole Krispy Kreme truck as wedding catering is the screenshot detail.",
+      "scores": { "velocity_spread": 3, "headline_grab": 3, "freshness": 2, "cross_domain_reach": 0, "curaition_depth": 0, "evidence": 1, "penalties": 0, "total": 9 },
+      "suggested_formats": ["tweet-thread"],
+      "provenance": [
+        { "data_point": "Wedding logistics / donation", "tool": "WebSearch", "source": "WebSearch" }
+      ]
+    },
+    {
+      "id": "alvarez-real-madrid-bid",
+      "rank": 3,
+      "headline_hypothesis": "Julian Alvarez wants out: after Argentina's win he told ESPN a transfer is 'best for my future' — and Real Madrid have lodged a €150M bid Atletico have rejected.",
+      "domains": ["sport", "football"],
+      "entities": ["Julian Alvarez", "Real Madrid", "Atletico Madrid"],
+      "the_signal_24h": {
+        "summary": "Julian Alvarez formally requested to leave Atletico Madrid; Real Madrid confirmed a €150M offer, rejected by Atletico who pointed to his release clause.",
+        "metrics": { "bid_eur_m": 150 },
+        "promotional_flag": false,
+        "citations": [
+          { "url": "https://www.espn.com/soccer/story/_/id/48990955/summer-transfer-window-grading-big-signings-mens-soccer", "title": "Summer transfer window coverage", "outlet": "ESPN", "domain": "sport", "published_at": "2026-07-02", "source": "WebSearch" },
+          { "url": "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs", "title": "Transfer news: Summer 2026", "outlet": "Sky Sports", "domain": "sport", "published_at": "2026-07-02", "source": "WebSearch" }
+        ]
+      },
+      "virality": {
+        "virality_signal": 2,
+        "headline_grab": 2,
+        "source_velocity": "Standard transfer-window churn; strong for football audiences, narrow outside them.",
+        "platforms": ["x", "news_wires"],
+        "corroboration": "multi-source",
+        "brand_safety": "safe",
+        "freshness_hours": 10,
+        "still_accelerating": false
+      },
+      "why_it_matters": "Clean, corroborated transfer story with a verbatim quote, but narrow domain reach and no CurAItion depth. A solid tweet-thread, not the lead.",
+      "surprise_factor": "A World Cup winner forcing a move days after lifting a trophy.",
+      "scores": { "velocity_spread": 2, "headline_grab": 2, "freshness": 1, "cross_domain_reach": 0, "curaition_depth": 0, "evidence": 2, "penalties": 0, "total": 7 },
+      "suggested_formats": ["tweet-thread"],
+      "provenance": [
+        { "data_point": "Alvarez transfer request / €150M bid", "tool": "WebSearch", "source": "WebSearch" }
+      ]
+    }
+  ],
+  "selected_candidate_id": "bitcoin-decouples-from-tech"
+}
