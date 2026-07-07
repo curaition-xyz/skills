@@ -1,0 +1,133 @@
+---
+name: substack-writer
+description: >-
+  Render a committed CurAItion Story Package into one on-voice Substack "The
+  Drop" article. Stage 3 (rendering) of the daily publishing chain: consumes a
+  story-package.json from story-packager plus the bundled CurAItion
+  tone-of-voice, and emits a single dry, evidence-led Drop essay — a headline, a
+  "Cur(AI)tion · date" subhead, a few sectioned beats, and a sources line. It is
+  the premium, deeper version of the LinkedIn post. Facts are frozen (it may
+  only assert claims present in the package's facts[]); voice and framing are
+  malleable. Ships a voice-lint gate. Use when the user asks to "write the Drop",
+  "render this package for Substack", "turn this story package into a Drop
+  article", or names Substack/The Drop as the target channel. Consumes a
+  story-package; if given only a raw scout handoff, run story-packager first.
+  Scope: The Drop only (not the longform essay).
+---
+
+# CurAItion Substack Writer (The Drop)
+
+The story-packager committed the story and froze its facts. This skill renders
+that package into one Substack **Drop** article: the deeper, evidenced sibling
+of the LinkedIn post, same facts, more room. It is a **renderer** (Stage 3 of
+the daily publishing chain), downstream of story-packager. It writes prose; it
+never re-derives the story or invents a fact.
+
+Governing rule, inherited from the package: **facts are frozen, craft is
+malleable.** Reorder, select, expand and rephrase freely. Never assert a claim
+absent from the package's `facts[]`.
+
+The Drop is *"more depth, more evidence, still dry — the premium version of the
+LinkedIn post"* (tone-of-voice guide). Same argument as the post; it earns its
+length with evidence and sequencing, not adjectives.
+
+## Inputs
+
+- **Required:** `story-package-<date>.json` (schema owned by story-packager:
+  `story-packager/references/story-package.schema.json`). Read:
+  - `editorial.thesis` — the argument the essay must land, and the seed of the
+    headline.
+  - `editorial.headline_options` — the pool for the title (adapt, don't
+    originate). The Drop title is usually two short declaratives ("The
+    Decoupling Is Real. The Buyers Aren't.").
+  - `editorial.narrative_spine` — the ordered beats; each becomes a section or a
+    move within one. `beat_type` governs use: `grounded` states cited fact;
+    `lift` is framed as a read, never flat fact; `structural` is mechanical.
+  - `editorial.dek`, `editorial.pull_quotes` — supporting craft.
+  - `editorial.tone` — `primary_need`, `primary_axis`, `register`. The need
+    steers which section leads.
+  - `facts[]` — the frozen ground truth with `importance` and `layer`. The Drop
+    can carry more of the mid-importance facts than the post; still lead with
+    the importance-3 signal.
+  - `channel_plan["substack-writer"]` — per-channel steering when present
+    (`lead_with`, `length`, `beats`, `use_assets`, `need_emphasis`). Steering,
+    not copy.
+  - `provenance` / `facts[].citations` — the only sources the closing line may
+    name.
+- **Voice source (bundled):** `references/curaition-tone-of-voice.md` — the
+  authority on voice.
+
+## Voice
+
+Dry, precise, direct; authority without arrogance; peer-to-peer. Short
+sentences, one idea each. No filler openers. **British English. No em dashes.**
+Self-aware, not cringe. The Drop is still dry — depth is added evidence and
+structure, not enthusiasm or ornament.
+
+## Structure (The Drop)
+
+From the calibrated reference (`examples/`). Sections are guided by the spine;
+use the beats you have, not a fixed count.
+
+1. **Title** — the argument as a headline. Usually two short declaratives. Obeys
+   the voice rules (no em dash, British English).
+2. **Subhead** — `*Cur(AI)tion · <DD Month YYYY>*`.
+3. **Lede** — the setup in facts, then the pivot: state the obvious read, then
+   *"None of that is the story. The story is…"*. Cited facts only.
+4. **Sections** (`## …`, ~3-4), each one beat of the spine:
+   - the catalyst (what actually moved it),
+   - the prior thesis (the CurAItion depth layer — the `lift`, framed as a read
+     with its honest caveat),
+   - the counter-evidence (the `so_what`; e.g. flows vs price),
+   - **one thing worth watching** — the conditions that would turn the story
+     into a signal.
+5. **Close** — restate the sharpest number or tension. Land the thesis.
+6. **Sources line** — `*Sources: …*` naming only outlets/links present in the
+   package citations. Never introduce a source the package doesn't carry.
+
+## Rules (the guardrails)
+
+1. **Facts-only.** Every claim traces to `facts[]`. No new numbers, names, or
+   sources anywhere, including the sources line.
+2. **Lift stays interpretation.** A thesis that "has been about to happen" is a
+   read, and carries its own caveat. Never launder it into fact.
+3. **British English, no em dashes, no filler opener.** Enforced by the lint.
+4. **Still dry.** No hype, no build-up language, no pitch. The evidence is the
+   essay.
+5. **Length:** a Drop, not a longform. Target ~500-900 words (lint band
+   400-1000). If it wants to run longer, that is the longform format, which is
+   out of scope here.
+6. **One argument.** The Drop deepens the post's single thesis; it does not add a
+   second.
+
+## Output, then validate
+
+Write to the package's staging folder as `<slug>-substack-drop.md`, headline
+first. Then run the gate:
+
+```
+python scripts/voice_lint.py <slug>-substack-drop.md --channel substack-drop \
+  --package story-package-<date>.json
+```
+
+Must exit 0 (no hard failures) before presenting. Hard failures: em dashes, US
+spelling, filler openers, word count outside 400-1000. Warnings (numbers not
+traceable to `facts[]`, over-long sentences) are for review — a warned number
+usually means a source line or stat to re-check against the package.
+
+## Reference files
+
+- `references/curaition-tone-of-voice.md` — the voice authority (bundled).
+- `scripts/voice_lint.py` — the gate. Run every time.
+- `examples/` — a golden input/output pair: the source package
+  (`story-package-clickbait-withneeds-2026-07-02.json`) and the rendered Drop
+  (`substack-thedrop-bitcoin-decoupling.md`), which passes the lint with zero
+  warnings. Use it as the calibration target.
+
+The story-package contract is owned by story-packager
+(`story-packager/references/story-package.schema.json`) — this skill consumes
+it, it does not redefine it.
+
+---
+
+*CurAItion Intelligence Desk · Substack Writer (The Drop) · one package, one essay, facts frozen · renderer stage of the daily publishing chain*
