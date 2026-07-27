@@ -10,20 +10,59 @@ The editorial rules live in `SKILL.md`; this is the tool reference. Remember the
 - `source_scope`: always **`"library"`** = CurAItion's curated, externally-safe corpus.
 - **Why `library` and not `global`:** under a super-admin token, `global`/`my_sources`
   silently escalate to `all_orgs` (proven: `global` returned 18,790 client activewear items).
-  `library` is **non-escalatable** — `effective_org_id:null`, `external_safe:true`, even for a
-  super-admin token. Verified live 2026-06-19.
+  `library` is **non-escalatable** — `effective_org_id:null`, forced non-super-admin at the DB
+  layer, even for a super-admin token. Verified live 2026-06-19. NOTE: `external_safe` is a
+  data-quality verdict, NOT proof of containment — it can read `false` on a leak-safe library
+  when one curator/seed org dominates. The containment proof is `effective_org_id:null` +
+  `source_scope:"library"`; treat `external_safe:false` as a quality note, never a gate.
 - `project_id`: client investigation layers. Never pass it.
 - Brand accounts (Gymshark, Nike, Red Bull) are intentionally library-flagged — signal, not
   contamination. Down-weight their `intent_class:"sale"` promo posts.
 
-## The library, as measured (2026-06-19)
+## The library, as measured (2026-07-27)
 
-233 sources, ~14,587 items, all 17 domains, well balanced (`domain_balance 0.893`). The
-curiosity-rich domains to favour: culture 3,547 · sport 2,848 · automotive 2,413 · fashion
-2,041 · gaming 1,868 · music 1,440 · sustainability 975 · travel 741 · science 727 · food
-625. Tech (4,631) and social_commentary (4,867) are large but **news/politics-heavy — treat
-with suspicion** (most current-affairs pollution lives there). Crypto (1,018) is video-only
-(0 articles) and excluded as a lead topic.
+286 sources, 19,289 items, 19 domains.
+
+> ⚠️ **These numbers are a snapshot for orientation only. Never score against them.** The
+> scout's rarity weight is computed at run time from the live `domain_registry` returned by
+> Canary A, precisely because this table goes stale fast — see the drift note below.
+
+Eligible-roster domains: culture 10,141 · sport 3,704 · gaming 2,591 · fashion 2,523 ·
+automotive 1,647 · music 1,585 · sustainability 836 · travel 732 · food 682 · science 677.
+
+Excluded: social_commentary 7,778 · tech 4,608 · f1 2,322 · geopolitics 2,294 · generic 514 ·
+crypto 304 · activewear 212 · endurance 138 · lifestyle 2,155. Reasons live in the SKILL.md
+domain roster — that table, not this file, is the source of truth for eligibility.
+
+### The corpus is NOT balanced any more — and that is why scoring must be dynamic
+
+The previous revision of this file (2026-06-19) recorded *"well balanced
+(`domain_balance 0.893`)"* and listed culture at 3,547. Since then:
+
+| domain | 2026-06-19 | 2026-07-27 | growth |
+|---|---|---|---|
+| culture | 3,547 | 10,141 | **2.9×** |
+| sport | 2,848 | 3,704 | 1.3× |
+| food | 625 | 682 | 1.1× |
+| science | 727 | 677 | 1.0× |
+
+culture:food was **5.7:1**; it is now **14.9:1**. `culture` alone is ~40% of the eligible
+pool. Any fixed weighting calibrated on the old distribution silently stops discriminating —
+which is exactly what happened to the old flat "+1 breadth bonus".
+
+**Two takeaways for anyone editing the scout:** compute domain weights from live counts, and
+re-measure this table (don't trust it) whenever a selection starts looking repetitive.
+
+### Standing judgements to revisit
+
+`social_commentary` was marked "news/politics-heavy — treat with suspicion" when it held
+**4,867** items. It now holds **7,778** and is the second-largest domain in the library,
+described in the registry as *"memes, internet culture, viral trends, and social media
+analysis"*. That judgement has not been re-examined against current material and is flagged
+**REVIEW** in the SKILL.md roster.
+
+Crypto (304 here, video-heavy) remains excluded as a lead topic on editorial grounds, not
+volume.
 
 ## Server status (2026-06-19, post-hardening)
 All tools green: `get_stats` (rollup-backed), `detect_patterns`, `semantic_search`
@@ -43,7 +82,7 @@ these constantly — that's expected; exclude them and keep looking.
 ### Phase 0 — Canaries
 | Tool | Use | Assert |
 |---|---|---|
-| `curaition_get_stats` | envelope safety + live domain registry | `effective_org_id==null` AND `external_safe==true` |
+| `curaition_get_stats` | containment proof + live domain registry | GATE: `source_scope=="library"` AND `effective_org_id==null`. Record `external_safe` as a quality note (do NOT gate on it). |
 | `curaition_list_content` | athlete-leak probe | `search:"<athlete handle>"` → `total==0` |
 
 ### Phase 1 — Curiosity-led discovery (PRIMARY — lead with these)
