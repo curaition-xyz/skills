@@ -54,8 +54,9 @@ work email.
 > password"** on the address you already have. Always. That is the fix, every
 > time.
 
-**2. A paid Claude plan on the CurAItion organisation.** Rick or Ben adds you.
-Skills do not work on a personal free account that isn't part of the org.
+**2. A Claude Pro or Max plan.** Skills work on Free too, but the CurAItion
+skills lean on code execution and long documents, so Pro is the realistic floor.
+Rick or Ben will confirm which you are on.
 
 **3. Ten minutes where nobody needs anything from you.** There is a login
 redirect in step 3 that will fail if you wander off mid-way.
@@ -80,40 +81,39 @@ there will be no error message to tell you why.
 
 ---
 
-## Step 2 — Get the skills onto your account
+## Step 2 — Install the skills on your account
 
-**There are two routes. Ask Rick or Ben which one applies to you before doing
-anything here.** Route A means you have almost nothing to do.
+**You install these yourself, on your own account.** Custom skills are private to
+whoever uploads them, so everybody does this once.
 
-### Route A — they were installed for the whole team (most likely)
+### Get the files
 
-An admin uploads them once and they appear for everyone automatically. **You do
-not need to install anything.**
+Download the eleven `.zip` files from the
+[latest release](https://github.com/curaition-xyz/skills/releases/latest), or use
+the folder Rick or Ben sends you.
 
-To confirm they arrived:
+**Do not unzip them.** Claude wants each zip exactly as downloaded. If you
+double-click one and upload the folder that comes out, it will be rejected.
 
-1. At claude.ai, click your name → **Settings** → **Customize** → **Skills**.
-2. You should see the eleven skills listed.
-3. Make sure each one is toggled **ON**.
-
-If the list is empty, they have not been provisioned yet. Ask Rick or Ben, and
-skip Route B — do not install them yourself, or you will end up with duplicates.
-
-### Route B — you install them yourself
-
-Only if you have been told to. You will be sent a folder of eleven `.zip` files.
-**Do not unzip them.** Claude wants the zip exactly as it is.
+### Upload them
 
 For each of the eleven:
 
 1. At claude.ai, click your name → **Settings** → **Customize** → **Skills**.
 2. Click **+ Add** (or **+ Create skill**).
 3. Choose **upload a zip file**.
-4. Pick one `.zip` from the folder.
+4. Pick one `.zip`.
 5. Claude reads it and shows the skill's name and description. Confirm.
 6. Repeat for the other ten.
 
 It is repetitive. There is no bulk upload. Put a podcast on.
+
+When you are done, all eleven should be listed and toggled **ON**.
+
+> **If you are ever moved onto a Claude Team or Enterprise plan**, this step
+> changes: an Organization Owner uploads the eleven once under *Organization
+> settings → Skills*, and they appear for everyone automatically. Nobody
+> installs anything individually. Until then, the steps above are the way.
 
 ---
 
@@ -254,18 +254,35 @@ The skills check `_voice/` inside the folder first, then `../_voice/` beside it,
 so one `SKILL.md` works in both layouts. `digest` and the two Gymshark skills are
 excluded — they carry their own client voice on purpose.
 
-### Provisioning for the org
+### Distribution
 
-Team and Enterprise plans only: **Organization settings → Skills → + Add**, one
-zip at a time. Provisioned skills are enabled by default for everyone and appear
-under each member's *Customize → Skills*. Both **Code execution and file
-creation** and **Skills** must be enabled at the organisation level first.
+Cut a GitHub release and attach `dist/*.zip`:
+
+```bash
+git tag -a vX.Y.Z -m "CurAItion Skills vX.Y.Z"
+git push origin vX.Y.Z
+gh release create vX.Y.Z --repo curaition-xyz/skills --notes "…" dist/*.zip
+```
+
+The repo is private, so the release is visible to org members only. Someone
+outside the GitHub org gets a 404 rather than a login prompt — if a link looks
+dead, check their membership before you check the URL.
+
+**Today everyone installs individually**, because custom skills are private to
+the account that uploads them. On a Claude **Team or Enterprise** plan that
+changes: an *Organization Owner* — the Owner role specifically, not an Admin —
+uploads once under **Organization settings → Skills**, where the same page holds
+both the **Code execution and file creation** / **Skills** toggles and the
+upload. Provisioned skills are then enabled by default for everyone and appear
+under each member's *Customize → Skills*. Worth revisiting if the team grows;
+eleven manual uploads per person stops being trivial somewhere around the third
+hire.
 
 ### After changing a skill
 
-Provisioned skills do not auto-update from the repo. Rebuild, then re-upload the
-changed bundle in Organization settings. Worth batching so people are not
-re-toggling things every week.
+Bundles do not auto-update. Rebuild, cut a new release, and tell people which
+bundle changed so they re-upload just that one. Batch changes where you can —
+nobody wants a re-upload every week.
 
 </details>
 
