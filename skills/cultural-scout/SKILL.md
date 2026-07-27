@@ -363,7 +363,13 @@ choice stays explicit rather than implied.
 
 Essentials, if the guide is unreachable: dry, not earnest. Short sentences, one
 idea each. No filler openers. **British English. No em dashes.** Peer-to-peer,
-never a vendor pitching. See `_voice/README.md` to add a different profile.
+never a vendor pitching.
+
+**Where it is:** `_voice/` sits *beside this skill's own directory*, not inside it
+— so `../_voice/curaition-tone-of-voice.md` relative to this SKILL.md, and
+`<skills-root>/_voice/…` absolute. Resolve it that way rather than looking for
+`_voice/` under the current working directory, which is usually somewhere else
+entirely. See `_voice/README.md` to add a different profile.
 
 ## Format routing (suggest, don't decide)
 

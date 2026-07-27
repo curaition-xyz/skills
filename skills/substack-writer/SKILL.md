@@ -88,7 +88,13 @@ the sourcing bar.
 
   There is **one** voice guide for the whole editorial chain and this skill does
   not carry its own — per-skill copies are how a house voice forks into
-  dialects. See `_voice/README.md` to add a different profile.
+  dialects.
+
+  **Where it is:** `_voice/` sits *beside this skill's own directory*, not inside
+  it — so `../_voice/curaition-tone-of-voice.md` relative to this SKILL.md, and
+  `<skills-root>/_voice/…` absolute. Resolve it that way rather than looking for
+  `_voice/` under the current working directory, which is usually somewhere else
+  entirely. See `_voice/README.md` to add a different profile.
 
 ## Voice
 
@@ -139,9 +145,15 @@ Write to the package's staging folder as `<slug>-substack-drop.md`, headline
 first. Then run the gate:
 
 ```
-python ../_voice/voice_lint.py <slug>-substack-drop.md --channel substack-drop \
+python <skills-root>/_voice/voice_lint.py <slug>-substack-drop.md --channel substack-drop \
   --package story-package-<date>.json
 ```
+
+`<skills-root>` is the directory this skill's own folder sits in — the lint lives
+beside the skill, but you run it from the **staging folder** where the draft is,
+so a bare `../_voice/…` will not find it. Use the absolute path you resolved for
+the voice guide.
+
 
 Must exit 0 (no hard failures) before presenting. Hard failures: em dashes, US
 spelling, filler openers, word count outside 400-1000. Warnings (numbers not
