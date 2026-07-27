@@ -49,8 +49,11 @@ skills/
   …
 ```
 
-So from a `SKILL.md`, the guide is `../_voice/curaition-tone-of-voice.md`. Do not
-look for `_voice/` under the current working directory — when a skill runs, cwd is
+So in a repo checkout the guide is `../_voice/curaition-tone-of-voice.md` from any
+`SKILL.md`. **In an installed bundle it is `_voice/` *inside* the skill folder** —
+a packaged skill is one folder with no siblings, so the build step copies this
+directory in. Skills check inside first, then beside. Do not look for `_voice/`
+under the current working directory — when a skill runs, cwd is
 usually the user's project or a staging folder, nowhere near the skills root.
 Resolve the absolute path once and reuse it, including for `voice_lint.py`, which
 is invoked from the staging folder where the draft lives.
