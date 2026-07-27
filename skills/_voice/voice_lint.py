@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 CurAItion writer voice lint — the "validate, don't hope" gate for the channel
-writers (linkedin-writer, substack-writer). Same gate philosophy as the
+writers in the editorial chain. Same gate philosophy as the
 packager's validate_package.py: encode the rules a human reviewer would apply,
 and refuse to ship a draft that breaks the hard ones.
 

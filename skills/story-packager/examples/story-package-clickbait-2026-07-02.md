@@ -50,14 +50,14 @@
 
 ## Assets — **none carried**
 
-The only sources are news articles, not embeddable social posts. Text formats (tweet-thread, Substack) are ready as-is. Any visual format (carousel) needs a **generated hero + a price/decoupling chart** downstream — flagged rather than faked.
+The only sources are news articles, not embeddable social posts. Text formats (thread, Substack) are ready as-is. Any visual format (carousel) needs a **generated hero + a price/decoupling chart** downstream — flagged rather than faked.
 
 ---
 
 ## Channel plan
 
-- **tweet-thread** → lead with the hook, 6 tweets, beats 1–3 + 5–6. *(Scout's default for a live wave: ship this first.)*
-- **substack-writer** → lead with the **tension** (ETFs vs price), longform, all six beats. Natural fit for the `curaitedcrypto` Substack.
+- **thread** → lead with the hook, 6 posts, beats 1–3 + 5–6. *(Scout's default for a live wave: ship this first.)*
+- **substack** → lead with the **tension** (ETFs vs price), longform, all six beats. Natural fit for the `curaitedcrypto` Substack.
 
 ---
 

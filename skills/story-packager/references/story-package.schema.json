@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://curaition.xyz/schemas/story-package/v1",
   "title": "CurAItion Story Package",
-  "description": "Output of the story-packager skill. Sits between the framing stage (user-needs-classifier) and the channel writers (substack-writer, linkedin-writer, tweet-thread, carousel-producer). It COMMITS to a single story (the selected candidate), CONSOLIDATES the story-candidate handoff + user-needs classification into one self-contained artifact so no downstream writer calls back upstream or re-derives, and SEPARATES a frozen cited-facts layer from a malleable craft layer. The fact/craft split mirrors the CurAItion MCP 'grounded facts vs interpretive lift' rule and is what makes the no-fabrication guarantee enforceable at render/publish time: a writer may rephrase `facts[]` and elaborate `editorial`, but may not introduce a claim absent from `facts[]`.",
+  "description": "A committed, channel-agnostic Story Package. Sits between the framing stage (need classification) and any channel renderer (Substack, LinkedIn, a thread, a carousel, a digest). It names no specific producer or consumer by design — every stage around it is optional and independently runnable. It COMMITS to a single story (the selected candidate), CONSOLIDATES the story-candidate handoff + user-needs classification into one self-contained artifact so no downstream writer calls back upstream or re-derives, and SEPARATES a frozen cited-facts layer from a malleable craft layer. The fact/craft split mirrors the CurAItion MCP 'grounded facts vs interpretive lift' rule and is what makes the no-fabrication guarantee enforceable at render/publish time: a writer may rephrase `facts[]` and elaborate `editorial`, but may not introduce a claim absent from `facts[]`.",
   "type": "object",
   "required": ["schema_version", "generated_at", "package_id", "source", "facts", "editorial", "assets"],
   "additionalProperties": false,
@@ -12,6 +12,7 @@
       "const": "curaition.story-package/v1"
     },
     "generated_at": { "type": "string", "format": "date-time" },
+    "voice_profile": { "type": "string", "description": "Which voice guide governs the prose in this artifact and everything derived from it. A path, or a bare name resolving to _voice/<name>.md. Omit or set to 'curaition-tone-of-voice' for the house default. Carried forward unchanged by every stage, so a non-default voice travels the whole chain without any skill needing to know which other skills exist. See _voice/README.md." },
     "package_id": {
       "type": "string",
       "description": "Stable id for this package, e.g. 'pkg-2026-07-02-<slug>'. Used by writers and publishers to correlate outputs back to the source story."
@@ -153,7 +154,7 @@
         "hooks": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Pool of opening hooks, seeded from surprise_factor. tweet-thread and carousel lead with one of these."
+          "description": "Pool of opening hooks, seeded from surprise_factor. The thread and carousel channels lead with one of these."
         },
         "pull_quotes": {
           "type": "array",
@@ -163,7 +164,7 @@
         "narrative_spine": {
           "type": "array",
           "minItems": 1,
-          "description": "THE reuse engine. One ordered set of beats; every channel maps it (longform -> sections, tweet-thread -> tweets, carousel -> slides). Because all channels share this spine, they provably tell the same story in the same order.",
+          "description": "THE reuse engine. One ordered set of beats; every channel maps it (longform -> sections, thread -> posts, carousel -> slides). Because all channels share this spine, they provably tell the same story in the same order.",
           "items": {
             "type": "object",
             "required": ["beat", "point"],
@@ -214,7 +215,7 @@
             },
             "voice_notes": {
               "type": "string",
-              "description": "Free-text steering. Should defer to the my-writing-style profile for house voice rather than restate it."
+              "description": "Free-text steering for THIS story only — register, emphasis, what to lead on. Never restate house voice here: that lives in the shared voice guide (see the sibling voice_profile field and _voice/README.md), and duplicating it is how the two drift apart."
             }
           }
         }
@@ -280,7 +281,7 @@
 
     "channel_plan": {
       "type": "object",
-      "description": "LATE-DIVERGENCE steering. Declares WHAT each channel should lead with and how far to lean; it never contains rendered copy. Writers decide HOW. Keys are writer skill names; unknown keys are allowed so new writers can be added without a schema change.",
+      "description": "LATE-DIVERGENCE steering. Declares WHAT each channel should lead with and how far to lean; it never contains rendered copy. Writers decide HOW. Keys are CHANNEL names — 'linkedin', 'substack', 'thread', 'carousel', 'digest' — never the names of the tools that render them. This is what lets a package be written without knowing which renderers exist: a renderer looks up its own channel, and a channel with no renderer is simply unread. Writer-skill-name keys ('linkedin-writer', 'tweet-thread', 'carousel-producer') are DEPRECATED aliases retained for packages written before 2026-07-27; readers should check the channel key first and fall back to the alias. Unknown keys are allowed so new channels need no schema change.",
       "additionalProperties": {
         "type": "object",
         "additionalProperties": true,

@@ -58,14 +58,14 @@ Writers may reorder, select by importance, and rephrase these. They may **not** 
 | a1_england_ig | inline | embed | instagram | ✅ | [IG post](https://www.instagram.com/p/DWHbrNDDERP/) |
 | a2_canada_ig | inline | embed | instagram | ✅ | [IG post](https://www.instagram.com/p/DV84O2jjFbG/) |
 
-Both are Instagram oEmbeds — a writer emits the bare URL and the platform renders it (Substack supports basic IG embeds). **Gap:** no generated hero image exists yet; `carousel-producer` must supply one downstream, and it will land as a Replicate asset flagged `rehost_required` at that point.
+Both are Instagram oEmbeds — a writer emits the bare URL and the platform renders it (Substack supports basic IG embeds). **Gap:** no generated hero image exists yet; the carousel channel must supply one downstream, and it will land as a Replicate asset flagged `rehost_required` at that point.
 
 ---
 
 ## Channel plan (late-divergence steering — not rendered copy)
 
-- **substack-writer** → lead with the hook, longform, use both IG embeds, all six beats.
-- **carousel-producer** → lead with the hook, 7 slides, use both IG embeds, beats 1–3 + 5–6.
+- **substack** → lead with the hook, longform, use both IG embeds, all six beats.
+- **carousel** → lead with the hook, 7 slides, use both IG embeds, beats 1–3 + 5–6.
 
 ---
 

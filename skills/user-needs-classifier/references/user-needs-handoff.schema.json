@@ -1,11 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "User Needs Classification Handoff",
-  "description": "Output of the user-needs-classifier skill. Enriches a cultural-scout / click-bait-scout story-candidate handoff with User Needs Model 2.0 classification, angle guidance, and a portfolio-balance check. Renderer skills (longform-post, tweet-thread, carousel-producer, digest) should read this alongside the source story-candidate file.",
+  "description": "A User Needs Model 2.0 classification. Enriches a story-candidate handoff — from any producer — with need scores, angle guidance, and a portfolio-balance check. Whatever renders the story should read this alongside the source story-candidate file.",
   "type": "object",
   "required": ["generated_at", "framework", "source_story_candidate_file", "classifications", "selected_candidate_id"],
   "properties": {
     "generated_at": { "type": "string", "format": "date-time" },
+    "voice_profile": { "type": "string", "description": "Which voice guide governs the prose in this artifact and everything derived from it. A path, or a bare name resolving to _voice/<name>.md. Omit or set to 'curaition-tone-of-voice' for the house default. Carried forward unchanged by every stage, so a non-default voice travels the whole chain without any skill needing to know which other skills exist. See _voice/README.md." },
     "framework": { "type": "string", "const": "smartocto / Shishkin User Needs Model 2.0" },
     "source_story_candidate_file": { "type": "string", "description": "Path or filename of the story-candidate-<date>.json this classification was built from" },
     "classifications": {

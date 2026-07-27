@@ -1,30 +1,28 @@
 ---
 name: story-packager
 description: >-
-  Consolidate a cultural-scout or click-bait-scout story-candidate handoff (and,
-  when present, its user-needs-classifier classification) into a single,
-  self-contained, channel-agnostic Story Package that downstream writer skills
-  (substack-writer, linkedin-writer, tweet-thread, carousel-producer, digest)
-  consume unchanged. It COMMITS to one story, CONSOLIDATES scout + classifier
-  into one artifact so no writer re-derives, and SEPARATES a frozen, cited facts
-  layer from a malleable craft layer (thesis, spine, hooks, headlines) plus an
-  asset manifest and per-channel plan. Use as Stage 3 of the daily publishing
-  chain, after cultural-scout / click-bait-scout and user-needs-classifier and
-  before any renderer. Also trigger for "package this story", "build a story
-  package", "prep this candidate for the writers", "turn this scout output into
-  a brief the channels can share", or any request to assemble one grounded,
-  reusable source-of-truth for multi-channel content from a scout handoff.
+  Consolidate a story-candidate handoff (and, when present, a user-needs
+  classification) into a single, self-contained, channel-agnostic Story Package
+  that any writer or renderer consumes unchanged. It COMMITS to one story,
+  CONSOLIDATES candidate + classification into one artifact so no writer
+  re-derives, and SEPARATES a frozen, cited facts layer from a malleable craft
+  layer (thesis, spine, hooks, headlines) plus an asset manifest and per-channel
+  plan. Use for "package this story", "build a story package", "prep this
+  candidate for the writers", "turn this scout output into a brief the channels
+  can share", or any request to assemble one grounded, reusable source-of-truth
+  for multi-channel content. Runs standalone: it needs only a cited candidate,
+  and degrades explicitly when the optional classification is absent.
 ---
 
 # CurAItion Story Packager
 
-cultural-scout and click-bait-scout find the *what* (a grounded, cited story
-candidate). user-needs-classifier decides the *need* (the psychological job).
-Renderer skills decide the *format* (Substack, LinkedIn, tweet-thread, carousel).
-This skill sits between framing and rendering and does the **commit**: it takes
-the many-candidate handoff plus the optional need classification and produces one
-**Story Package** — the single, self-contained source of truth every channel
-writer builds from.
+A story arrives as *what* (a grounded, cited candidate) and, sometimes, as a
+*need* (the psychological job it does for a reader). Format — Substack,
+LinkedIn, a thread, a carousel — is decided later, by whoever renders it. This
+skill sits between framing and rendering and does the **commit**: it takes the
+many-candidate handoff plus any need classification and produces one **Story
+Package** — the single, self-contained source of truth every channel writer
+builds from.
 
 Its three moves:
 
@@ -62,17 +60,34 @@ convention, not a guarantee — the file may sit anywhere):
 
 The `.json` **must** pass `scripts/validate_package.py` before you emit it.
 
+## Running standalone
+
+**This skill requires no other skill.** It consumes *artifacts*, not a pipeline
+position, and both inputs below can come from anywhere — another skill, a
+colleague, a hand-written file.
+
+Only the candidate is required, and even that degrades: given a cited brief or
+a topic with links rather than a formal handoff, build the candidate structure
+yourself from the material and proceed. The one thing you may never manufacture
+is a citation — see rule 2 under **Non-negotiables**.
+
+The need classification is genuinely optional and the fallback is built in
+(step 3). Never stop and tell the caller to go run something else first;
+produce the package, flag what you inferred, and let them decide whether to
+enrich it and re-run.
+
 ## Inputs
 
-- **Required:** `story-candidate-<date>.json` (or `clickbait-candidate-<date>.json`)
-  from either scout. Read its `selected_candidate_id` and commit to that one
-  candidate (or a specific `candidate_id` if the caller names one).
-- **Optional but strongly preferred:** `user-needs-<date>.json` from
-  user-needs-classifier. When present, the need, axis, angle guidance and
-  headline options are **carried as source of truth** — do not re-derive them.
-  When absent, infer a provisional need as a **flagged, low-confidence fallback**
-  (see step 3) and tell the caller to run user-needs-classifier first for a real
-  classification and portfolio-balance check.
+- **Required:** a story-candidate handoff — `story-candidate-<date>.json` or
+  `clickbait-candidate-<date>.json`. Read its `selected_candidate_id` and commit
+  to that one candidate (or a specific `candidate_id` if the caller names one).
+  `examples/story-candidate-2026-07-02.json` is a worked instance of the shape.
+- **Optional:** a user-needs classification — `user-needs-<date>.json`. When
+  present, the need, axis, angle guidance and headline options are **carried as
+  source of truth** — do not re-derive them. When absent, infer a provisional
+  need as a **flagged, low-confidence fallback** (see step 3) and record
+  `source: "backfill"` so a later pass can tell what was inferred from what was
+  classified.
 
 ## Workflow
 
@@ -116,11 +131,35 @@ never bundled. For every fact:
 - **If absent:** infer a provisional `primary_need`/`primary_axis` from
   `why_it_matters` and `surprise_factor`, mark it **low confidence in
   `backfill`** with `source: "story-packager"`, and note in `tone.voice_notes`
-  that a portfolio-balance check was not possible. Nudge the caller to run
-  user-needs-classifier for a real classification.
+  that a portfolio-balance check was not possible. Ship the package regardless —
+  a flagged inference is the designed behaviour here, not a blocked run.
 
 Set `tone.register` from `source.mode` (`click-bait` → `urgent-topical`,
 `cultural` → `evergreen-curious`).
+
+## Voice
+
+This skill writes text a reader will see — `headline_options`, `hooks`, `dek` and `pull_quotes` — the pool every channel
+draws its opening from — so it resolves the **shared**
+house voice, the same one the writers use. There is one guide for the whole
+editorial chain; this skill does not carry its own copy.
+
+Resolve most specific first:
+
+1. a voice guide named in the request;
+2. `voice_profile` on the artifact you are reading (a path, or a bare name
+   resolving to `_voice/<name>.md`);
+3. the default `_voice/curaition-tone-of-voice.md`;
+4. nothing resolvable → the essentials below, and say so in your output.
+
+**Carry `voice_profile` forward onto everything you emit.** That is what lets a
+non-default voice travel the chain without any skill needing to know which other
+skills exist. If you resolved the default, write `voice_profile` anyway so the
+choice stays explicit rather than implied.
+
+Essentials, if the guide is unreachable: dry, not earnest. Short sentences, one
+idea each. No filler openers. **British English. No em dashes.** Peer-to-peer,
+never a vendor pitching. See `_voice/README.md` to add a different profile.
 
 ### 4. Write `editorial` — the craft layer
 
@@ -135,7 +174,7 @@ Generate the malleable layer, seeded from the candidate (`headline_hypothesis`,
 - `dek`, `hooks` (from `surprise_factor`), `pull_quotes` (consistent with
   `facts[]`).
 - `narrative_spine` — one ordered set of beats; this is the **reuse engine**
-  (longform → sections, tweet-thread → tweets, carousel → slides). Each beat has
+  (longform → sections, thread → posts, carousel → slides). Each beat has
   a `beat_type`:
   - **grounded** — rests on cited facts; `supports` is required and every id must
     exist in `facts[]`.
@@ -172,7 +211,13 @@ against.
 From the candidate's `suggested_formats`, emit per-channel steering in
 `channel_plan`: `lead_with`, `length`, a `beats` subset of the spine,
 `use_assets` ids, and `need_emphasis`. **This is steering, never rendered copy.**
-Keys are writer skill names; new writers can be added without a schema change.
+
+**Key by channel, never by tool** — `linkedin`, `substack`, `thread`,
+`carousel`, `digest`. You do not know, and must not care, what will render this
+package: a renderer looks up its own channel, and a channel nobody renders is
+simply unread. Naming a tool here would bake your installed set into the
+artifact and strand it the day that set changes. New channels need no schema
+change.
 
 ### 7. `format_readiness`
 
@@ -207,7 +252,7 @@ files. Then write the `.json` and the `.md` twin to the staging folder.
    The packager consolidates; it does not research.
 3. **Ground before lift.** Uncited interpretation is `beat_type: lift`, never a
    fact. `facts[].source` is restricted to real research tools.
-4. **Need is owned by user-needs-classifier.** Carry it when present; infer only
+4. **Need is owned by the classification, not by you.** Carry it when present; infer only
    as a flagged, low-confidence fallback, and say so.
 5. **Flag durability, don't rehost.** The packager marks `rehost_required`; the
    publisher acts on it.
@@ -248,4 +293,4 @@ The **need-aware `framings[]` extension** (multiple need-conditioned framings of
 one story, plus portfolio-balance-driven lead selection — the "user-needs-package"
 idea) is deliberately **deferred to v2** and is not built here.
 
-*CurAItion Intelligence Desk · Story Packager · commit → consolidate → separate · Stage 3 of the daily publishing chain*
+*CurAItion Intelligence Desk · Story Packager · commit → consolidate → separate · runs standalone*

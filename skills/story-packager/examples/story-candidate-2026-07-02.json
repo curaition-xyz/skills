@@ -58,7 +58,7 @@
         "penalties": 0,
         "total": 10
       },
-      "suggested_formats": ["longform-post", "carousel-producer"],
+      "suggested_formats": ["longform", "carousel"],
       "relationship_verifications": [
         {
           "entity": "Nike / England National Team kit",
@@ -92,7 +92,7 @@
       "why_it_matters": "Based on the citations above: the 'arrival photo' has become its own content genre with its own grammar (nonchalance, tailoring, archive-referencing pieces), independent of match performance — a parallel athlete economy running on aesthetics rather than results.",
       "surprise_factor": "The confidence-to-clothing pipeline is stated outright in the captions themselves ('three points minimum when you look that fly') — players and brands are naming the mechanism, not hiding it.",
       "scores": { "cross_domain_bridge": 2, "time_depth": 1, "surprise": 2, "novelty": 1, "evidence": 2, "penalties": 0, "total": 8 },
-      "suggested_formats": ["tweet-thread", "carousel-producer"],
+      "suggested_formats": ["thread", "carousel"],
       "provenance": [
         { "data_point": "Athlete-as-fashion-icon theme, 4 sources / 20 citations", "tool": "curaition_get_cited_themes", "source": "CurAItion" }
       ]
@@ -114,7 +114,7 @@
       "why_it_matters": "Based on the citation above: this is a small, specific instance of a larger authenticity-arbitrage pattern (private, unpolished channels emerging wherever a public channel gets over-monetised) — worth watching as brands try to close the gap.",
       "surprise_factor": "The idea that top-tier footballers feel alienated from their own official social presence — enough to run a second, hidden account — inverts the assumption that athletes control their platforms.",
       "scores": { "cross_domain_bridge": 1, "time_depth": 1, "surprise": 3, "novelty": 1, "evidence": 1, "penalties": 0, "total": 7 },
-      "suggested_formats": ["tweet-thread"],
+      "suggested_formats": ["thread"],
       "provenance": [
         { "data_point": "Authenticity vs Commercialization theme (finsta)", "tool": "curaition_get_cited_themes", "source": "CurAItion" }
       ]
@@ -137,7 +137,7 @@
       "why_it_matters": "Based on the citations above: action sports keep finding ways to borrow terrain never designed for them — a low-cost, high-spectacle format that works for brands and city marketing alike. Evidence base is thin (2 sources), so this is a weaker, lower-confidence pick relative to the others.",
       "surprise_factor": "A literal snow mountain trucked into a city plaza is an immediately strange, delightful image with no news-cycle attachment.",
       "scores": { "cross_domain_bridge": 1, "time_depth": 0, "surprise": 3, "novelty": 1, "evidence": 1, "penalties": 0, "total": 6 },
-      "suggested_formats": ["carousel-producer"],
+      "suggested_formats": ["carousel"],
       "provenance": [
         { "data_point": "Urbanization of Action Sports theme", "tool": "curaition_get_cited_themes", "source": "CurAItion" }
       ]

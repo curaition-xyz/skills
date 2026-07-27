@@ -2,11 +2,12 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://curaition.xyz/schemas/story-candidate.click-bait/v1",
   "title": "CurAItion Story Candidate Handoff (click-bait-scout variant)",
-  "description": "Output of the click-bait-scout skill. SUPERSET of the cultural-scout story-candidate contract: every field the renderers (longform-post, tweet-thread, carousel-producer, digest) already read is preserved, so this validates as a drop-in. Adds a `mode` discriminator, a per-candidate `virality` block, and source-credibility fields. For click-bait, the primary `the_signal_24h.citations` MUST be live web sources (WebSearch/web_fetch) inside the 24h window; any CurAItion facts are optional and live in `the_depth_90d` / `curaition_crossref`.",
+  "description": "A story-candidate handoff from a live-web scout. SUPERSET of the standard story-candidate contract: every field a renderer already reads is preserved, so this validates as a drop-in wherever the standard shape is accepted. Adds a `mode` discriminator, a per-candidate `virality` block, and source-credibility fields. For click-bait, the primary `the_signal_24h.citations` MUST be live web sources (WebSearch/web_fetch) inside the 24h window; any CurAItion facts are optional and live in `the_depth_90d` / `curaition_crossref`.",
   "type": "object",
   "required": ["generated_at", "mode", "candidates", "selected_candidate_id"],
   "properties": {
     "generated_at": { "type": "string", "format": "date-time" },
+    "voice_profile": { "type": "string", "description": "Which voice guide governs the prose in this artifact and everything derived from it. A path, or a bare name resolving to _voice/<name>.md. Omit or set to 'curaition-tone-of-voice' for the house default. Carried forward unchanged by every stage, so a non-default voice travels the whole chain without any skill needing to know which other skills exist. See _voice/README.md." },
     "mode": {
       "type": "string",
       "enum": ["click-bait", "cultural"],
@@ -133,7 +134,8 @@
           },
           "suggested_formats": {
             "type": "array",
-            "items": { "type": "string", "enum": ["longform-post", "tweet-thread", "carousel-producer", "digest"] }
+            "items": { "type": "string", "enum": ["longform", "thread", "carousel", "digest", "longform-post", "tweet-thread", "carousel-producer"] },
+            "description": "Shape the story wants to be, NOT the tool that renders it. Use the four canonical keywords: longform (a written argument), thread (a short sequence of posts), carousel (image slides), digest (a multi-item newsletter). The trailing longform-post/tweet-thread/carousel-producer values are DEPRECATED aliases retained so handoffs written before 2026-07-27 still validate — do not emit them. Naming formats rather than tools is what lets any renderer consume this handoff without that renderer having to exist when the handoff was written."
           },
           "relationship_verifications": {
             "type": "array",
