@@ -36,3 +36,31 @@ readable by a renderer written next year.
 
 Each `SKILL.md` in a chain carries a **Running standalone** section stating its
 contract. Keep it there, and keep it true.
+
+## One voice guide, not one per skill
+
+House voice is the exception that proves the rule above — it is genuinely shared
+data, so it lives in exactly one place: **`skills/_voice/`**.
+
+Every skill in the editorial chain — `cultural-scout`, `click-bait-scout`,
+`user-needs-classifier`, `story-packager`, `linkedin-writer`, `substack-writer` —
+resolves from there. **None carries its own copy.** Two copies stay identical
+right up until the day someone edits one, and then the house voice has quietly
+forked into dialects that nobody notices because every individual skill still
+looks self-consistent.
+
+This does not break standalone-ness, because voice resolves like any other input
+and degrades the same way: name a guide → read `voice_profile` off the artifact →
+fall back to `_voice/curaition-tone-of-voice.md` → fall back to the handful of
+essentials each skill carries inline, and say so. A skill lifted out of this repo
+on its own still writes on-voice; it just flags that the full guide was
+unreachable.
+
+**Swapping voice is supported.** Add `<name>.md` to `_voice/`, then either name it
+per run or set `voice_profile` on the artifact — every stage carries that field
+forward, so the choice travels the chain without any skill knowing another
+exists. See `_voice/README.md`.
+
+Out of scope: `gymshark-partner-pulse`, `gymshark-market-pulse` and `digest`
+speak in a client/product voice of their own and deliberately do not resolve from
+`_voice/`.

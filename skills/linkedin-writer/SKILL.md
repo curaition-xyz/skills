@@ -3,7 +3,7 @@ name: linkedin-writer
 description: >-
   Render a committed CurAItion Story Package into one on-voice LinkedIn post.
   Consumes a story-package.json (a committed story with a frozen facts layer)
-  plus the bundled CurAItion tone-of-voice, and emits a single dry,
+  plus the shared CurAItion tone-of-voice, and emits a single dry,
   argument-led, 150-250 word LinkedIn post that ends on a provocation. Facts
   are frozen (it may only assert claims present in the package's facts[]);
   voice and framing are malleable. Ships a voice-lint gate. Use when the user
@@ -69,8 +69,18 @@ the sourcing bar.
     before 2026-07-27 key this by writer name instead; if `["linkedin"]` is
     absent, fall back to `["linkedin-writer"]`. If neither exists, proceed —
     the plan is optional steering, never a precondition.
-- **Voice source (bundled):** `references/curaition-tone-of-voice.md`. This is
-  the authority on voice. The essentials below are a summary, not a substitute.
+- **Voice source:** resolved from the shared guide, most specific first:
+  1. a voice guide named in the request;
+  2. `voice_profile` carried on the package (a path, or a bare name resolving to
+     `_voice/<name>.md`);
+  3. the default `_voice/curaition-tone-of-voice.md`;
+  4. nothing resolvable → the essentials below, and say so in the delivery note.
+
+  There is **one** voice guide for the whole editorial chain and this skill does
+  not carry its own — per-skill copies are how a house voice forks into
+  dialects. See `_voice/README.md` to add a different profile.
+
+  The essentials below are a summary of the default, never a substitute for it.
 
 ## Voice (from the tone-of-voice guide)
 
@@ -125,7 +135,7 @@ Write the post to the package's staging folder as
 has no headline). Then run the gate:
 
 ```
-python scripts/voice_lint.py <slug>-linkedin.md --channel linkedin \
+python ../_voice/voice_lint.py <slug>-linkedin.md --channel linkedin \
   --package story-package-<date>.json
 ```
 
@@ -136,8 +146,9 @@ them; a warned number usually means a fact-fidelity slip to fix.
 
 ## Reference files
 
-- `references/curaition-tone-of-voice.md` — the voice authority (bundled).
-- `scripts/voice_lint.py` — the "validate, don't hope" gate. Run every time.
+- `_voice/curaition-tone-of-voice.md` — the shared voice authority (one copy,
+  used by the whole chain; see `_voice/README.md`).
+- `_voice/voice_lint.py` — the "validate, don't hope" gate. Run every time.
 - `examples/` — a golden input/output pair: the source package
   (`story-package-clickbait-withneeds-2026-07-02.json`) and the rendered post
   (`linkedin-bitcoin-decoupling.md`) it produces. The post passes the lint with

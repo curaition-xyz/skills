@@ -137,6 +137,30 @@ never bundled. For every fact:
 Set `tone.register` from `source.mode` (`click-bait` → `urgent-topical`,
 `cultural` → `evergreen-curious`).
 
+## Voice
+
+This skill writes text a reader will see — `headline_options`, `hooks`, `dek` and `pull_quotes` — the pool every channel
+draws its opening from — so it resolves the **shared**
+house voice, the same one the writers use. There is one guide for the whole
+editorial chain; this skill does not carry its own copy.
+
+Resolve most specific first:
+
+1. a voice guide named in the request;
+2. `voice_profile` on the artifact you are reading (a path, or a bare name
+   resolving to `_voice/<name>.md`);
+3. the default `_voice/curaition-tone-of-voice.md`;
+4. nothing resolvable → the essentials below, and say so in your output.
+
+**Carry `voice_profile` forward onto everything you emit.** That is what lets a
+non-default voice travel the chain without any skill needing to know which other
+skills exist. If you resolved the default, write `voice_profile` anyway so the
+choice stays explicit rather than implied.
+
+Essentials, if the guide is unreachable: dry, not earnest. Short sentences, one
+idea each. No filler openers. **British English. No em dashes.** Peer-to-peer,
+never a vendor pitching. See `_voice/README.md` to add a different profile.
+
 ### 4. Write `editorial` — the craft layer
 
 Generate the malleable layer, seeded from the candidate (`headline_hypothesis`,

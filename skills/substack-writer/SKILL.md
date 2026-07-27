@@ -3,7 +3,7 @@ name: substack-writer
 description: >-
   Render a committed CurAItion Story Package into one on-voice Substack "The
   Drop" article. Consumes a story-package.json (a committed story with a frozen
-  facts layer) plus the bundled CurAItion tone-of-voice, and emits a single dry,
+  facts layer) plus the shared CurAItion tone-of-voice, and emits a single dry,
   evidence-led Drop essay — a headline, a "Cur(AI)tion · date" subhead, a few
   sectioned beats, and a sources line. It is the premium, deeper version of the
   LinkedIn post. Facts are frozen (it may only assert claims present in the
@@ -79,8 +79,16 @@ the sourcing bar.
     precondition.
   - `provenance` / `facts[].citations` — the only sources the closing line may
     name.
-- **Voice source (bundled):** `references/curaition-tone-of-voice.md` — the
-  authority on voice.
+- **Voice source:** resolved from the shared guide, most specific first:
+  1. a voice guide named in the request;
+  2. `voice_profile` carried on the package (a path, or a bare name resolving to
+     `_voice/<name>.md`);
+  3. the default `_voice/curaition-tone-of-voice.md`;
+  4. nothing resolvable → the essentials below, and say so in the delivery note.
+
+  There is **one** voice guide for the whole editorial chain and this skill does
+  not carry its own — per-skill copies are how a house voice forks into
+  dialects. See `_voice/README.md` to add a different profile.
 
 ## Voice
 
@@ -131,7 +139,7 @@ Write to the package's staging folder as `<slug>-substack-drop.md`, headline
 first. Then run the gate:
 
 ```
-python scripts/voice_lint.py <slug>-substack-drop.md --channel substack-drop \
+python ../_voice/voice_lint.py <slug>-substack-drop.md --channel substack-drop \
   --package story-package-<date>.json
 ```
 
@@ -142,8 +150,9 @@ usually means a source line or stat to re-check against the package.
 
 ## Reference files
 
-- `references/curaition-tone-of-voice.md` — the voice authority (bundled).
-- `scripts/voice_lint.py` — the gate. Run every time.
+- `_voice/curaition-tone-of-voice.md` — the shared voice authority (one copy,
+  used by the whole chain; see `_voice/README.md`).
+- `_voice/voice_lint.py` — the gate. Run every time.
 - `examples/` — a golden input/output pair: the source package
   (`story-package-clickbait-withneeds-2026-07-02.json`) and the rendered Drop
   (`substack-thedrop-bitcoin-decoupling.md`), which passes the lint with zero

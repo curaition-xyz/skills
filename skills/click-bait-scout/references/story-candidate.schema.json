@@ -7,6 +7,7 @@
   "required": ["generated_at", "mode", "candidates", "selected_candidate_id"],
   "properties": {
     "generated_at": { "type": "string", "format": "date-time" },
+    "voice_profile": { "type": "string", "description": "Which voice guide governs the prose in this artifact and everything derived from it. A path, or a bare name resolving to _voice/<name>.md. Omit or set to 'curaition-tone-of-voice' for the house default. Carried forward unchanged by every stage, so a non-default voice travels the whole chain without any skill needing to know which other skills exist. See _voice/README.md." },
     "mode": {
       "type": "string",
       "enum": ["click-bait", "cultural"],

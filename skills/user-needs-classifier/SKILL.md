@@ -129,6 +129,30 @@ need is the psychological job. This is also why the classification never
 names a renderer — it describes the job, and whoever renders picks the
 container.
 
+## Voice
+
+This skill writes text a reader will see — the example headline you produce for each need, and the angle questions a
+writer will work from — so it resolves the **shared**
+house voice, the same one the writers use. There is one guide for the whole
+editorial chain; this skill does not carry its own copy.
+
+Resolve most specific first:
+
+1. a voice guide named in the request;
+2. `voice_profile` on the artifact you are reading (a path, or a bare name
+   resolving to `_voice/<name>.md`);
+3. the default `_voice/curaition-tone-of-voice.md`;
+4. nothing resolvable → the essentials below, and say so in your output.
+
+**Carry `voice_profile` forward onto everything you emit.** That is what lets a
+non-default voice travel the chain without any skill needing to know which other
+skills exist. If you resolved the default, write `voice_profile` anyway so the
+choice stays explicit rather than implied.
+
+Essentials, if the guide is unreachable: dry, not earnest. Short sentences, one
+idea each. No filler openers. **British English. No em dashes.** Peer-to-peer,
+never a vendor pitching. See `_voice/README.md` to add a different profile.
+
 ### 3. Generate angle guidance for the top need(s)
 
 For the primary need (and secondary if named), produce 3-4 concrete

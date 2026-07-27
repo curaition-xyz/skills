@@ -12,6 +12,7 @@
       "const": "curaition.story-package/v1"
     },
     "generated_at": { "type": "string", "format": "date-time" },
+    "voice_profile": { "type": "string", "description": "Which voice guide governs the prose in this artifact and everything derived from it. A path, or a bare name resolving to _voice/<name>.md. Omit or set to 'curaition-tone-of-voice' for the house default. Carried forward unchanged by every stage, so a non-default voice travels the whole chain without any skill needing to know which other skills exist. See _voice/README.md." },
     "package_id": {
       "type": "string",
       "description": "Stable id for this package, e.g. 'pkg-2026-07-02-<slug>'. Used by writers and publishers to correlate outputs back to the source story."
@@ -214,7 +215,7 @@
             },
             "voice_notes": {
               "type": "string",
-              "description": "Free-text steering. Should defer to the my-writing-style profile for house voice rather than restate it."
+              "description": "Free-text steering for THIS story only — register, emphasis, what to lead on. Never restate house voice here: that lives in the shared voice guide (see the sibling voice_profile field and _voice/README.md), and duplicating it is how the two drift apart."
             }
           }
         }
