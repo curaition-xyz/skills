@@ -7,11 +7,10 @@ description: >
   cross-domain signal — valuing curiosity and uniqueness over immediacy and current affairs.
   It deliberately AVOIDS news, politics, geopolitics and market/crypto stories, and never
   leads with a client brand lane. Grounds the pick in citations and emits a ranked
-  story-candidate handoff that downstream renderers (longform-post, tweet-thread, digest,
-  carousel-producer) turn into publishable content. Use when asked to "find today's story",
-  "scout cultural signals", "what should we post about", for dog-food / marketing content
-  discovery, or as STAGE 1 of the daily publishing chain. LIBRARY-ONLY: never analyse
-  client/org content.
+  story-candidate handoff that any downstream renderer can turn into publishable content.
+  Use when asked to "find today's story", "scout cultural signals", "what should we post
+  about", or for dog-food / marketing content discovery. Runs standalone: the handoff is a
+  finished artifact, useful on its own. LIBRARY-ONLY: never analyse client/org content.
 ---
 
 # CurAItion Cultural Scout
@@ -146,6 +145,17 @@ Record the canary results in the handoff (`scope_verification`). A candidate pro
 passing canaries is invalid.
 
 ---
+
+## Running standalone
+
+**This skill requires no other skill.** The handoff it writes is a finished
+artifact — a ranked, cited shortlist with a selected pick — and it is useful on
+its own, read by a person or by any tool that understands the shape.
+
+Nothing downstream is assumed to exist. Suggest formats, never tools (see
+**Format routing**), and never end a run by telling the caller to go run
+something else. If they want a post out of it, they will point something at the
+file.
 
 ## What you produce
 
@@ -332,10 +342,17 @@ justification line in the handoff (`selection_note`).
 ---
 
 ## Format routing (suggest, don't decide)
-- **Distinctive thesis, 2+ domains, needs argument** → `longform-post` (LinkedIn + Substack)
-- **One delightful counter-intuitive fact** → `tweet-thread`
-- **Visual/narrative arc, a protagonist or place** → `carousel-producer`
-- **Several curiosities worth a round-up** → `digest`
+
+Name **formats**, never tools. Whoever renders this handoff picks their own
+instrument; your job is only to say what shape the story wants to be.
+
+- **Distinctive thesis, 2+ domains, needs argument** → `longform` (a written argument — e.g. LinkedIn, Substack)
+- **One delightful counter-intuitive fact** → `thread` (a short sequence of posts)
+- **Visual/narrative arc, a protagonist or place** → `carousel` (image slides)
+- **Several curiosities worth a round-up** → `digest` (a multi-item newsletter)
+
+Write exactly those four keywords into `suggested_formats`. They describe shape,
+so they stay meaningful whatever the reader happens to have installed.
 
 Default: **one story, many formats** (repurpose the day's top curiosity across channels).
 
@@ -369,4 +386,4 @@ Default: **one story, many formats** (repurpose the day's top curiosity across c
 - `references/curaition-playbook.md` — CurAItion MCP toolset: what each tool does + scout recipes.
 - `references/story-candidate.schema.json` — the handoff contract every renderer reads.
 
-*CurAItion Intelligence Desk · Cultural Scout · curiosity over immediacy · Stage 1 of the daily dog-food chain*
+*CurAItion Intelligence Desk · Cultural Scout · curiosity over immediacy · runs standalone*

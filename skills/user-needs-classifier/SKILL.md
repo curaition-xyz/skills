@@ -8,23 +8,33 @@ description: >
   Produces primary/secondary need scores, story-specific angle and
   headline guidance, and a portfolio-balance check against recent editions
   so output doesn't lopsidedly over-serve one need (esp. overproduced,
-  underperforming "Update me" pieces). Use as Stage 2 of the daily
-  publishing chain, after cultural-scout / click-bait-scout and before a
-  renderer (longform-post, tweet-thread, carousel-producer, digest). Also
-  trigger for "classify by user need", "what need does this story serve",
-  "apply the user needs framework/model", "run this through smartocto/BBC
-  user needs", or any request for editorial framing/angle guidance on a
-  story idea, even without naming the framework.
+  underperforming "Update me" pieces). Applies to a story-candidate handoff
+  from any source, and to a story described in prose when no handoff exists.
+  Also trigger for "classify by user need", "what need does this story
+  serve", "apply the user needs framework/model", "run this through
+  smartocto/BBC user needs", or any request for editorial framing/angle
+  guidance on a story idea, even without naming the framework. Runs
+  standalone: it needs nothing but a story to classify.
 ---
 
 # User Needs Classifier
 
-Editorial framing sits on top of facts and format. cultural-scout and
-click-bait-scout find the *what* (a grounded, cited story candidate).
-Renderer skills decide the *format* (longform-post, tweet-thread,
-carousel-producer, digest). This skill decides the *need* — the
-psychological reason a reader engages with the piece — and hands the
-renderer concrete guidance for hitting it.
+Editorial framing sits on top of facts and format. Something else finds the
+*what* (a grounded, cited story candidate). Something else decides the
+*format* (a long-form essay, a thread, a carousel, a digest). This skill
+decides the *need* — the psychological reason a reader engages with the
+piece — and hands whoever writes it concrete guidance for hitting it.
+
+## Running standalone
+
+**This skill requires no other skill.** It classifies whatever story it is
+given. A `story-candidate-<date>.json` is the richest input, but a story
+described in a paragraph, a headline plus a few links, or a rough pitch all
+work — the eight needs apply to any story, not to a file format.
+
+With thinner input the classification is thinner too: say so in the
+rationale and hold the secondary need loosely. What you must not do is
+refuse, or send the caller away to produce a handoff first.
 
 Read `references/user-needs-model.md` before classifying anything — it has
 the full framework, all eight need definitions, and the question banks this
@@ -52,11 +62,12 @@ skill is for.
 
 ### 1. Load the story candidates
 
-Read the `story-candidate-<YYYY-MM-DD>.json` produced by cultural-scout or
-click-bait-scout, wherever it actually lives (the scouts' own default is
-`daily-drafts/<YYYY-MM-DD>/`, but treat that as a convention, not a
-guarantee — the file may sit anywhere, including flat in a working
-directory). You need the full `candidates` array, not just the
+Read the `story-candidate-<YYYY-MM-DD>.json`, wherever it actually lives
+(`daily-drafts/<YYYY-MM-DD>/` is the usual convention, not a guarantee — the
+file may sit anywhere, including flat in a working directory). It does not
+matter what produced it; only its shape matters. If no such file exists,
+work from whatever description of the story you were given and skip to
+step 2. You need the full `candidates` array, not just the
 `selected_candidate_id` — classify every candidate the scout ranked, not
 only the top pick, since the portfolio-balance step (below) benefits from
 seeing the full spread of options that were available that day.
@@ -99,8 +110,8 @@ as primary/secondary. Write a one-line rationale for each that names the
 specific fact it's grounded in.
 
 If the source candidate itself flags its evidence as thin, contaminated, or
-inconclusive (e.g. cultural-scout marking a `why_now` signal as
-contaminated, or a candidate carrying only one or two citations), say so
+inconclusive (a `why_now` signal marked contaminated, or a candidate
+carrying only one or two citations), say so
 explicitly in the rationale and hold any secondary need loosely rather than
 scoring it with the same confidence as a well-evidenced candidate. A
 low-confidence classification honestly labelled is more useful downstream
@@ -112,9 +123,11 @@ like "analysis" or "explainer" is not itself a need. An analysis piece can
 serve Give me perspective (interpreting what something means) or Educate me
 (explaining how something works) depending on what it's actually doing for
 the reader — don't let the candidate's `suggested_formats` field
-(longform-post, carousel-producer, etc.) bleed into or substitute for the
+(longform, thread, carousel, digest) bleed into or substitute for the
 need classification. They're independent axes: format is the container,
-need is the psychological job.
+need is the psychological job. This is also why the classification never
+names a renderer — it describes the job, and whoever renders picks the
+container.
 
 ### 3. Generate angle guidance for the top need(s)
 
@@ -200,4 +213,4 @@ opening hook and structure, not just the topic.
 
 ---
 
-*CurAItion Intelligence Desk · User Needs Classifier · classify the need before you render · Stage 2 of the daily publishing chain*
+*CurAItion Intelligence Desk · User Needs Classifier · classify the need before you render · runs standalone*

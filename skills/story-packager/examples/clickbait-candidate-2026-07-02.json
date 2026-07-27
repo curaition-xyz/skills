@@ -57,7 +57,7 @@
       "why_it_matters": "Based on the citations above: 'crypto is just leveraged Nasdaq' has been the bear's favourite jibe for years. A day where Bitcoin rises as tech falls is exactly the counter-example bulls have wanted — but the simultaneous ETF outflows say the smart, slow money isn't validating it yet. That tension (retail/technical rally vs absent institutions) is the real story, not the green candle.",
       "surprise_factor": "The rally's named catalyst is a man who isn't even a current Fed policymaker, and it happened while ETF money kept leaving — a decoupling nobody 'official' is funding.",
       "scores": { "velocity_spread": 2, "headline_grab": 2, "freshness": 2, "cross_domain_reach": 1, "curaition_depth": 1, "evidence": 2, "penalties": 0, "total": 10 },
-      "suggested_formats": ["tweet-thread", "longform-post"],
+      "suggested_formats": ["thread", "longform"],
       "relationship_verifications": [
         { "claim": "Crypto rose while the Nasdaq fell on 2 July 2026 (decoupling)", "corroborating_outlet": "The Motley Fool", "evidence_url": "https://www.fool.com/coverage/stock-market-today/2026/07/02/crypto-market-today-july-2-bitcoin-breaks-away-from-tech-stocks-to-surge-above-usd61-000/" },
         { "claim": "Rally attributed to Warsh's Sintra comments + rate-cut hopes", "corroborating_outlet": "Coinpedia", "evidence_url": "https://coinpedia.org/news/why-is-crypto-market-going-up-today-july-2nd/" }
@@ -96,7 +96,7 @@
       "why_it_matters": "Highest raw velocity of the day, but for a cultural-intelligence brand it is thin: no CurAItion library depth, limited cross-domain reach beyond celebrity, and easy to look like every other outlet. Selected against for that reason, not for safety.",
       "surprise_factor": "A whole Krispy Kreme truck as wedding catering is the screenshot detail.",
       "scores": { "velocity_spread": 3, "headline_grab": 3, "freshness": 2, "cross_domain_reach": 0, "curaition_depth": 0, "evidence": 1, "penalties": 0, "total": 9 },
-      "suggested_formats": ["tweet-thread"],
+      "suggested_formats": ["thread"],
       "provenance": [
         { "data_point": "Wedding logistics / donation", "tool": "WebSearch", "source": "WebSearch" }
       ]
@@ -126,10 +126,10 @@
         "freshness_hours": 10,
         "still_accelerating": false
       },
-      "why_it_matters": "Clean, corroborated transfer story with a verbatim quote, but narrow domain reach and no CurAItion depth. A solid tweet-thread, not the lead.",
+      "why_it_matters": "Clean, corroborated transfer story with a verbatim quote, but narrow domain reach and no CurAItion depth. A solid thread, not the lead.",
       "surprise_factor": "A World Cup winner forcing a move days after lifting a trophy.",
       "scores": { "velocity_spread": 2, "headline_grab": 2, "freshness": 1, "cross_domain_reach": 0, "curaition_depth": 0, "evidence": 2, "penalties": 0, "total": 7 },
-      "suggested_formats": ["tweet-thread"],
+      "suggested_formats": ["thread"],
       "provenance": [
         { "data_point": "Alvarez transfer request / €150M bid", "tool": "WebSearch", "source": "WebSearch" }
       ]

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://curaition.xyz/schemas/story-candidate/v1",
   "title": "CurAItion Story Candidate Handoff",
-  "description": "Output of the cultural-scout skill. Consumed by renderer skills (longform-post, tweet-thread, carousel-producer, digest). All facts must be library-sourced (source_scope: 'library') and citation-backed.",
+  "description": "A story-candidate handoff from a library-corpus scout. Consumed by any renderer for the longform / thread / carousel / digest formats — it names no renderer, so none needs to exist when the handoff is written. All facts must be library-sourced (source_scope: 'library') and citation-backed.",
   "type": "object",
   "required": ["generated_at", "scope_verification", "candidates", "selected_candidate_id"],
   "properties": {
@@ -93,7 +93,8 @@
           },
           "suggested_formats": {
             "type": "array",
-            "items": { "type": "string", "enum": ["longform-post", "tweet-thread", "carousel-producer", "digest"] }
+            "items": { "type": "string", "enum": ["longform", "thread", "carousel", "digest", "longform-post", "tweet-thread", "carousel-producer"] },
+            "description": "Shape the story wants to be, NOT the tool that renders it. Use the four canonical keywords: longform (a written argument), thread (a short sequence of posts), carousel (image slides), digest (a multi-item newsletter). The trailing longform-post/tweet-thread/carousel-producer values are DEPRECATED aliases retained so handoffs written before 2026-07-27 still validate — do not emit them. Naming formats rather than tools is what lets any renderer consume this handoff without that renderer having to exist when the handoff was written."
           },
           "relationship_verifications": {
             "type": "array",

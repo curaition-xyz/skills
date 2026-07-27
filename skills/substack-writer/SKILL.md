@@ -2,26 +2,24 @@
 name: substack-writer
 description: >-
   Render a committed CurAItion Story Package into one on-voice Substack "The
-  Drop" article. Stage 3 (rendering) of the daily publishing chain: consumes a
-  story-package.json from story-packager plus the bundled CurAItion
-  tone-of-voice, and emits a single dry, evidence-led Drop essay — a headline, a
-  "Cur(AI)tion · date" subhead, a few sectioned beats, and a sources line. It is
-  the premium, deeper version of the LinkedIn post. Facts are frozen (it may
-  only assert claims present in the package's facts[]); voice and framing are
-  malleable. Ships a voice-lint gate. Use when the user asks to "write the Drop",
-  "render this package for Substack", "turn this story package into a Drop
-  article", or names Substack/The Drop as the target channel. Consumes a
-  story-package; if given only a raw scout handoff, run story-packager first.
-  Scope: The Drop only (not the longform essay).
+  Drop" article. Consumes a story-package.json (a committed story with a frozen
+  facts layer) plus the bundled CurAItion tone-of-voice, and emits a single dry,
+  evidence-led Drop essay — a headline, a "Cur(AI)tion · date" subhead, a few
+  sectioned beats, and a sources line. It is the premium, deeper version of the
+  LinkedIn post. Facts are frozen (it may only assert claims present in the
+  package's facts[]); voice and framing are malleable. Ships a voice-lint gate.
+  Use when the user asks to "write the Drop", "render this package for
+  Substack", "turn this story package into a Drop article", or names
+  Substack/The Drop as the target channel. Runs standalone: given a thinner
+  brief it commits the story itself and says so. Scope: The Drop only (not the
+  longform essay).
 ---
 
 # CurAItion Substack Writer (The Drop)
 
-The story-packager committed the story and froze its facts. This skill renders
-that package into one Substack **Drop** article: the deeper, evidenced sibling
-of the LinkedIn post, same facts, more room. It is a **renderer** (Stage 3 of
-the daily publishing chain), downstream of story-packager. It writes prose; it
-never re-derives the story or invents a fact.
+This skill renders a committed story into one Substack **Drop** article: the
+deeper, evidenced sibling of the LinkedIn post, same facts, more room. It
+writes prose; it never re-derives the story or invents a fact.
 
 Governing rule, inherited from the package: **facts are frozen, craft is
 malleable.** Reorder, select, expand and rephrase freely. Never assert a claim
@@ -31,10 +29,34 @@ The Drop is *"more depth, more evidence, still dry — the premium version of th
 LinkedIn post"* (tone-of-voice guide). Same argument as the post; it earns its
 length with evidence and sequencing, not adjectives.
 
+## Running standalone
+
+**This skill requires no other skill.** It consumes an *artifact*, not a
+pipeline position. A story package may arrive from anywhere — another skill, a
+colleague, a file you wrote by hand.
+
+If you are handed something thinner than a story package (a scout handoff, a
+cited brief, a topic plus links), do not stop and ask for one. Commit the story
+yourself: pick the single candidate, extract the cited claims into a `facts[]`
+of your own with `importance` and `layer`, derive a one-line thesis, and write.
+Then open the delivery note with one line — *"Rendered from a raw handoff, not
+a committed package: thesis and fact importance are mine."* — so the caller
+knows the framing was not pre-agreed. A flagged inference beats a refusal.
+
+The Drop's length makes this more consequential than for a short post: with
+more room, an uncommitted story drifts further. Keep the thin-input version
+shorter rather than padding to the usual depth.
+
+The only hard floor is citation: every claim you assert must be traceable to
+something in the material you were given. Thin input lowers confidence, never
+the sourcing bar.
+
 ## Inputs
 
-- **Required:** `story-package-<date>.json` (schema owned by story-packager:
-  `story-packager/references/story-package.schema.json`). Read:
+- **Preferred:** `story-package-<date>.json`. The fields below are the whole
+  contract — anything else in the file is ignored, and any producer that emits
+  them will work. `examples/story-package-clickbait-withneeds-2026-07-02.json`
+  is a complete worked instance; read it if the shape is unclear. Read:
   - `editorial.thesis` — the argument the essay must land, and the seed of the
     headline.
   - `editorial.headline_options` — the pool for the title (adapt, don't
@@ -49,9 +71,12 @@ length with evidence and sequencing, not adjectives.
   - `facts[]` — the frozen ground truth with `importance` and `layer`. The Drop
     can carry more of the mid-importance facts than the post; still lead with
     the importance-3 signal.
-  - `channel_plan["substack-writer"]` — per-channel steering when present
+  - `channel_plan["substack"]` — per-channel steering when present
     (`lead_with`, `length`, `beats`, `use_assets`, `need_emphasis`). Steering,
-    not copy.
+    not copy. Packages written before 2026-07-27 key this by writer name
+    instead; if `["substack"]` is absent, fall back to `["substack-writer"]`.
+    If neither exists, proceed — the plan is optional steering, never a
+    precondition.
   - `provenance` / `facts[].citations` — the only sources the closing line may
     name.
 - **Voice source (bundled):** `references/curaition-tone-of-voice.md` — the
@@ -124,10 +149,11 @@ usually means a source line or stat to re-check against the package.
   (`substack-thedrop-bitcoin-decoupling.md`), which passes the lint with zero
   warnings. Use it as the calibration target.
 
-The story-package contract is owned by story-packager
-(`story-packager/references/story-package.schema.json`) — this skill consumes
-it, it does not redefine it.
+This skill does not define the story-package format — it reads a documented
+subset of it (see **Inputs**) and ignores the rest. That is deliberate: a
+producer can add fields without breaking this renderer, and this renderer needs
+nothing installed alongside it to work.
 
 ---
 
-*CurAItion Intelligence Desk · Substack Writer (The Drop) · one package, one essay, facts frozen · renderer stage of the daily publishing chain*
+*CurAItion Intelligence Desk · Substack Writer (The Drop) · one package, one essay, facts frozen · runs standalone*

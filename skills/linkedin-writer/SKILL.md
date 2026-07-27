@@ -2,33 +2,51 @@
 name: linkedin-writer
 description: >-
   Render a committed CurAItion Story Package into one on-voice LinkedIn post.
-  Stage 3 (rendering) of the daily publishing chain: consumes a
-  story-package.json from story-packager plus the bundled CurAItion
-  tone-of-voice, and emits a single dry, argument-led, 150-250 word LinkedIn
-  post that ends on a provocation. Facts are frozen (it may only assert claims
-  present in the package's facts[]); voice and framing are malleable. Ships a
-  voice-lint gate. Use when the user asks to "write the LinkedIn post", "render
-  this package for LinkedIn", "turn this story package into a LinkedIn post",
-  or names LinkedIn as the target channel for a packaged story. Consumes a
-  story-package; if given only a raw scout handoff, run story-packager first.
+  Consumes a story-package.json (a committed story with a frozen facts layer)
+  plus the bundled CurAItion tone-of-voice, and emits a single dry,
+  argument-led, 150-250 word LinkedIn post that ends on a provocation. Facts
+  are frozen (it may only assert claims present in the package's facts[]);
+  voice and framing are malleable. Ships a voice-lint gate. Use when the user
+  asks to "write the LinkedIn post", "render this package for LinkedIn", "turn
+  this story package into a LinkedIn post", or names LinkedIn as the target
+  channel. Runs standalone: given a thinner brief it commits the story itself
+  and says so.
 ---
 
 # CurAItion LinkedIn Writer
 
-The story-packager committed the story and froze its facts. This skill does one
-thing: render that package into a single LinkedIn post in CurAItion's voice.
-It is a **renderer** (Stage 3 of the daily publishing chain), downstream of
-story-packager. It writes prose; it never re-derives the story or invents a
-fact.
+This skill does one thing: render a committed story into a single LinkedIn post
+in CurAItion's voice. It writes prose; it never re-derives the story or invents
+a fact.
 
 The governing rule, inherited from the package: **facts are frozen, craft is
 malleable.** You may reorder, select by importance, compress and rephrase. You
 may never assert a claim that is not in the package's `facts[]`.
 
+## Running standalone
+
+**This skill requires no other skill.** It consumes an *artifact*, not a
+pipeline position. A story package may arrive from anywhere — another skill, a
+colleague, a file you wrote by hand.
+
+If you are handed something thinner than a story package (a scout handoff, a
+cited brief, a topic plus links), do not stop and ask for one. Commit the story
+yourself: pick the single candidate, extract the cited claims into a `facts[]`
+of your own with `importance` and `layer`, derive a one-line thesis, and write.
+Then open the delivery note with one line — *"Rendered from a raw handoff, not
+a committed package: thesis and fact importance are mine."* — so the caller
+knows the framing was not pre-agreed. A flagged inference beats a refusal.
+
+The only hard floor is citation: every claim you assert must be traceable to
+something in the material you were given. Thin input lowers confidence, never
+the sourcing bar.
+
 ## Inputs
 
-- **Required:** `story-package-<date>.json` (schema owned by story-packager:
-  `story-packager/references/story-package.schema.json`). Read:
+- **Preferred:** `story-package-<date>.json`. The fields below are the whole
+  contract — anything else in the file is ignored, and any producer that emits
+  them will work. `examples/story-package-clickbait-withneeds-2026-07-02.json`
+  is a complete worked instance; read it if the shape is unclear. Read:
   - `editorial.thesis` — the one-sentence argument the post must land.
   - `editorial.hooks` — candidate opening reframes.
   - `editorial.narrative_spine` — the ordered beats. Each beat's `beat_type`
@@ -45,9 +63,12 @@ may never assert a claim that is not in the package's `facts[]`.
     steer emphasis (e.g. "Give me perspective" → lead with the reframe).
   - `facts[]` — the frozen ground truth, each with `importance` (0-3) and a
     `layer`. For a 150-250 word post, keep only importance 2-3 facts.
-  - `channel_plan["linkedin-writer"]` — per-channel steering when present:
+  - `channel_plan["linkedin"]` — per-channel steering when present:
     `lead_with`, `length`, a `beats` subset of the spine, `use_assets`,
-    `need_emphasis`. This is steering, not copy. Honour it.
+    `need_emphasis`. This is steering, not copy. Honour it. Packages written
+    before 2026-07-27 key this by writer name instead; if `["linkedin"]` is
+    absent, fall back to `["linkedin-writer"]`. If neither exists, proceed —
+    the plan is optional steering, never a precondition.
 - **Voice source (bundled):** `references/curaition-tone-of-voice.md`. This is
   the authority on voice. The essentials below are a summary, not a substitute.
 
@@ -122,10 +143,11 @@ them; a warned number usually means a fact-fidelity slip to fix.
   (`linkedin-bitcoin-decoupling.md`) it produces. The post passes the lint with
   zero warnings; use it as the calibration target.
 
-The story-package contract itself is owned by story-packager
-(`story-packager/references/story-package.schema.json`) — this skill consumes
-it, it does not redefine it.
+This skill does not define the story-package format — it reads a documented
+subset of it (see **Inputs**) and ignores the rest. That is deliberate: a
+producer can add fields without breaking this renderer, and this renderer needs
+nothing installed alongside it to work.
 
 ---
 
-*CurAItion Intelligence Desk · LinkedIn Writer · one package, one post, facts frozen · renderer stage of the daily publishing chain*
+*CurAItion Intelligence Desk · LinkedIn Writer · one package, one post, facts frozen · runs standalone*

@@ -129,13 +129,13 @@
   ],
 
   "channel_plan": {
-    "substack-writer": {
+    "substack": {
       "lead_with": "hook",
       "length": "longform",
       "use_assets": ["a1_england_ig", "a2_canada_ig"],
       "beats": ["hook", "context", "depth", "why_now", "so_what", "cta"]
     },
-    "carousel-producer": {
+    "carousel": {
       "lead_with": "hook",
       "length": "7 slides",
       "use_assets": ["a1_england_ig", "a2_canada_ig"],
@@ -146,7 +146,7 @@
   "format_readiness": {
     "user_needs": { "ready": true },
     "linkedin-article": { "ready": true },
-    "tweet-thread": { "ready": true },
+    "thread": { "ready": true },
     "ig-carousel": { "ready": true, "needs": ["generated hero image", "consistent visual motif for slides"] },
     "long-form-substack": { "ready": false, "reason": "4 facts / 2 primary sources — essay-length, not feature-length", "enrichment": ["more nations' kits (Adidas named but only England + Canada evidenced)", "cited history for the heraldry beat so depth stops being uncited lift"] }
   },
@@ -171,6 +171,6 @@
     { "field": "editorial.headline_options", "method": "generated", "derived_from": ["headline_hypothesis", "surprise_factor"], "confidence": "high", "note": "Pool seeded from the candidate's headline_hypothesis; classifier headline_options were unavailable." },
     { "field": "editorial.narrative_spine", "method": "generated", "derived_from": ["the_signal_24h", "the_depth_90d", "why_now", "why_it_matters"], "confidence": "high", "note": "Beats assembled from the candidate; the_depth_90d carried as beat_type=lift because it is explicitly uncited interpretation." },
     { "field": "facts", "method": "carried-transformed", "derived_from": ["the_signal_24h.summary", "relationship_verifications", "why_now"], "confidence": "high", "note": "Signal summary split into atomic facts; WebSearch corroboration folded into f1 citations; f3/f4 drawn from verification + why_now layers." },
-    { "field": "assets", "method": "carried-transformed", "derived_from": ["the_signal_24h.citations"], "confidence": "high", "note": "Two Instagram source citations promoted to oEmbed assets (embed_provider=instagram). No generated hero image exists yet — carousel-producer must supply one downstream." }
+    { "field": "assets", "method": "carried-transformed", "derived_from": ["the_signal_24h.citations"], "confidence": "high", "note": "Two Instagram source citations promoted to oEmbed assets (embed_provider=instagram). No generated hero image exists yet — the carousel channel must supply one downstream." }
   ]
 }

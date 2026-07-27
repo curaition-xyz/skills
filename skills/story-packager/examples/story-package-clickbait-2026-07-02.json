@@ -133,12 +133,12 @@
   "assets": [],
 
   "channel_plan": {
-    "tweet-thread": {
+    "thread": {
       "lead_with": "hook",
       "length": "6 tweets",
       "beats": ["hook", "context", "why_now", "tension", "cta"]
     },
-    "substack-writer": {
+    "substack": {
       "lead_with": "tension",
       "length": "longform",
       "beats": ["hook", "context", "why_now", "depth", "tension", "cta"]
@@ -146,7 +146,7 @@
   },
 
   "format_readiness": {
-    "tweet-thread": { "ready": true },
+    "thread": { "ready": true },
     "long-form-substack": { "ready": true },
     "ig-carousel": { "ready": false, "reason": "no embeddable or generated visual asset — sources are news articles", "needs": ["generated hero image", "a BTC-vs-Nasdaq / ETF-flows chart"] }
   },

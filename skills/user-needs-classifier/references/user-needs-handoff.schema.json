@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "User Needs Classification Handoff",
-  "description": "Output of the user-needs-classifier skill. Enriches a cultural-scout / click-bait-scout story-candidate handoff with User Needs Model 2.0 classification, angle guidance, and a portfolio-balance check. Renderer skills (longform-post, tweet-thread, carousel-producer, digest) should read this alongside the source story-candidate file.",
+  "description": "A User Needs Model 2.0 classification. Enriches a story-candidate handoff — from any producer — with need scores, angle guidance, and a portfolio-balance check. Whatever renders the story should read this alongside the source story-candidate file.",
   "type": "object",
   "required": ["generated_at", "framework", "source_story_candidate_file", "classifications", "selected_candidate_id"],
   "properties": {
