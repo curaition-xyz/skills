@@ -37,6 +37,24 @@ Then select it, by either route:
 `voice_profile` holds a path or a bare profile name (`acme-house` resolves to
 `_voice/acme-house.md`). Absent, the default applies.
 
+## Finding this directory
+
+`_voice/` sits **beside** each skill's folder, not inside it:
+
+```
+skills/
+  _voice/            ← here
+  cultural-scout/
+  linkedin-writer/
+  …
+```
+
+So from a `SKILL.md`, the guide is `../_voice/curaition-tone-of-voice.md`. Do not
+look for `_voice/` under the current working directory — when a skill runs, cwd is
+usually the user's project or a staging folder, nowhere near the skills root.
+Resolve the absolute path once and reuse it, including for `voice_lint.py`, which
+is invoked from the staging folder where the draft lives.
+
 ## Resolution order
 
 Every chain skill resolves voice the same way, most specific first:
