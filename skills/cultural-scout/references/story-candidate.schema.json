@@ -16,14 +16,15 @@
     },
     "scope_verification": {
       "type": "object",
-      "description": "Proof the library-only scope contract held. A candidate is INVALID if either canary failed.",
+      "description": "Proof the library-only scope contract held. A candidate is INVALID only if a HARD GATE failed: source_scope !== 'library', effective_org_id_null !== true, or athlete_canary_count > 0. external_safe is a recorded data-quality note, NOT a gate.",
       "required": ["source_scope", "effective_org_id_null", "external_safe", "athlete_canary_count"],
       "properties": {
         "source_scope": { "type": "string", "const": "library" },
-        "effective_org_id_null": { "type": "boolean", "description": "envelope.scope.effective_org_id === null — must be true" },
-        "external_safe": { "type": "boolean", "description": "envelope.external_safe === true — must be true" },
+        "effective_org_id_null": { "type": "boolean", "description": "HARD GATE: envelope.scope.effective_org_id === null — must be true" },
+        "external_safe": { "type": "boolean", "description": "RECORDED, not gated: envelope.external_safe (a data-quality verdict, not a leak signal). May be false on library when one curator/seed org dominates — note it and proceed." },
+        "representativeness_note": { "type": "string", "description": "When external_safe is false, the envelope.external_safe_reasons[0] explaining the data-quality caveat (e.g. single-org concentration)." },
         "athlete_canary_handle": { "type": "string", "description": "the Partner-Ecosystem handle probed" },
-        "athlete_canary_count": { "type": "integer", "description": "items returned for the athlete-leak probe — must be 0" },
+        "athlete_canary_count": { "type": "integer", "description": "HARD GATE: items returned for the athlete-leak probe — must be 0" },
         "checked_at": { "type": "string", "format": "date-time" }
       }
     },
@@ -32,12 +33,13 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "rank", "headline_hypothesis", "domains", "scores", "the_signal_24h", "why_it_matters", "provenance"],
+        "required": ["id", "rank", "headline_hypothesis", "lead_domain", "domains", "scores", "the_signal_24h", "why_it_matters", "provenance"],
         "properties": {
           "id": { "type": "string" },
           "rank": { "type": "integer" },
           "headline_hypothesis": { "type": "string", "description": "The angle in one line. Not a final headline." },
-          "domains": { "type": "array", "items": { "type": "string" }, "description": "Library domains this signal spans. 2+ is the strong case." },
+          "lead_domain": { "type": "string", "description": "The single domain this candidate leads with — must be on the SKILL.md eligible roster. REQUIRED: the next run's cooldown reads this field from the last 7 handoffs to avoid repeating a domain. Without it the cooldown silently no-ops." },
+          "domains": { "type": "array", "items": { "type": "string" }, "description": "Library domains this signal spans, including lead_domain. 2+ is the strong case." },
           "entities": { "type": "array", "items": { "type": "string" } },
           "the_signal_24h": {
             "type": "object",
@@ -78,13 +80,15 @@
             "type": "object",
             "required": ["total"],
             "properties": {
-              "cross_domain_bridge": { "type": "integer" },
-              "time_depth": { "type": "integer" },
-              "surprise": { "type": "integer" },
+              "cross_domain_bridge": { "type": "integer", "description": "0-3: a surprising connection between 2+ eligible domains." },
+              "time_depth": { "type": "integer", "description": "0-2: timeless rhyme — echoes something old, NOT a news escalation." },
+              "surprise": { "type": "integer", "description": "0-3: curiosity / distinctiveness, the 'I never knew that' factor. The primary signal." },
               "novelty": { "type": "integer" },
-              "evidence": { "type": "integer" },
-              "penalties": { "type": "integer" },
-              "total": { "type": "integer" }
+              "rarity_weight": { "type": "integer", "minimum": 0, "maximum": 3, "description": "0-3: computed at run time from the lead domain's share of the live eligible pool (see scoring.rarity_weights). Replaces the retired flat breadth bonus, which was worth +1, applied to 10 of the 11 swept domains including the largest, and had no field here at all — so it was both inert and invisible." },
+              "evidence": { "type": "integer", "description": "0-2: citation density and source count RELATIVE TO THAT DOMAIN'S OWN NORM. Absolute density re-imports the volume bias the per-domain quota removes." },
+              "cooldown": { "type": "integer", "minimum": -3, "maximum": 0, "description": "0 to -3: penalty when lead_domain was selected recently (-3 within 3 days, -1 at 4-7 days). Derived by reading the previous 7 handoffs." },
+              "penalties": { "type": "integer", "description": "Hard penalties: current-affairs/geopolitics -5, markets/crypto -5, big-tech-as-news -4, client brand lane as lead -5, promotional -3, single-domain no bridge -1." },
+              "total": { "type": "integer", "description": "Sum of the above. Maximum 13 before modifiers and penalties." }
             }
           },
           "suggested_formats": {
@@ -117,6 +121,27 @@
         }
       }
     },
-    "selected_candidate_id": { "type": "string", "description": "The top pick for today's one-story-many-formats run." }
+    "selected_candidate_id": { "type": "string", "description": "The top pick for today's one-story-many-formats run." },
+    "scoring": {
+      "type": "object",
+      "description": "How this run's domain weighting was derived. Recorded so a reader can see WHY the day's pick won, and so a repetitive streak is auditable rather than mysterious.",
+      "properties": {
+        "rarity_weights": {
+          "type": "object",
+          "description": "Per-eligible-domain { share, weight } computed at run time from the live domain_registry returned by Canary A. Never hardcoded: culture grew 2.9x between 2026-06-19 and 2026-07-27 while food grew 1.1x, so any fixed table stops discriminating within weeks.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "share": { "type": "number", "description": "domain content_count / total across the eligible roster." },
+              "weight": { "type": "integer", "minimum": 0, "maximum": 3 }
+            }
+          }
+        },
+        "cooldown_source": { "type": "string", "description": "Which prior handoffs informed the cooldown, or 'no history' on a first run." },
+        "domains_swept": { "type": "array", "items": { "type": "string" }, "description": "Eligible domains actually queried this run — one get_cited_themes call each." },
+        "domains_empty": { "type": "array", "items": { "type": "string" }, "description": "Eligible domains that returned nothing usable. Recorded explicitly; a domain must never be dropped silently." }
+      }
+    },
+    "selection_note": { "type": "string", "description": "Required when the selected candidate's lead_domain has rarity_weight 0 (the largest eligible domain) AND was also selected within the last 7 days — the exact repetition this rubric exists to prevent. Not forbidden, but it must be justified in writing." }
   }
 }
