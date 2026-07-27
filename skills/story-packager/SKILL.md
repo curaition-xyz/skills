@@ -161,11 +161,16 @@ Essentials, if the guide is unreachable: dry, not earnest. Short sentences, one
 idea each. No filler openers. **British English. No em dashes.** Peer-to-peer,
 never a vendor pitching.
 
-**Where it is:** `_voice/` sits *beside this skill's own directory*, not inside it
-— so `../_voice/curaition-tone-of-voice.md` relative to this SKILL.md, and
-`<skills-root>/_voice/…` absolute. Resolve it that way rather than looking for
-`_voice/` under the current working directory, which is usually somewhere else
-entirely. See `_voice/README.md` to add a different profile.
+**Where it is** depends on how this skill was installed. Check both, in order:
+
+1. `_voice/` **inside** this skill's folder — an installed bundle carries its own
+   copy, because a packaged skill is a single folder with no siblings.
+2. `../_voice/` **beside** this skill's folder — a checkout of the skills repo,
+   where one shared copy serves every skill.
+
+Either way, resolve it relative to *this SKILL.md*, never to the current working
+directory — when a skill runs, cwd is the user's project or a staging folder,
+nowhere near the skills root. See `_voice/README.md` to add a different profile.
 
 ### 4. Write `editorial` — the craft layer
 
