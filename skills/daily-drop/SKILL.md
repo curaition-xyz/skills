@@ -231,6 +231,43 @@ PASTE-READY flow applies unchanged: the `.html` twin goes to Drive and the
 human pastes it; the first comment keeps the placeholder slug and the run
 report flags it.
 
+**Instagram publish handoff (when publishing through CurAItion).** The
+carousel's route to Instagram is CurAItion's asset pipeline, and the run's
+job ends at INGEST — a human presses publish. Verified live on Issue 52:
+
+1. Ingest the 9 rendered slides via multipart
+   **`POST /api/assets/prerendered`** on the CurAItion API (slide 1 first;
+   `caption` = the IG caption; `hashtags_json` = a JSON array string;
+   `X-Organization-ID` header required for API-key callers). This is the
+   ONLY correct route: it sets `metadata.prerendered = true`, which is the
+   flag the publish renderer checks before preserving artwork — any other
+   create path (the generic `/api/assets`, any `curaition_asset_catalog`
+   create) omits it and the deck is **silently redrawn** at publish time.
+   There is no MCP tool for this endpoint today; call the API directly, or
+   leave ingestion to the human when no API access is in the session.
+2. **`cta_url` sequencing:** the Substack public URL is baked into the IG
+   caption at publish, and the real slug exists only once the Substack post
+   is LIVE (the Stage 7 draft is not live). So ingest with `cta_url`
+   **null** — never a guessed slug; a wrong link is worse than a missing
+   one — and put "set cta_url from the live Substack URL before publishing
+   Instagram" in the run report's eyeball list. Order is always: publish
+   Substack → set cta_url → publish Instagram.
+3. Successful ingest IS the media-spec compliance proof (aspect 0.8–1.91,
+   width ≤1440, ≤8MB after JPEG, 2–10 slides — the 1080×1350 canvas is
+   0.8000 exactly). Validation runs at ingest only; the publish path never
+   re-checks geometry. The asset lands in `review` status and waits
+   indefinitely.
+4. The publish itself (`POST /api/assets/{id}/publish`) is a **human
+   action, never the run's**: `dry_run: false` is live and irreversible,
+   and its dry run proves only S3 reachability and slide count, not the
+   media spec or the Instagram token. Record the asset id and status in
+   the run report; stop there.
+
+**LinkedIn carousel is a manual upload.** There is no automated LinkedIn
+publish anywhere downstream (placeholder platform row, no publisher class).
+The PDF in Drive is for a human to upload via LinkedIn's document icon —
+say so in the run report rather than implying an automated post.
+
 Google Drive: the **"The Drop"** folder inside the **"Output" shared
 drive** (folder ID `1H-nlMyc-jWxm13mSMzEn2ckB3N6yIZci` — the ID survived
 the move into the shared drive; verify with `get_file_metadata` and ask the
@@ -273,6 +310,10 @@ hand.
 - every gate result, every revision loop, anything inferred or degraded
   (snapshot used, connector missing, placeholder Substack URL, Substack
   draft created by the tool or left to the paste flow, and why);
+- publish-handoff state: the Substack draft editor URL + slug, the
+  CurAItion asset id in `review` (or "not ingested" and why), and the two
+  standing human steps — publish Substack then set `cta_url` before the
+  Instagram publish; upload the LinkedIn PDF manually;
 - what the user should eyeball before posting (the 2-3 highest-risk spots).
 
 ## Running without the stage skills
@@ -294,4 +335,6 @@ verification is the licence to publish.
 ---
 
 *CurAItion Intelligence Desk · Daily Drop orchestrator · scout → sign-off →
-package → verify → render → gate → deliver · GBrain is canonical · v1.0*
+package → verify → render → gate → deliver · GBrain is canonical · v1.2*
+*Changelog v1.2: Stage 7 gains the Instagram publish handoff, verified live on Issue 52: ingest via `POST /api/assets/prerendered` only (the flag-setting route — any other create path lets the publish renderer silently redraw the deck), `cta_url` null until the Substack post is live (publish Substack → set cta_url → publish Instagram), ingest as the media-spec compliance proof, and the publish call itself always a human action. LinkedIn stated plainly as a manual PDF upload (no automated path exists). Run report now carries the publish-handoff state.*
+*Changelog v1.1: Stage 7 creates the Substack draft via `curaition_publish_substack` when the session has it (super-admin only, draft-only), confirms the real slug into the LinkedIn first comment, and falls back to the PASTE-READY flow when absent.*
