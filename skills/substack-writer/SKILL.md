@@ -176,7 +176,20 @@ beats you have, not a fixed count.
 ## Output, then validate
 
 Write to the package's staging folder as `<slug>-substack-drop.md`, headline
-first. Then run the gate:
+first. Then produce the paste-ready HTML twin:
+
+```
+python <path-to-this-skill>/scripts/drop_to_html.py <slug>-substack-drop.md
+```
+
+This exists because pasting raw markdown into Substack's editor loses every
+element (links included), while pasting rendered HTML keeps them. The script
+strips the title and subtitle (those go into Substack's own fields — it
+prints them for copying) and converts the body via pandoc. The publisher
+opens the `.html` in a browser, selects all, copies, and pastes into the
+Substack body. Both files ship together.
+
+Then run the gate:
 
 ```
 python <path-to>/_voice/voice_lint.py <slug>-substack-drop.md --channel substack-drop \

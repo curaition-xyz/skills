@@ -155,7 +155,10 @@ Order matters only where the contract does: the Drop must exist before the
 LinkedIn post (subtitle mirror). Carousel and caption can run alongside the
 Drop.
 
-1. **substack-writer** → `<slug>-substack-drop.md` (its lint must pass).
+1. **substack-writer** → `<slug>-substack-drop.md` (its lint must pass) +
+   the paste-ready `<slug>-substack-drop.html` twin (the writer's
+   `drop_to_html.py`) — raw markdown pasted into Substack loses links; the
+   rendered HTML keeps them.
 2. **linkedin-writer** (after 1) → `<slug>-linkedin.md` +
    `<slug>-linkedin-first-comment.md` (lints pass, `--drop` supplied).
 3. **carousel-producer** → `carousel-<slug>.json` (slide_lint passes) →
@@ -199,10 +202,10 @@ the move into the shared drive; verify with `get_file_metadata` and ask the
 user rather than recreating the folder if it ever stops resolving):
 
 1. Create subfolder `<YYYY-MM-DD>/` under it (skip if it exists).
-2. Upload: the Drop (`.md`), LinkedIn post + first comment (`.md`), IG
-   caption (`.txt` or `.md`), all 9 IG PNGs, the LinkedIn PDF, the
-   `story-package-<date>.json`, `verification-<date>.json`, and
-   `run-report-<date>.md`.
+2. Upload: the Drop (`.md` **and** its paste-ready `.html`), LinkedIn post
+   + first comment (`.md`), IG caption (`.txt` or `.md`), all 9 IG PNGs,
+   the LinkedIn PDF, the `story-package-<date>.json`,
+   `verification-<date>.json`, and `run-report-<date>.md`.
 3. Also deliver the four text assets and the run report into the
    conversation so the user can review without opening Drive.
 
