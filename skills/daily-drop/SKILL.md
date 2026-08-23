@@ -56,8 +56,10 @@ updated.
 ## Connectors this run needs
 
 CurAItion MCP (scouting, corpus), GBrain MCP (canonical spec + issue log),
-Google Drive MCP (delivery), WebSearch/WebFetch (verification). At run start,
-check each is present. Missing connector handling:
+Google Drive MCP (delivery), WebSearch/WebFetch (verification). Optional:
+the `curaition_publish_substack` tool on the CurAItion connector (super-admin
+principals only) lets Stage 7 create the Substack draft directly. At run
+start, check each is present. Missing connector handling:
 
 - No CurAItion → halt before scouting; nothing to scout from. Tell the user.
 - No GBrain → run from the snapshot, flag every place the snapshot decided.
@@ -196,6 +198,39 @@ the unresolved notes. Never ship a marginal asset to hit the schedule.
 
 ### Stage 7 — Deliver
 
+**Substack draft first (when the tool is in the session).** If the CurAItion
+connector exposes `curaition_publish_substack` (super-admin principals only;
+`curaition_describe_tools` with `name_filter: "substack"` tells you), the run
+creates the Substack draft itself instead of leaving the paste for a human:
+
+1. After the Stage 6 editor gate has passed, call it with `dry_run: true`
+   (`title` = the Drop title with its terminal full stop, `subtitle` = the Drop
+   subtitle, `body_html` = the paste-ready `<slug>-substack-drop.html`,
+   `issue_number` = this issue). It validates and reports block counts
+   without creating anything. A validation error here is a real defect in the
+   HTML twin (dialect, em dash, double hyphen): fix the draft, do not work
+   around it.
+2. Same call with `dry_run: false`. It returns the draft editor URL and the
+   slug Substack assigned (or a clearly labelled predicted slug). The draft is
+   DRAFT only; the tool cannot publish or schedule. Record the editor URL and
+   slug in the run report.
+3. The LinkedIn first comment must carry the **real** slug: if it differs from
+   the `https://curaition.substack.com/p/<slug>` placeholder the
+   linkedin-writer used, rewrite `<slug>-linkedin-first-comment.md` with the
+   returned slug, re-run `voice_lint.py --channel first-comment`, and say so
+   in the run report. If the response says the slug is predicted, keep the
+   "confirm the live URL before posting the comment" item in the eyeball
+   list.
+
+Failure handling: `ERR_ACCESS_DENIED` with the refresh hint means the stored
+Substack session cookie has expired (the expected failure mode; a super-admin
+refreshes `SUBSTACK_SESSION_TOKEN` on the Render `mcp-server` service). Any
+other non-validation failure is reported verbatim in the run report. In both
+cases, and whenever the tool is simply absent from the session, the existing
+PASTE-READY flow applies unchanged: the `.html` twin goes to Drive and the
+human pastes it; the first comment keeps the placeholder slug and the run
+report flags it.
+
 Google Drive: the **"The Drop"** folder inside the **"Output" shared
 drive** (folder ID `1H-nlMyc-jWxm13mSMzEn2ckB3N6yIZci` — the ID survived
 the move into the shared drive; verify with `get_file_metadata` and ask the
@@ -236,7 +271,8 @@ hand.
 - verification summary: facts verified / failed / unreachable, with the
   removed facts listed;
 - every gate result, every revision loop, anything inferred or degraded
-  (snapshot used, connector missing, placeholder Substack URL);
+  (snapshot used, connector missing, placeholder Substack URL, Substack
+  draft created by the tool or left to the paste flow, and why);
 - what the user should eyeball before posting (the 2-3 highest-risk spots).
 
 ## Running without the stage skills

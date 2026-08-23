@@ -153,7 +153,12 @@ The link lives in the comment, not the post. Alongside the post, write
 Validate with `--channel first-comment`. If the Substack URL is not yet known
 (the article publishes first), write the canonical placeholder
 `https://curaition.substack.com/p/<slug>` and flag it in the delivery note for
-the publisher to confirm.
+the publisher to confirm. When the run creates the Substack draft through the
+`curaition_publish_substack` MCP tool (daily-drop Stage 7), the tool returns
+the slug Substack actually assigned: the first comment must use that real
+slug, not the placeholder, and is re-linted after the swap. Without the tool,
+the placeholder stands and the publisher confirms the live URL before
+posting the comment.
 
 ## Rules (the guardrails)
 
