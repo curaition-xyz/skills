@@ -3,7 +3,7 @@ name: substack-writer
 description: >-
   Render a committed CurAItion Story Package into one on-voice Substack "The
   Drop" article. Consumes a story-package.json (a committed story with a frozen
-  facts layer) plus the shared CurAItion tone-of-voice, and emits a single dry,
+  facts layer) plus the shared CurAItion tone-of-voice, and emits a dry,
   evidence-led Drop essay of 1,000 words max — a gap-opening title, a mandatory
   subtitle that hints without resolving, sectioned beats, and sources carried
   as INLINE hyperlinks in the body (never a sources block). It is the premium,
