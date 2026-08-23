@@ -7,7 +7,7 @@ CurAItion carousel spec (GBrain `curaition/daily-publishing-prompt`,
 16 Aug 2026 + `curaition/carousel-slide-density`, 15 Aug 2026).
 
 Two output formats from ONE carousel.json:
-  --format ig        1080x1440 PNGs (Instagram)
+  --format ig        1080x1350 PNGs (Instagram)
   --format linkedin  1080x1350 PNGs + a compiled PDF (LinkedIn document upload)
   --format both      both of the above (default)
 
@@ -19,7 +19,8 @@ CANONICAL SPEC (do not restyle per-carousel):
             centred, bottom edge at 96.9% of slide height.
   chart   : vertical bars as SVG <rect> elements, sage #9CAF7A, anchored
             to a 1px stone axis baseline at 86.5% of slide height,
-            tallest bar 396px (scaled for 1350). Title left-aligned at
+            tallest bar 396px at the spec's 1440 authoring baseline,
+            scaled to the 1350 canvas (371px). Title left-aligned at
             y=110, Geist Medium olive. Generous empty space above bars.
             Watermark + slide number as content slides.
   final   : mycelium mark 40px tall + "curAItion" wordmark Geist Medium
@@ -61,14 +62,28 @@ SAGE = "#9CAF7A"
 SCRIM = "20, 22, 14"     # near-black olive, for scrims/dim (rgb tuple string)
 
 W = 1080
-H_IG = 1440
+H_IG = 1350
 H_LI = 1350
 
-# Canonical geometry, expressed as fractions of slide height so both
-# formats stay on-spec (absolute values in the spec assume 1440).
-WATERMARK_BOTTOM_FRAC = 1412 / 1440       # 96.9%
-CHART_BASELINE_FRAC = 1246 / 1440         # 86.5%
-CHART_MAX_BAR = 396                       # px at 1440; scaled by H/1440
+# The height the canonical spec's absolute pixel values were authored
+# against. This is NOT a canvas anyone renders any more — it is the
+# denominator that converts those absolutes into proportions. It was equal
+# to H_IG until Instagram forced the IG canvas to 1350, and the two must
+# stay separate now: fold them back together and every chart silently
+# re-scales.
+SPEC_BASELINE_H = 1440
+
+# Canonical geometry, expressed as fractions of slide height so a canvas
+# change cannot silently shift the layout. Both formats are 1350 because
+# Instagram's Content Publishing API accepts only aspect ratios between 4:5
+# and 1.91:1, and 1080x1440 (3:4 = 0.75) sits below that floor — the old IG
+# canvas could never be posted through the API at all. Keep the fractions
+# rather than re-baselining the absolutes: they reproduce the already
+# approved LinkedIn geometry exactly, so this is a canvas change, not a
+# redesign.
+WATERMARK_BOTTOM_FRAC = 1412 / SPEC_BASELINE_H    # 96.9%
+CHART_BASELINE_FRAC = 1246 / SPEC_BASELINE_H      # 86.5%
+CHART_MAX_BAR = 396                               # px at SPEC_BASELINE_H
 
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
 FONT_MEDIUM = ASSETS / "Geist-Medium.woff2"
@@ -281,7 +296,7 @@ def render_chart_html(slide: dict, h: int, num_label: str) -> str:
     values = [float(b.get("value", 0)) for b in bars] or [1.0]
     vmax = max(values) or 1.0
     unit = slide.get("unit", "")
-    scale = h / H_IG
+    scale = h / SPEC_BASELINE_H
 
     baseline_y = round(h * CHART_BASELINE_FRAC)
     max_bar = round(CHART_MAX_BAR * scale)

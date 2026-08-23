@@ -1,6 +1,6 @@
 ---
 name: carousel-producer
-description: "Produce brand-locked carousels from CurAItion cultural intelligence — deterministic, typographic, image-free. Pulls the most compelling narrative thread via CurAItion MCP tools, writes an editorial script, then renders 8 content slides + 1 final brand slide in TWO formats from one carousel.json: Instagram 1080x1440 PNGs and a LinkedIn 1080x1350 PNG set compiled to a PDF for document upload (olive-on-cream Geist Medium typography, 66px, max 3 lines per slide, mycelium watermark, one story-specific SVG data chart, N/9 slide numbers) via a bundled Chromium (Playwright) renderer, gated by a density lint. No AI image generation — visual richness comes from copy, data, and brand system. Use when the user asks to create a carousel, Instagram post series, LinkedIn carousel, visual story, or slide-based content from CurAItion data. Also trigger for 'make a carousel from this episode', 'turn this into slides', 'create an Instagram series', 'regen slide N', 'tweak slide N', 'change the chart', or any request combining CurAItion content analysis with brand-rendered carousel production or editorial iteration on a previously-produced carousel."
+description: "Produce brand-locked carousels from CurAItion cultural intelligence — deterministic, typographic, image-free. Pulls the most compelling narrative thread via CurAItion MCP tools, writes an editorial script, then renders 8 content slides + 1 final brand slide in TWO formats from one carousel.json: Instagram 1080x1350 PNGs and a LinkedIn 1080x1350 PNG set compiled to a PDF for document upload (olive-on-cream Geist Medium typography, 66px, max 3 lines per slide, mycelium watermark, one story-specific SVG data chart, N/9 slide numbers) via a bundled Chromium (Playwright) renderer, gated by a density lint. No AI image generation — visual richness comes from copy, data, and brand system. Use when the user asks to create a carousel, Instagram post series, LinkedIn carousel, visual story, or slide-based content from CurAItion data. Also trigger for 'make a carousel from this episode', 'turn this into slides', 'create an Instagram series', 'regen slide N', 'tweak slide N', 'change the chart', or any request combining CurAItion content analysis with brand-rendered carousel production or editorial iteration on a previously-produced carousel."
 ---
 
 # CurAItion Carousel Producer (Brand Render)
@@ -204,9 +204,9 @@ GBrain page wins; update this file and the renderer to match it.
 
 | Token | Value |
 |-------|-------|
-| IG canvas | **1080 × 1440px** PNG |
+| IG canvas | **1080 × 1350px** PNG (4:5 — the tallest ratio Instagram's API accepts) |
 | LinkedIn canvas | **1080 × 1350px** PNG per slide, compiled to a **PDF** (uploaded via the document icon, not the image icon) |
-| Renderer | headless Chromium (Playwright); vertical geometry expressed as fractions of slide height so both canvases stay on-spec |
+| Renderer | headless Chromium (Playwright); vertical geometry expressed as fractions of slide height, against a `SPEC_BASELINE_H` of 1440 — the height the spec's absolute values were authored at, deliberately kept separate from the canvas |
 | Text / mark / values | Olive **#6B7A3F** — never dark ink on content slides |
 | Chart bars | Sage **#9CAF7A** |
 | Background | Cream **#F1EFE8** throughout |
@@ -216,15 +216,16 @@ GBrain page wins; update this file and the renderer to match it.
 
 **Content slide:** olive copy on cream, centred, **66px / 1.31 line-height,
 max 3 lines**. Slide number top-right `N/9`. Mycelium watermark **32×32px,
-horizontally centred, bottom edge at 96.9% of slide height** (y=1412 on the
-1440 canvas), rendered as an `<img>`-equivalent CSS mask, never SVG
-`<image>`.
+horizontally centred, bottom edge at 96.9% of slide height** (y=1412 at the
+spec's 1440 authoring baseline → y=1324 on the 1350 canvas), rendered as an
+`<img>`-equivalent CSS mask, never SVG `<image>`.
 
 **Chart slide:** vertical bars only, as **SVG `<rect>` elements** (HTML divs
 are silently dropped by some rasterisers; rects are also what the spec
 mandates). Bars anchor to a **1px stone axis baseline at 86.5% of slide
-height** (y=1246 on 1440); the tallest bar is **396px** (scaled
-proportionally on the 1350 canvas). Title **left-aligned at y=110**, Geist
+height** (y=1246 at the 1440 authoring baseline → y=1168 on the 1350
+canvas); the tallest bar is **396px** at that baseline, scaled
+proportionally to **371px** on the 1350 canvas. Title **left-aligned at y=110**, Geist
 Medium olive. Generous empty space above the bars. Value labels above bars
 (Medium, olive), category labels below the baseline (Light, olive), source
 line above the watermark (Light, stone). This is the moment the question
@@ -301,8 +302,8 @@ python scripts/render_carousel.py carousel.json --out-dir out/ \
     [--format ig|linkedin|both] [--chromium /path/to/chrome]
 ```
 
-Outputs, per format: `out/<slug>-ig-slide-01.png` … `-09.png` at 1080×1440,
-and `out/<slug>-linkedin-slide-01.png` … `-09.png` at 1080×1350 plus
+Outputs, per format: `out/<slug>-ig-slide-01.png` … `-09.png` and
+`out/<slug>-linkedin-slide-01.png` … `-09.png`, both at 1080×1350, plus
 `out/<slug>-linkedin.pdf` (the slides compiled via Pillow, ready for
 LinkedIn's document upload). Fonts and the mycelium mark are embedded as
 base64 in each slide's HTML (self-contained); one Chromium instance renders
@@ -419,7 +420,7 @@ out/[slug]-slide-01.png …       # Layer 3 exported slides
 | 1 | `curaition_get_cited_themes` | Timestamped evidence |
 | 1 | `curaition_trend_analysis` | Domain trend context |
 | 1 | `WebSearch` | Supplementary research + citable chart data |
-| 3 | `scripts/render_carousel.py` | Render carousel.json → 1080×1440 PNGs |
+| 3 | `scripts/render_carousel.py` | Render carousel.json → 1080×1350 PNGs |
 | 3 | Playwright + Chromium | Headless browser the renderer drives (WOFF2 + image compositing) |
 | 4 | `curaition_asset_registry` (`create`/`get`) | Optional ingestion + round-trip verify |
 | 5 | `scripts/render_carousel.py` | Re-render tweaked slide(s) |
@@ -427,7 +428,8 @@ out/[slug]-slide-01.png …       # Layer 3 exported slides
 
 ---
 
-*CurAItion Intelligence Desk · Carousel Producer · brand-rendered typography · renderer stage of the daily publishing chain · v3.0*
+*CurAItion Intelligence Desk · Carousel Producer · brand-rendered typography · renderer stage of the daily publishing chain · v3.1*
+*Changelog v3.1: The Instagram canvas moved 1080×1440 → **1080×1350**. Instagram's Content Publishing API accepts aspect ratios between 4:5 (0.800) and 1.91:1 only, and the old 3:4 (0.750) canvas sat below that floor — every IG deck this skill has ever produced was un-postable through the API, and would have been cropped by Instagram had it gone through. The two formats now share a canvas and differ only in the final slide's follow line and the LinkedIn PDF compile. **No redesign:** geometry is fraction-based, so the IG slides now render byte-identical to the already-approved LinkedIn slides (verified: 9/9 identical, slide 9 excepted). Internally `SPEC_BASELINE_H = 1440` was split out of `H_IG` — the spec's absolute values (watermark y=1412, chart baseline y=1246, tallest bar 396px) are authored against 1440 and are the *denominator*, not a canvas. They were the same number until now; folding them back together silently re-scales every chart. GBrain `curaition/daily-publishing-prompt` is canonical and carries this change.*
 *Changelog v3.0: Synchronised with the canonical publishing spec (GBrain `curaition/daily-publishing-prompt` 16 Aug 2026 + `curaition/carousel-slide-density` 15 Aug 2026). Content type is now Geist Medium 500 at 66px / 1.31 (was Regular 108px / 1.08); max 3 lines per slide with the hook capped at 2; slide numbers are N/9 at 28px; watermark is 32px at 96.9% height; chart is SVG rects in sage #9CAF7A on a stone baseline at 86.5% with a left-aligned title; final slide is the 40px mark + 42px Geist Medium wordmark, all olive, with the Substack CTA, plus a LinkedIn variant with the follow line. Added the LinkedIn 1080×1350 PNG + PDF output, the density lint (`slide_lint.py`), the automatic widow gate, and the one-line IG caption spec. GBrain is canonical for all of the above; this file mirrors it.*
 *Changelog v2.1: Renderer moved from wkhtmltoimage to Playwright/Chromium — restores base64 WOFF2 per spec (no TTF fallback) and adds an optional `background` image-composite layer (cover/focal/duotone/scrim/blur/dim + text-colour override) so the future image-gen skill integrates through the same carousel.json. One browser renders the whole deck. Runtime-agnostic: identical output under Cowork or self-hosted (Hermes-Agent).*
 *Changelog v2.0: Replaced the AI-imagery pipeline (Flux/Wan, frame extraction, gradient overlays, Bebas Neue) with a deterministic olive-on-cream Geist brand renderer. Added bundled Geist + mycelium mark, a data-chart slide, and a final brand lockup slide.*

@@ -52,7 +52,9 @@ question becomes concrete in numbers.
   compressed not summarised. 150-250 words. Ends "Full breakdown in the
   comments". Max 3 hashtags: #CulturalIntelligence #BrandStrategy + one
   variable.
-- **IG carousel** — 8 content slides + 1 final slide, 1080x1440 PNG.
+- **IG carousel** — 8 content slides + 1 final slide, 1080x1350 PNG (4:5).
+  Instagram's API accepts aspect ratios from 4:5 to 1.91:1 only; the former
+  1080x1440 (3:4) canvas was below that floor and could not be posted via API.
 - **LinkedIn carousel PDF** — same slides, 1080x1350 PNG per slide, compiled
   to PDF. Upload via the document icon, not the image icon.
 - **IG caption** — one line, declarative, ends with relevant emoji.

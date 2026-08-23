@@ -1,7 +1,7 @@
-# Installing `carousel-producer` (v2.1)
+# Installing `carousel-producer` (v3.1)
 
 Brand-locked Instagram carousel producer for CurAItion. Turns CurAItion cultural
-intelligence into 1080×1440 typographic PNG slides (olive-on-cream Geist, mycelium
+intelligence into 1080×1350 typographic PNG slides (olive-on-cream Geist, mycelium
 watermark, one data chart, brand outro), rendered deterministically by headless
 Chromium via Playwright. Image generation is intentionally a **separate** skill;
 this one owns the brand renderer and the `carousel.json` schema (including the
@@ -134,7 +134,7 @@ cd carousel-producer
 python scripts/render_carousel.py examples/carousel.example.json --out-dir out/
 ```
 
-Expect nine `out/example-slide-01.png … -09.png` files at **1080×1440**. Open
+Expect nine `out/example-slide-01.png … -09.png` files at **1080×1350**. Open
 `examples/preview.html` (if present in your bundle) to review them as a strip.
 
 Test the image-composite layer too:
@@ -185,7 +185,7 @@ Minimal schema (full reference in `examples/carousel.example.json` and `SKILL.md
   Brand content cards stay image-free by design.
 
 Brand tokens (owned by the renderer — don't hand-tune per carousel): olive `#6B7A3F`,
-cream `#F1EFE8`, stone `#C8C3B4`, Geist 400/300, 1080×1440.
+cream `#F1EFE8`, stone `#C8C3B4`, Geist 400/300, 1080×1350.
 
 ---
 
