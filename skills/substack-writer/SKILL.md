@@ -4,11 +4,13 @@ description: >-
   Render a committed CurAItion Story Package into one on-voice Substack "The
   Drop" article. Consumes a story-package.json (a committed story with a frozen
   facts layer) plus the shared CurAItion tone-of-voice, and emits a single dry,
-  evidence-led Drop essay — a headline, a "Cur(AI)tion · date" subhead, a few
-  sectioned beats, and a sources line. It is the premium, deeper version of the
-  LinkedIn post. Facts are frozen (it may only assert claims present in the
-  package's facts[]); voice and framing are malleable. Ships a voice-lint gate.
-  Use when the user asks to "write the Drop", "render this package for
+  evidence-led Drop essay of 1,000 words max — a gap-opening title, a mandatory
+  subtitle that hints without resolving, sectioned beats, and sources carried
+  as INLINE hyperlinks in the body (never a sources block). It is the premium,
+  deeper version of the LinkedIn post, and its subtitle becomes the LinkedIn
+  post's first line. Facts are frozen (it may only assert claims present in
+  the package's facts[]); voice and framing are malleable. Ships a voice-lint
+  gate. Use when the user asks to "write the Drop", "render this package for
   Substack", "turn this story package into a Drop article", or names
   Substack/The Drop as the target channel. Runs standalone: given a thinner
   brief it commits the story itself and says so. Scope: The Drop only (not the
@@ -111,39 +113,65 @@ structure, not enthusiasm or ornament.
 
 ## Structure (The Drop)
 
-From the calibrated reference (`examples/`). Sections are guided by the spine;
-use the beats you have, not a fixed count.
+Canonical spec: GBrain `curaition/daily-publishing-prompt` (pull it at run
+time when GBrain is available; it wins over this file on any conflict). The
+issue log `curaition/the-drop` holds every published title, subtitle and
+caption — the calibration corpus. Sections are guided by the spine; use the
+beats you have, not a fixed count.
 
-1. **Title** — the argument as a headline. Usually two short declaratives. Obeys
-   the voice rules (no em dash, British English).
-2. **Subhead** — `*Cur(AI)tion · <DD Month YYYY>*`.
-3. **Lede** — the setup in facts, then the pivot: state the obvious read, then
-   *"None of that is the story. The story is…"*. Cited facts only.
+1. **Title** — must create a tension or reversal. Never resolve the argument
+   in the title itself: the title opens the gap. Obeys the voice rules (no em
+   dash, no double hyphen, British English). Published references: *"The
+   Batman Problem"*, *"It exists only for pleasure"*, *"Unexpected items in
+   the bagging area"*, *"The stink of excellence"*.
+2. **Subtitle** — mandatory, every issue. It hints at the answer without
+   resolving it, and it does double duty: it becomes the LinkedIn post's
+   first line verbatim. Published reference: title *"The clicks that weren't
+   real."* / subtitle *"A trillion-dollar industry. Forty percent of it was
+   bots."*
+3. **Lede** — opens on the specific object, never the announcement of it.
+   State the obvious read, then pivot to what the coverage skips. Cited
+   facts only.
 4. **Sections** (`## …`, ~3-4), each one beat of the spine:
    - the catalyst (what actually moved it),
-   - the prior thesis (the CurAItion depth layer — the `lift`, framed as a read
-     with its honest caveat),
-   - the counter-evidence (the `so_what`; e.g. flows vs price),
+   - the prior thesis (the CurAItion depth layer — the `lift`, framed as a
+     read with its honest caveat),
+   - the counter-evidence (the `so_what`),
    - **one thing worth watching** — the conditions that would turn the story
      into a signal.
+   Structure the argument on the Veritasium engagement formula: a
+   misconception challenged, a question opened then explained, an A plot
+   carrying a B plot. Before writing, answer: what does this add up to? What
+   does the reader leave with that they didn't arrive with?
 5. **Close** — restate the sharpest number or tension. Land the thesis.
-6. **Sources line** — `*Sources: …*` naming only outlets/links present in the
-   package citations. Never introduce a source the package doesn't carry.
+6. **Sources are inline.** Every source is a markdown hyperlink in the body,
+   at the claim it supports, using only URLs present in the package
+   citations. **No sources block at the bottom — the lint fails it.** Never
+   introduce a source the package doesn't carry.
 
 ## Rules (the guardrails)
 
 1. **Facts-only.** Every claim traces to `facts[]`. No new numbers, names, or
-   sources anywhere, including the sources line.
+   sources anywhere, including inline links.
 2. **Lift stays interpretation.** A thesis that "has been about to happen" is a
    read, and carries its own caveat. Never launder it into fact.
-3. **British English, no em dashes, no filler opener.** Enforced by the lint.
+3. **British English, no em dashes, no double hyphens, no filler opener.**
+   Enforced by the lint.
 4. **Still dry.** No hype, no build-up language, no pitch. The evidence is the
    essay.
-5. **Length:** a Drop, not a longform. Target ~500-900 words (lint band
-   400-1000). If it wants to run longer, that is the longform format, which is
-   out of scope here.
-6. **One argument.** The Drop deepens the post's single thesis; it does not add a
-   second.
+5. **Length: 1,000 words max.** Target ~600-900 (lint band 400-1000). If it
+   wants to run longer, that is the longform format, which is out of scope
+   here.
+6. **One argument.** The Drop deepens the post's single thesis; it does not add
+   a second.
+7. **Reads as discovered, not constructed.** Argument worked out on the page,
+   uneven rhythm, no parallel short-sentence structures, no tidy three-beat
+   builds, never explain the observation after making it. See the shared
+   voice guide's "Reads as discovered, not constructed" section.
+8. **Verified links only.** When a verification manifest is present in the
+   staging folder (`verification-<date>.json`, produced by the daily-drop
+   fact gate), link only to URLs it marks verified. A fact whose citation
+   failed verification does not appear in the article at all.
 
 ## Output, then validate
 
@@ -170,10 +198,14 @@ usually means a source line or stat to re-check against the package.
 - `_voice/curaition-tone-of-voice.md` — the shared voice authority (one copy,
   used by the whole chain; see `_voice/README.md`).
 - `_voice/voice_lint.py` — the gate. Run every time.
-- `examples/` — a golden input/output pair: the source package
+- `examples/` — an input/output pair: the source package
   (`story-package-clickbait-withneeds-2026-07-02.json`) and the rendered Drop
-  (`substack-thedrop-bitcoin-decoupling.md`), which passes the lint with zero
-  warnings. Use it as the calibration target.
+  (`substack-thedrop-bitcoin-decoupling.md`). **The rendered example predates
+  the 16 Aug 2026 spec** (it carries a sources line and no subtitle, both of
+  which now fail the lint) — use it for the shape of a package-to-prose
+  render, never for format. The calibration corpus for format is the
+  published archive: GBrain `curaition/the-drop` (titles, subtitles,
+  captions, 51+ issues) and curaition.substack.com for full articles.
 
 This skill does not define the story-package format — it reads a documented
 subset of it (see **Inputs**) and ignores the rest. That is deliberate: a

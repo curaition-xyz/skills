@@ -1,19 +1,22 @@
 {
-  "slug": "example",
+  "slug": "example-batman-problem",
   "slides": [
-    {"type":"content","copy":"Mushrooms don't\ncompete for space.\nThey trade for it."},
-    {"type":"content","copy":"Beneath every forest\nis a network older\nthan the trees."},
-    {"type":"chart","title":"Share of forest carbon routed\nthrough fungal networks","unit":"%","source":"Source: illustrative — replace with cited CurAItion data","bars":[
-      {"label":"Boreal","value":58},
-      {"label":"Temperate","value":41},
-      {"label":"Tropical","value":33},
-      {"label":"Savanna","value":19}
-    ]},
-    {"type":"content","copy":"A single teaspoon\nof soil holds miles\nof living thread."},
-    {"type":"content","copy":"Trees pay the\nnetwork in sugar."},
-    {"type":"content","copy":"The network answers\nin nitrogen, water,\nand warning signals."},
-    {"type":"content","copy":"Cut one tree\nand the whole\ngrid feels it."},
-    {"type":"content","copy":"Intelligence, it turns out,\ndoesn't need a brain.\nJust a network."},
-    {"type":"final"}
+    {"type": "content", "copy": "A CEO cited Batman to\njustify 80,000 cameras."},
+    {"type": "content", "copy": "The film ends with the\nsystem shut down."},
+    {"type": "chart",
+     "title": "AI infrastructure share of\nUS economic growth",
+     "unit": "%",
+     "source": "Source: cited in The Drop, Issue 51",
+     "bars": [
+       {"label": "2024", "value": 34},
+       {"label": "2025", "value": 61},
+       {"label": "2026", "value": 90}
+     ]},
+    {"type": "content", "copy": "A $20 subscription is\ndoing a $235,000 job."},
+    {"type": "content", "copy": "Nobody asked how\nthe film ends."},
+    {"type": "content", "copy": "Ten summers of doorbell\ncameras made 80,000\nmore feel normal."},
+    {"type": "content", "copy": "The warnings were read\nas instruction manuals."},
+    {"type": "content", "copy": "That's the\nBatman problem."},
+    {"type": "final"}
   ]
 }

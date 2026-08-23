@@ -37,6 +37,20 @@ readable by a renderer written next year.
 Each `SKILL.md` in a chain carries a **Running standalone** section stating its
 contract. Keep it there, and keep it true.
 
+## GBrain is canonical for the editorial spec
+
+The daily publishing spec changes faster than this repo. The canonical
+version of the format, style and design rules lives in GBrain —
+`curaition/daily-publishing-prompt`, `curaition/carousel-slide-density`,
+`curaition/the-drop` (the issue log) — and the chain skills **pull those
+pages at run time** when GBrain is available. The copies of those rules in
+each SKILL.md and in `daily-drop/references/publishing-spec-snapshot.md` are
+mirrors: on any conflict the GBrain page wins, and the mirror gets updated.
+This is what stops the repo and the live process forking again. The
+`daily-drop` orchestrator writes each published issue back to the GBrain
+issue log, so the corpus the writers calibrate against stays current without
+manual upkeep.
+
 ## One voice guide, not one per skill
 
 House voice is the exception that proves the rule above — it is genuinely shared

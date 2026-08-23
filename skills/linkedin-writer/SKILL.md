@@ -1,10 +1,14 @@
 ---
 name: linkedin-writer
 description: >-
-  Render a committed CurAItion Story Package into one on-voice LinkedIn post.
-  Consumes a story-package.json (a committed story with a frozen facts layer)
-  plus the shared CurAItion tone-of-voice, and emits a single dry,
-  argument-led, 150-250 word LinkedIn post that ends on a provocation. Facts
+  Render a committed CurAItion Story Package into one on-voice LinkedIn post
+  plus its prepared first comment. Consumes a story-package.json (a committed
+  story with a frozen facts layer) plus the shared CurAItion tone-of-voice,
+  and — when the Drop draft exists — that draft, whose subtitle becomes the
+  post's first line verbatim. Emits a single dry, argument-led, 150-250 word
+  LinkedIn post that mirrors the Drop's opening object and register, ends
+  "Full breakdown in the comments" with max 3 hashtags, and a separate
+  first-comment file carrying the Substack link and remaining hashtags. Facts
   are frozen (it may only assert claims present in the package's facts[]);
   voice and framing are malleable. Ships a voice-lint gate. Use when the user
   asks to "write the LinkedIn post", "render this package for LinkedIn", "turn
@@ -106,28 +110,50 @@ writing to another, never a vendor pitching.
 - **No em dashes.** Use a full stop or a comma.
 - **Self-aware, not cringe.** A point of view on ourselves, without preciousness.
 
-LinkedIn calibration: **dry, argument-led, no product pitch, 150-250 words, end
-with a question or provocation.** No sign-off (the "Ben + Rick" sign-off is for
-DMs and email, not posts).
+LinkedIn calibration: **dry, argument-led, no product pitch, 150-250 words,
+compressed not summarised.** No sign-off (the "Ben + Rick" sign-off is for DMs
+and email, not posts).
+
+Canonical spec: GBrain `curaition/daily-publishing-prompt` (pull it at run
+time when GBrain is available; it wins over this file on any conflict).
 
 ## Structure (the shape that works)
 
-Derived from the calibrated reference post (`examples/`). Map the package's spine
-onto it; don't pad to fill it.
+The post is the Drop's compression, not its summary. Same argument, same
+register, less room. Map the package's spine onto it; don't pad to fill it.
 
-1. **Reframe hook** (1-3 short lines). Flip the obvious read. State the headline
-   fact, then undercut it. *"Bitcoin went up while tech went down. That's the
-   headline. It's the least interesting thing that happened."*
-2. **What actually happened** — the core grounded facts, compressed. Cited facts
-   only; lead with specifics and numbers.
-3. **The part the coverage skips** — the `lift` beat. The CurAItion angle that
-   reframes the news (the depth layer, the pattern). Framed as interpretation.
-4. **The tension** — the `so_what`. Often a counter-fact that complicates the
-   easy read (price vs flows).
-5. **Provocation close** — one question that hands the argument to the reader.
-   *"Which one are you trading?"*
-6. **CTA** — `Full breakdown in the comments.` (drives to the longform / source;
-   this is the `structural` beat).
+1. **First line = the Drop's subtitle, verbatim.** When a Drop draft exists in
+   the staging folder (`<slug>-substack-drop.md`), its subtitle is your
+   opening line, character for character. When there is no Drop draft, write
+   the line that would be its subtitle: it hints at the answer without
+   resolving it.
+2. **Mirror the Drop's opening** — the same specific object, the same
+   register, compressed. Open on the thing, never the announcement of it.
+3. **What actually happened** — the core grounded facts, compressed. Cited
+   facts only; lead with specifics and numbers.
+4. **The part the coverage skips** — the `lift` beat, framed as
+   interpretation.
+5. **The tension** — the `so_what`. Often a counter-fact that complicates the
+   easy read.
+6. **Provocation** — one question that hands the argument to the reader.
+7. **CTA** — the post's last sentence is `Full breakdown in the comments.`
+   (the lint enforces the ending). Hashtags may follow it.
+8. **Hashtags** — exactly this shape: `#CulturalIntelligence #BrandStrategy`
+   plus at most one story-specific variable. Never more than 3.
+
+## The first comment (second output)
+
+The link lives in the comment, not the post. Alongside the post, write
+`<slug>-linkedin-first-comment.md`:
+
+- the Substack link for this issue (the only URL);
+- hashtags: `#culturalintelligence #brandstrategy` + 2-3 topic-specific +
+  `#curaition`.
+
+Validate with `--channel first-comment`. If the Substack URL is not yet known
+(the article publishes first), write the canonical placeholder
+`https://curaition.substack.com/p/<slug>` and flag it in the delivery note for
+the publisher to confirm.
 
 ## Rules (the guardrails)
 
@@ -135,21 +161,32 @@ onto it; don't pad to fill it.
    sources. If the post needs a fact the package lacks, stop and say so.
 2. **Lift stays interpretation.** Never state a `lift` beat as a flat fact.
 3. **150-250 words.** If it won't fit, cut, don't shrink the idea.
-4. **End on a question or provocation.** Never a summary, never a pitch.
-5. **British English, no em dashes, no filler opener.** Enforced by the lint.
-6. **No product pitch.** The intelligence is the case. Let it stand.
-7. **Hashtags:** none, or at most 1-3 tasteful. Never a stack.
+4. **British English, no em dashes, no double hyphens, no filler opener.**
+   Enforced by the lint.
+5. **No product pitch.** The intelligence is the case. Let it stand.
+6. **No links in the post body.** The Substack link goes in the first
+   comment. LinkedIn suppresses reach on body links; the canonical layout has
+   always kept the link in the comment.
+7. **Reads as discovered, not constructed.** Uneven rhythm, no parallel
+   short-sentence structures, no tidy three-beat builds. See the shared voice
+   guide's "Reads as discovered, not constructed" section.
 
 ## Output, then validate
 
 Write the post to the package's staging folder as
 `<slug>-linkedin.md` — the post body only, no descriptive H1 (a LinkedIn post
-has no headline). Then run the gate:
+has no headline) — and the first comment as
+`<slug>-linkedin-first-comment.md`. Then run the gates:
 
 ```
 python <path-to>/_voice/voice_lint.py <slug>-linkedin.md --channel linkedin \
-  --package story-package-<date>.json
+  --package story-package-<date>.json --drop <slug>-substack-drop.md
+python <path-to>/_voice/voice_lint.py <slug>-linkedin-first-comment.md \
+  --channel first-comment
 ```
+
+`--drop` makes the lint verify the first-line/subtitle mirror mechanically;
+omit it only when no Drop draft exists, and say so in the delivery note.
 
 Use the **absolute** path to `voice_lint.py` you resolved above (inside this
 skill's folder, or beside it). You run the lint from the staging folder where the
@@ -166,10 +203,13 @@ them; a warned number usually means a fact-fidelity slip to fix.
 - `_voice/curaition-tone-of-voice.md` — the shared voice authority (one copy,
   used by the whole chain; see `_voice/README.md`).
 - `_voice/voice_lint.py` — the "validate, don't hope" gate. Run every time.
-- `examples/` — a golden input/output pair: the source package
+- `examples/` — an input/output pair: the source package
   (`story-package-clickbait-withneeds-2026-07-02.json`) and the rendered post
-  (`linkedin-bitcoin-decoupling.md`) it produces. The post passes the lint with
-  zero warnings; use it as the calibration target.
+  (`linkedin-bitcoin-decoupling.md`). **The rendered example predates the
+  16 Aug 2026 spec** (it does not open with a Drop subtitle) — use it for the
+  package-to-prose shape, never for format. Calibrate format against the
+  published corpus: GBrain `curaition/the-drop` subtitles are the openers of
+  the live posts.
 
 This skill does not define the story-package format — it reads a documented
 subset of it (see **Inputs**) and ignores the rest. That is deliberate: a

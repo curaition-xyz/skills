@@ -14,11 +14,12 @@ A **skill** is a set of instructions that teaches Claude how to do one specific
 job the way we do it. You do not run a skill like an app. You just ask Claude for
 something, and it picks up the right skill on its own.
 
-There are eleven. You do not need to remember them — this is here so the names
+There are twelve. You do not need to remember them — this is here so the names
 mean something when you see them in a menu.
 
 | Skill | What it does |
 |---|---|
+| `daily-drop` | Runs the whole daily publishing chain end-to-end and delivers to Drive |
 | `cultural-scout` | Sweeps our library for the most interesting story of the day |
 | `click-bait-scout` | Same job, but for whatever is breaking on the live web right now |
 | `user-needs-classifier` | Works out *why* a reader would care about a story |
@@ -88,7 +89,7 @@ whoever uploads them, so everybody does this once.
 
 ### Get the files
 
-Download the eleven `.zip` files from the
+Download the twelve `.zip` files from the
 [latest release](https://github.com/curaition-xyz/skills/releases/latest), or use
 the folder Rick or Ben sends you.
 
@@ -97,7 +98,7 @@ double-click one and upload the folder that comes out, it will be rejected.
 
 ### Upload them
 
-For each of the eleven:
+For each of the twelve:
 
 1. At claude.ai, click your name → **Settings** → **Customize** → **Skills**.
 2. Click **+ Add** (or **+ Create skill**).
@@ -108,10 +109,10 @@ For each of the eleven:
 
 It is repetitive. There is no bulk upload. Put a podcast on.
 
-When you are done, all eleven should be listed and toggled **ON**.
+When you are done, all twelve should be listed and toggled **ON**.
 
 > **If you are ever moved onto a Claude Team or Enterprise plan**, this step
-> changes: an Organization Owner uploads the eleven once under *Organization
+> changes: an Organization Owner uploads the twelve once under *Organization
 > settings → Skills*, and they appear for everyone automatically. Nobody
 > installs anything individually. Until then, the steps above are the way.
 
@@ -142,6 +143,21 @@ empty-handed, which is more confusing than an error.
 > again. If it fails a second time, stop and message Rick — do not create a new
 > account to get past it. See the warning in *Before you start*.
 
+### Extra connections for the daily publishing run
+
+`daily-drop` (the one-command daily run) needs **two more** connections on top
+of CurAItion, in the same **Settings → Connectors** page:
+
+1. **Google Drive** — it is a built-in connector; click Connect and sign in
+   with the Google account that can see the **Output** shared drive. This is
+   where the finished issue lands (`The Drop/<date>/`).
+2. **GBrain** — the editorial memory (issue log, publishing spec, voice
+   references). It is a custom connector; ask Rick for the address.
+
+Without Drive, the run finishes but delivers into the chat only. Without
+GBrain, it runs from a bundled snapshot of the spec and says so. It will
+tell you at the start of a run which connections it found.
+
 ---
 
 ## Step 4 — Check it actually works
@@ -169,6 +185,12 @@ can click.
 ---
 
 ## Using them day to day
+
+**The daily routine is one line.** Type *"run the daily drop"* (or
+`/daily-drop`) and the whole chain runs: both scouts, a story shortlist for
+you to pick from, verification, all four assets, the quality gates, and
+delivery to the Drive folder. You make one decision — which story — and
+review the result.
 
 **You do not need to name the skill.** Ask for what you want and Claude picks:
 
@@ -275,7 +297,7 @@ uploads once under **Organization settings → Skills**, where the same page hol
 both the **Code execution and file creation** / **Skills** toggles and the
 upload. Provisioned skills are then enabled by default for everyone and appear
 under each member's *Customize → Skills*. Worth revisiting if the team grows;
-eleven manual uploads per person stops being trivial somewhere around the third
+twelve manual uploads per person stops being trivial somewhere around the third
 hire.
 
 ### After changing a skill

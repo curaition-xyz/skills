@@ -33,6 +33,7 @@ DIST = REPO / "dist"
 # the Gymshark skills and digest carry their own client/product voice by design.
 VOICE_CONSUMERS = {
     "cultural-scout",
+    "daily-drop",
     "click-bait-scout",
     "user-needs-classifier",
     "story-packager",

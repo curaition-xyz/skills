@@ -1,6 +1,6 @@
 ---
 name: carousel-producer
-description: "Produce brand-locked Instagram carousels from CurAItion cultural intelligence — deterministic, typographic, image-free. Pulls the most compelling narrative thread via CurAItion MCP tools, writes an editorial script, then renders 8 content slides + 1 final brand slide as 1080x1440 PNGs (olive-on-cream Geist typography, mycelium watermark, one story-specific data chart) via a bundled Chromium (Playwright) renderer. No AI image generation — visual richness comes from copy, data, and brand system. Use when the user asks to create a carousel, Instagram post series, visual story, or slide-based content from CurAItion data. Also trigger for 'make a carousel from this episode', 'turn this into slides', 'create an Instagram series', 'regen slide N', 'tweak slide N', 'change the chart', or any request combining CurAItion content analysis with brand-rendered carousel production or editorial iteration on a previously-produced carousel."
+description: "Produce brand-locked carousels from CurAItion cultural intelligence — deterministic, typographic, image-free. Pulls the most compelling narrative thread via CurAItion MCP tools, writes an editorial script, then renders 8 content slides + 1 final brand slide in TWO formats from one carousel.json: Instagram 1080x1440 PNGs and a LinkedIn 1080x1350 PNG set compiled to a PDF for document upload (olive-on-cream Geist Medium typography, 66px, max 3 lines per slide, mycelium watermark, one story-specific SVG data chart, N/9 slide numbers) via a bundled Chromium (Playwright) renderer, gated by a density lint. No AI image generation — visual richness comes from copy, data, and brand system. Use when the user asks to create a carousel, Instagram post series, LinkedIn carousel, visual story, or slide-based content from CurAItion data. Also trigger for 'make a carousel from this episode', 'turn this into slides', 'create an Instagram series', 'regen slide N', 'tweak slide N', 'change the chart', or any request combining CurAItion content analysis with brand-rendered carousel production or editorial iteration on a previously-produced carousel."
 ---
 
 # CurAItion Carousel Producer (Brand Render)
@@ -130,17 +130,46 @@ Choose by the material: one protagonist → LINEAR-HERO; instigator/executor han
 
 ### Slide Copy Rules (brand-specific)
 
-The copy is the entire visual. These rules are tuned for large centred Geist on cream:
+The copy is the entire visual. Canonical authority: GBrain
+`curaition/carousel-slide-density` (reach-data-backed; pull at run time when
+GBrain is available) and `curaition/daily-publishing-prompt`. These rules are
+tuned for 66px centred Geist Medium on cream:
 
-1. **One idea per slide.** Each slide delivers exactly one beat. Never two.
-2. **Hard line breaks, and you own every one.** Write copy with explicit `\n`. The renderer breaks only where you tell it. Every break is a beat.
-3. **No widows.** Never leave a lone short word on the last line. Because you control breaks, this is an editorial obligation — rebalance the lines. (Old-WebKit rendering has no auto-balance; the fix is your line breaks.)
-4. **Fit the frame.** Default size is **108px**. At 108px, a line of ~16–18 characters fills the safe width (side padding is 104px). Keep the longest line under ~18 characters, or lower `font_size` for that slide (e.g. 92–100px) — never let a line clip. Aim for ≤ 6 lines.
-5. **Sentence case, not caps.** Geist on cream reads as calm editorial, not shouty overlay. Do **not** uppercase. (This is a deliberate reversal of the old overlay aesthetic.)
-6. **Numbers do the work.** "168 vs 80,000" beats any adjective. Lead with specifics.
-7. **Staccato for character.** "Illiterate. Illegitimate. Nearly 60." Fragments build a person fast.
-8. **Primary-source quotes cut through.** Use devastating period voice verbatim; label the source in the production note.
-9. **End on a mirror or a question.** The last content slide (CLOSE) echoes the hook with the weight of the whole story behind it.
+1. **Maximum 3 lines per slide. Ideally 2.** The best slides are 1-2 lines.
+   The gap between two lines is where the interest lives. A slide that needs
+   a fourth line is two slides.
+2. **Slide 1 is the hook, and the sparest slide in the deck.** 1-2 lines
+   only. Specific fact + reframe/withhold. The canonical reach-ranked hooks:
+   - *"England are in the World Cup semifinal. / They left their best right
+     back at home."* (fact + reframe, nothing explained)
+   - *"Jannik Sinner just won Wimbledon. / Again."* (the pause is everything)
+   - *"Yesterday, Ariana Grande's rep issued a statement. / One word in it is
+     doing all the work."* (states the fact, withholds the punchline)
+   - *"China's Gen Z stopped buying status."* (one line; the statement IS the
+     argument)
+   The pattern: a short first line stating a specific fact or naming the
+   specific object; a second line that reframes, contradicts, withholds, or
+   delivers a flat verdict. What kills it: explaining the observation after
+   making it, a third line that summarises the first two, parallel sentence
+   structures, opening with a question (reads as an ad).
+3. **One idea per slide.** Each slide delivers exactly one beat. Never two.
+4. **Hard line breaks, and you own every one.** Write copy with explicit
+   `\n`. Keep every line **≤ 24 characters** so the authored break IS the
+   rendered break at 66px — a longer line wraps and the visual line count
+   drifts off-spec. Do not lower `font_size` to cram a long line in; cut the
+   line.
+5. **No widows.** A last line of 6 characters or fewer fails the lint (the
+   renderer would merge it, but rebalance the copy instead).
+6. **Sentence case, not caps.** Geist on cream reads as calm editorial.
+7. **Numbers do the work.** "168 vs 80,000" beats any adjective.
+8. **Staccato for character.** "Illiterate. Illegitimate. Nearly 60."
+9. **Primary-source quotes cut through.** Verbatim, source in the production
+   note.
+10. **End on a mirror or a verdict.** The last content slide (CLOSE) echoes
+    the hook with the weight of the whole story behind it.
+11. **Gate before rendering:** `python scripts/slide_lint.py carousel.json`
+    must exit 0. It enforces the density rules, the hook rules, widows, line
+    length, and the no-em-dash / no-double-hyphen rule mechanically.
 
 ### The Chart Slide
 
@@ -152,7 +181,14 @@ One chart, positioned 3–5, only if there's a citable figure. Keep it honest an
 
 ### Caption Writing
 
-The Instagram caption follows the same arc, compressed: **Hook** (restate the premise), **Build** (3–4 short paragraphs of specifics — names, numbers), **Land** (the thematic punchline, often the CLOSE line), **Credit** (@ mention the source creator), **Hashtags** (8–12, mixing broad and specific). Facts first, emotion second. The caption stands alone for non-swipers.
+The IG caption is **one line, declarative, ending with a relevant emoji**.
+It states the hook's fact and withholds the rest — the carousel does the
+work. Published references (from the issue log): *"A CEO cited Batman to
+justify his surveillance cameras. Batman ends with the surveillance system
+being shut down. 🦇"*, *"She played a girl who couldn't be hurt. She was
+thirty-six. 🖤"*. Validate with
+`voice_lint.py <file> --channel ig-caption`. No hashtag stack in the
+caption; discovery hashtags belong to the LinkedIn first comment, not here.
 
 ---
 
@@ -162,20 +198,46 @@ This layer is deterministic. Given a `carousel.json`, the bundled renderer produ
 
 ### The Brand Spec (authoritative)
 
+Canonical source: GBrain `curaition/daily-publishing-prompt` § Carousel
+technical spec (16 Aug 2026, from Issue 44 production). On any conflict, the
+GBrain page wins; update this file and the renderer to match it.
+
 | Token | Value |
 |-------|-------|
-| Canvas | **1080 × 1440px**, PNG, rendered by headless Chromium (Playwright) |
-| Text / bars / mark | Olive **#6B7A3F** |
-| Background | Cream **#F1EFE8** |
-| Slide numbers, light labels | Stone **#C8C3B4** |
-| Primary type | **Geist Regular (400)** — content copy, chart values, wordmark |
-| Secondary type | **Geist Light (300)** — slide numbers, chart labels, curaition.xyz |
+| IG canvas | **1080 × 1440px** PNG |
+| LinkedIn canvas | **1080 × 1350px** PNG per slide, compiled to a **PDF** (uploaded via the document icon, not the image icon) |
+| Renderer | headless Chromium (Playwright); vertical geometry expressed as fractions of slide height so both canvases stay on-spec |
+| Text / mark / values | Olive **#6B7A3F** — never dark ink on content slides |
+| Chart bars | Sage **#9CAF7A** |
+| Background | Cream **#F1EFE8** throughout |
+| Slide numbers, axis, source lines | Stone **#C8C3B4** |
+| Content type | **Geist Medium (500)**, 66px, line-height 1.31, centred |
+| Slide numbers | **Geist Light (300)**, 28px, top-right, format **N/9** (N/total) |
 
-**Content slide:** olive copy on cream, centred, default **108px**, line-height 1.08. Text block sits **slightly below vertical centre** (padding 180px top / 130px bottom → optical centre ≈ 25px below middle). Slide number **top-right**, two digits (`01`…`08`), Geist Light 300, stone #C8C3B4. Mycelium mark **~62px wide, centred at the bottom**.
+**Content slide:** olive copy on cream, centred, **66px / 1.31 line-height,
+max 3 lines**. Slide number top-right `N/9`. Mycelium watermark **32×32px,
+horizontally centred, bottom edge at 96.9% of slide height** (y=1412 on the
+1440 canvas), rendered as an `<img>`-equivalent CSS mask, never SVG
+`<image>`.
 
-**Chart slide:** olive bars on cream, sparse horizontal grid (5 faint lines at 0/25/50/75/100%), Geist value labels above bars (Regular) and category labels below (Light), title top-centre (Regular olive), source line bottom (stone), slide number top-right. A **ghosted mycelium mark at 5% opacity** sits behind the plot area. **No decorative grain, no overlays, no bottom watermark** on this slide (the ghost mark is the brand cue).
+**Chart slide:** vertical bars only, as **SVG `<rect>` elements** (HTML divs
+are silently dropped by some rasterisers; rects are also what the spec
+mandates). Bars anchor to a **1px stone axis baseline at 86.5% of slide
+height** (y=1246 on 1440); the tallest bar is **396px** (scaled
+proportionally on the 1350 canvas). Title **left-aligned at y=110**, Geist
+Medium olive. Generous empty space above the bars. Value labels above bars
+(Medium, olive), category labels below the baseline (Light, olive), source
+line above the watermark (Light, stone). This is the moment the question
+becomes concrete in numbers — the Q→E beat of the Veritasium formula.
 
-**Final slide (slide 9):** the mark (~90px) and the **"curAItion"** wordmark (90px, Geist Regular 400) as a **horizontal inline lockup, truly centred** on the slide. **"curaition.xyz"** in Geist Light 300, small, centred at the bottom. Cream background, **no scrim, no dark background**.
+**Final slide (slide 9):** mycelium mark **40px tall** + **"curAItion"**
+wordmark (**42px, Geist Medium**) as a horizontal lockup, truly centred,
+**both entirely in olive — the AI is NOT contrasted in a different colour**.
+CTA **"Read the full story at curaition.substack.com"** bottom-centre, Geist
+Medium 26px olive. **No watermark and no slide number on the final slide.**
+**LinkedIn variant:** the same lockup plus **"Follow curAItion for daily
+cultural intelligence"** in Geist Light 300 below the wordmark, CTA at the
+bottom.
 
 > **Font note:** fonts are embedded as base64 **WOFF2** per spec — Chromium decodes WOFF2 data-URIs natively (verified). (History: an earlier wkhtmltoimage/Qt-WebKit renderer could not decode WOFF2 and needed a TTF fallback; the move to Chromium removed that compromise.)
 
@@ -208,8 +270,8 @@ This layer is deterministic. Given a `carousel.json`, the bundled renderer produ
 
 Field notes:
 - `type`: `content` | `chart` | `final`.
-- Slide numbers auto-fill (two-digit, by position) for `content`/`chart`. Override with `n` if needed. `final` has no number.
-- `font_size` (content) overrides the 108px default for a single slide — use it to prevent clipping on long lines.
+- Slide numbers auto-fill as `N/total` by position for `content`/`chart`. Override with `n` if needed. `final` has no number.
+- `font_size` (content) overrides the 66px default for a single slide. Prefer cutting the line to shrinking the type — the spec is 66px.
 - `bars[].display` (optional) overrides the value label text (e.g. `"58%"`, `"1.2M"`); otherwise it's `value` + `unit`.
 - `final` accepts optional `wordmark` (default `"curAItion"`) and `url` (default `"curaition.xyz"`).
 - `background` (optional, any slide) — the image-composite layer. **Brand content slides omit it.** See *Image slides — renderer contract* below.
@@ -234,23 +296,36 @@ Treatment tokens (listed bottom-to-top paint order): `duotone` (desaturate + oli
 ### Rendering
 
 ```
-python scripts/render_carousel.py carousel.json --out-dir out/ [--chromium /path/to/chrome]
+python scripts/slide_lint.py carousel.json          # must exit 0 first
+python scripts/render_carousel.py carousel.json --out-dir out/ \
+    [--format ig|linkedin|both] [--chromium /path/to/chrome]
 ```
 
-Outputs `out/<slug>-slide-01.png` … `-slide-09.png` at 1080×1440. Fonts and the mycelium mark are embedded as base64 in each slide's HTML (self-contained); one Chromium instance renders the whole deck.
+Outputs, per format: `out/<slug>-ig-slide-01.png` … `-09.png` at 1080×1440,
+and `out/<slug>-linkedin-slide-01.png` … `-09.png` at 1080×1350 plus
+`out/<slug>-linkedin.pdf` (the slides compiled via Pillow, ready for
+LinkedIn's document upload). Fonts and the mycelium mark are embedded as
+base64 in each slide's HTML (self-contained); one Chromium instance renders
+both decks. The renderer applies the widow gate automatically (merges a
+last line of ≤6 characters) and reports when it does.
 
 **Prerequisite — Playwright + Chromium:** `pip install playwright` then `playwright install chromium`. On a server also install the browser's system libraries once: `sudo playwright install-deps chromium` (or `playwright install --with-deps chromium`). If you can't use root (sandboxed), the browser still runs once the shared libs are on `LD_LIBRARY_PATH`. Point `--chromium` at a specific Chrome/Chromium build if you don't want Playwright's bundled one. Chromium is chosen deliberately: it renders the spec's WOFF2 natively and provides the CSS compositing the image layer needs.
 
 ### Bundled assets
 
 ```
+assets/Geist-Medium.woff2        # Geist 500, OFL — content copy, wordmark, CTA
 assets/Geist-Regular.woff2       # Geist 400, OFL
-assets/Geist-Light.woff2         # Geist 300, OFL
+assets/Geist-Light.woff2         # Geist 300, OFL — slide numbers, labels
 assets/mycelium-mark-olive.png   # transparent PNG, mark mapped to #6B7A3F
 scripts/render_carousel.py       # the renderer (single source of truth for the brand spec)
+scripts/slide_lint.py            # the density gate — run before every render
 examples/carousel.example.json   # a complete 9-slide reference
 examples/demo-image-slide.json   # image-background compositing demo
 ```
+
+If `Geist-Medium.woff2` is missing: `npm pack geist && tar -xzf geist-*.tgz
+&& cp package/dist/fonts/geist-sans/Geist-Medium.woff2 assets/`.
 
 The mark asset was produced from `curAItion_Logo_Image.jpg` by stripping light pixels to transparent and mapping dark pixels to olive #6B7A3F. To regenerate it, see *Regenerating the mark* below.
 
@@ -352,6 +427,7 @@ out/[slug]-slide-01.png …       # Layer 3 exported slides
 
 ---
 
-*CurAItion Intelligence Desk · Carousel Producer · brand-rendered typography · renderer stage of the daily publishing chain · v2.1*
+*CurAItion Intelligence Desk · Carousel Producer · brand-rendered typography · renderer stage of the daily publishing chain · v3.0*
+*Changelog v3.0: Synchronised with the canonical publishing spec (GBrain `curaition/daily-publishing-prompt` 16 Aug 2026 + `curaition/carousel-slide-density` 15 Aug 2026). Content type is now Geist Medium 500 at 66px / 1.31 (was Regular 108px / 1.08); max 3 lines per slide with the hook capped at 2; slide numbers are N/9 at 28px; watermark is 32px at 96.9% height; chart is SVG rects in sage #9CAF7A on a stone baseline at 86.5% with a left-aligned title; final slide is the 40px mark + 42px Geist Medium wordmark, all olive, with the Substack CTA, plus a LinkedIn variant with the follow line. Added the LinkedIn 1080×1350 PNG + PDF output, the density lint (`slide_lint.py`), the automatic widow gate, and the one-line IG caption spec. GBrain is canonical for all of the above; this file mirrors it.*
 *Changelog v2.1: Renderer moved from wkhtmltoimage to Playwright/Chromium — restores base64 WOFF2 per spec (no TTF fallback) and adds an optional `background` image-composite layer (cover/focal/duotone/scrim/blur/dim + text-colour override) so the future image-gen skill integrates through the same carousel.json. One browser renders the whole deck. Runtime-agnostic: identical output under Cowork or self-hosted (Hermes-Agent).*
 *Changelog v2.0: Replaced the AI-imagery pipeline (Flux/Wan, frame extraction, gradient overlays, Bebas Neue) with a deterministic olive-on-cream Geist brand renderer. Added bundled Geist + mycelium mark, a data-chart slide, and a final brand lockup slide.*

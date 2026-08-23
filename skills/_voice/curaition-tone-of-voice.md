@@ -15,7 +15,7 @@ The tone adapts by context: more personal in build transparency posts, more rigo
 | **No filler openers** | Never start with "We're excited to...", "Today we're thrilled...", or "I wanted to reach out...". Just start with the thing. |
 | **Peer-to-peer** | Write as one senior practitioner to another. Not a vendor pitching. Not a startup announcing. Two people who've been in the room. |
 | **British English** | Colour not color. Realise not realize. Organisation not organization. No exceptions. |
-| **No em dashes** | Use a full stop or a comma instead. Never the long dash. |
+| **No em dashes, no double hyphens** | Use a full stop or a comma instead. Never the long dash, never `--`. Anywhere. |
 | **Self-aware, not cringe** | We're allowed to have a point of view on ourselves. We're not allowed to be precious about it. |
 
 ## Voice in practice
@@ -42,13 +42,25 @@ The tone adapts by context: more personal in build transparency posts, more rigo
 
 | Channel | Tone adjustment |
 |---|---|
-| **LinkedIn posts** | Dry, argument-led, no product pitch. 150-250 words. End with a question or provocation. |
+| **LinkedIn posts** | Dry, argument-led, no product pitch. 150-250 words. Opens with the Drop's subtitle as the first line, then mirrors the Drop's opening object and register: compressed, not summarised. Ends "Full breakdown in the comments". Max 3 hashtags: #CulturalIntelligence #BrandStrategy + one variable. The Substack link and remaining hashtags (2-3 topic-specific + #curaition) go in the first comment, never the post body. |
 | **LinkedIn DMs** | Warm but efficient. No pitch. Open question. One paragraph maximum. |
 | **Email (cold/warm outreach)** | Peer-to-peer. Lead with the intelligence, not the ask. Signs off "Ben + Rick". |
-| **Instagram** | Sparse. 3-6 words per post. Demonstrates taste rather than explains it. |
-| **Substack (The Drop)** | More depth, more evidence. Still dry. The premium version of the LinkedIn post. |
+| **Instagram** | Sparse. Demonstrates taste rather than explains it. Caption: one line, declarative, ends with a relevant emoji. Carousel copy: max 3 lines per slide, ideally 2; the hook slide is the sparest slide in the deck. |
+| **Substack (The Drop)** | More depth, more evidence. Still dry. The premium version of the LinkedIn post. 1,000 words max. Title creates a tension or reversal, never resolves the argument. Every issue carries a subtitle: title opens the gap, subtitle hints at the answer without resolving it. Sources are inline hyperlinks in the body; no sources block at the bottom. |
 | **Pitch decks / SOWs** | Precise and evidenced. No hype. Claim only what the platform demonstrably does. |
 | **WhatsApp (warm contacts)** | Casual, emoji-inclusive. Personal not professional. |
+
+## Reads as discovered, not constructed
+
+Everything published under the CurAItion name must read as a person working an argument out, not a machine assembling one. These are mechanical tells to design out (from GBrain `curaition/daily-publishing-prompt`, which stays canonical for this list):
+
+- The argument feels discovered, not constructed. Open on the specific object, never the announcement of it.
+- No parallel short-sentence structures. No tidy three-beat punchline builds.
+- Uneven rhythm: sentences that don't do what you expect. Brooker rhythm works: short, short, short, then the longer sentence with the real point.
+- Never explain the observation after making it.
+- British idiom throughout. "Mate" is not a substitute for wit.
+- Apply the Veritasium engagement formula to structure: misconception challenged → question opened, then explained → an A plot carrying a B plot. Titles challenge a belief and open a gap at the same time.
+- Before writing anything, answer: what does this add up to? What does the reader leave with that they didn't arrive with?
 
 ## Sign-off convention
 
