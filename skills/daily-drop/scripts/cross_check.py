@@ -83,6 +83,8 @@ def urls_in(text: str) -> set[str]:
 
 
 def dash_check(name: str, text: str, fails: list[str]) -> None:
+    # horizontal-rule lines (---) are section dividers, not double hyphens
+    text = "\n".join(ln for ln in text.splitlines() if not HR_LINE.match(ln))
     no_urls = MD_LINK.sub(lambda m: "[%s](URL)" % m.group(1), text)
     no_urls = BARE_URL.sub("URL", no_urls)
     if "—" in no_urls:

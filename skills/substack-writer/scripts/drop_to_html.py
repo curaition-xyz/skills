@@ -60,6 +60,21 @@ def main() -> int:
     src = Path(sys.argv[1])
     text = src.read_text(encoding="utf-8")
     title, subtitle, body = split_drop(text)
+
+    # House layout: the published Drop has NO H2/H3 headings in the body.
+    # Sections are separated by horizontal rules and open with a bold
+    # lead-in phrase. Demote any residual markdown headings to that form.
+    demoted = []
+    for ln in body.splitlines():
+        m = re.match(r"^\s*#{2,}\s+(.*)$", ln)
+        if m:
+            lead = m.group(1).strip().rstrip(".")
+            demoted.append("---")
+            demoted.append("")
+            demoted.append("**%s.**" % lead)
+        else:
+            demoted.append(ln)
+    body = "\n".join(demoted)
     if not title or not subtitle:
         print("FAIL: could not find title (H1) and subtitle — is this a "
               "Drop draft?")
@@ -82,7 +97,9 @@ def main() -> int:
     print("wrote", out)
     print("\nPaste these into Substack's own fields (they are NOT in the "
           "HTML body):")
-    print("  Title:    " + title)
+    # house convention: the published title carries a terminal full stop
+    print("  Title:    " + (title if title.endswith((".", "?", "!"))
+                            else title + "."))
     print("  Subtitle: " + subtitle)
     print("\nThen open %s in a browser, select all, copy, and paste into "
           "the Substack body." % out.name)

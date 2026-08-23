@@ -132,7 +132,14 @@ beats you have, not a fixed count.
 3. **Lede** — opens on the specific object, never the announcement of it.
    State the obvious read, then pivot to what the coverage skips. Cited
    facts only.
-4. **Sections** (`## …`, ~3-4), each one beat of the spine:
+4. **Sections — no headings.** The published Drop carries **no H2/H3
+   headings in the body**. Sections (~3-4, one beat of the spine each) are
+   separated by a horizontal rule (`---`) and open with a **bold lead-in
+   phrase**, usually the section's argument as one bolded sentence ending
+   in a full stop (published reference: *"**The counter-signals are also
+   building.**"*). Blockquotes carry quoted material; italics carry quoted
+   words. The title itself takes a terminal full stop on Substack
+   (*"The Batman Problem."*). The beats:
    - the catalyst (what actually moved it),
    - the prior thesis (the CurAItion depth layer — the `lift`, framed as a
      read with its honest caveat),
@@ -146,8 +153,19 @@ beats you have, not a fixed count.
 5. **Close** — restate the sharpest number or tension. Land the thesis.
 6. **Sources are inline.** Every source is a markdown hyperlink in the body,
    at the claim it supports, using only URLs present in the package
-   citations. **No sources block at the bottom — the lint fails it.** Never
-   introduce a source the package doesn't carry.
+   citations. **No "Sources:" list at the bottom — the lint fails it.**
+   Never introduce a source the package doesn't carry.
+7. **Standing method block** — the last element, italicised, after a
+   horizontal rule. Fixed opening sentence: *"CurAItion monitors curated
+   social content items across 19 domains, surfacing cultural formation
+   signals before they peak."* Follow it with one italic sentence naming
+   the pieces this edition drew on, hyperlinked, using only verified
+   citation URLs. This is method attribution, not a sources list; it is
+   present in every published issue.
+8. **Substack widgets are added in the editor, never in the draft.** The
+   subscribe button and "Thanks for reading curAItion!" line are Substack
+   blocks the publisher adds when pasting. The draft and the HTML twin
+   carry neither.
 
 ## Rules (the guardrails)
 
