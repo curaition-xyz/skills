@@ -85,6 +85,18 @@ WATERMARK_BOTTOM_FRAC = 1412 / SPEC_BASELINE_H    # 96.9%
 CHART_BASELINE_FRAC = 1246 / SPEC_BASELINE_H      # 86.5%
 CHART_MAX_BAR = 396                               # px at SPEC_BASELINE_H
 
+# Chart labelling is anchored to the chart BASELINE, not to the canvas
+# bottom, so the axis labels and the source caption move together when the
+# canvas height changes. Anchoring the caption to the bottom instead is what
+# let it collide with the category labels when the IG canvas went 1440 ->
+# 1350: `bottom: round(70*scale) + 40` carried a fixed +40 that did not
+# scale, so the labels rose with the baseline and the caption stayed put.
+# Both offsets below are measured from `baseline_y` in px at any height.
+CHART_CLABEL_DY = 46      # category-label text baseline, below the axis
+CHART_SOURCE_DY = 68      # source-caption box TOP, below the axis
+CHART_SOURCE_LH = 1.2     # pinned: UA default line-height is font-dependent,
+                          # which makes the caption's box height unassertable
+
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
 FONT_MEDIUM = ASSETS / "Geist-Medium.woff2"
 FONT_REGULAR = ASSETS / "Geist-Regular.woff2"
@@ -324,7 +336,7 @@ def render_chart_html(slide: dict, h: int, num_label: str) -> str:
         clabels.append(
             "<text x='%d' y='%d' text-anchor='middle' fill='%s' "
             "font-family='Geist' font-weight='300' font-size='26'>%s</text>"
-            % (round(x + bar_w / 2), baseline_y + 46, OLIVE,
+            % (round(x + bar_w / 2), baseline_y + CHART_CLABEL_DY, OLIVE,
                html.escape(str(b.get("label", "")))))
 
     axis = ("<rect x='%d' y='%d' width='%d' height='1' fill='%s'/>"
@@ -332,9 +344,10 @@ def render_chart_html(slide: dict, h: int, num_label: str) -> str:
     title = html.escape(slide.get("title", "")).replace("\n", "<br>")
     source = slide.get("source", "")
     source_html = (
-        "<div style='position:absolute;bottom:%dpx;left:104px;width:%dpx;"
-        "font-weight:300;font-size:22px;color:%s'>%s</div>"
-        % (round(70 * scale) + 40, plot_w, STONE, html.escape(source))
+        "<div style='position:absolute;top:%dpx;left:104px;width:%dpx;"
+        "font-weight:300;font-size:22px;line-height:%s;color:%s'>%s</div>"
+        % (baseline_y + CHART_SOURCE_DY, plot_w, CHART_SOURCE_LH, STONE,
+           html.escape(source))
         if source else "")
 
     body = (

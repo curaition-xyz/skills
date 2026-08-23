@@ -1,4 +1,4 @@
-# Installing `carousel-producer` (v3.1)
+# Installing `carousel-producer` (v3.2)
 
 Brand-locked Instagram carousel producer for CurAItion. Turns CurAItion cultural
 intelligence into 1080×1350 typographic PNG slides (olive-on-cream Geist, mycelium
