@@ -239,6 +239,10 @@ os.chmod(cred_file, 0o600)
 - org_id: `297e242a-4f5b-4012-8f82-10f717eeade7`
 - Roster project_id: `0bdbc3d2-1360-4430-b634-dea95841c9ba` ("Gymshark Creator Dashboard", active). Gymshark's SINGLE roster project. The archived `Partner Ecosystem` (`83472bde-a285-42cd-bba0-f7b92728e728`) was folded into it on 2026-08-25 — all 170 of its source rows are now linked here, so nothing should ever be scoped to `83472bde` again.
 - Partner Pulse: `source_scope: my_sources` with org_id + the roster project_id
+- Roster project state (verified 2026-08-25): 1,560 source rows, ~1,172 distinct handles, ~39,068 items. `sentinel_enabled` true on 1,558 of 1,560.
+- **123 rows are PAUSED / `sync_enabled = false`**, stopping at 2026-07-30 (56 TikTok, 52 YouTube, 16 Instagram) — the rows carried over from `Partner Ecosystem`. History readable, feeds dead. Resuming them is an unmade recurring-ingestion cost decision, not an oversight.
+- Two scheduled queries were repointed off the archived project on 2026-08-25: `gymshark_recent_honest_content` (weekly) and `gymshark_partner_founder_inventory` (monthly), both `active`, both `scope_to_project: true`. They had been reading a 46-source slice for months. **When a project is retired, grep `scheduled_queries.project_id` — nothing warns you.**
+- `Partner Ecosystem` still holds its 170 `source_projects` rows (now duplicated into the roster) plus 137 historical `patterns` rows. Left deliberately: unlinking adds nothing, and the patterns are history. It has zero dossiers, brand-safety rows or sentinel cohorts.
 - Market Pulse: evergreen sources only (no project_id)
 - Cross-domain intelligence: `source_scope: all` without project_id
 
