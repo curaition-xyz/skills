@@ -9,7 +9,7 @@ This file is the single source of truth for CurAItion scoping across all Gymshar
 
 ## Three-Tier Scoping (MANDATORY)
 
-### Tier 1: Gymshark Creator Dashboard (creators)
+### Tier 1: Gymshark Creator Dashboard (the roster — athletes AND creators)
 
 ```
 org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
@@ -17,20 +17,57 @@ project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
 source_scope: "my_sources"
 ```
 
-**Use for:** Partner Pulse creator data, roster, content analysis, theme extraction, co-occurrences within the creator ecosystem.
+**Use for:** Partner Pulse roster data, content analysis, theme extraction, co-occurrences. This is Gymshark's SINGLE roster project — signed athletes, ambassadors and discovery-pool creators all live here. It is not a discovery pool sitting next to a roster; treat the mix as a property of the corpus and say which kind of creator a story is about.
 
-**Returns:** 1,436 source rows across TikTok, Instagram and YouTube. That is a **channel** count, not a person count — most creators hold two or three rows, one per platform, so the roster is roughly **880 distinct people**. There is no canonical-person field on a source, so any "N creators" claim has to be deduped by hand (see Phase 2 in SKILL.md).
+**Returns:** 1,560 source rows across TikTok, Instagram and YouTube (~39,000 content items). That is a **channel** count, not a person count — most creators hold two or three rows, one per platform. Distinct handles number roughly **1,172**, which is the closest cheap proxy for headcount; there is no canonical-person field on a source, so any "N creators" claim has to be deduped by hand (see Phase 2 in SKILL.md).
 
-> **Changed 2026-08-25.** Tier 1 previously pointed at `Partner Ecosystem`
-> (`83472bde-a285-42cd-bba0-f7b92728e728`), which was **archived** with 170
-> sources, none of them still syncing. Every Partner Pulse edition before this
-> date was therefore scoped to a dead, ~12%-sized slice of the roster.
+**123 of these rows are PAUSED** (the ones carried over from `Partner Ecosystem` on 2026-08-25) and their content stops at 2026-07-30. Their history is readable and belongs in the corpus; their feeds are not live. When a digest leans on one of these creators, either say the window ends in July or ask for the source to be resumed — do not present a paused row's last post as current activity. `curaition_list_sources(status="PAUSED")` lists them.
+
+**Domain scoping caveat.** This project's `domains` array is `["activewear", "lifestyle"]` (recomputed from its sources on 2026-08-25; it had been empty). A project-scoped CurAItion read returns project-source content **plus evergreen content in matching domains** — currently ~379 non-project items in those two domains. That is small against ~39,000 roster items, but it is not roster content. If a Tier 1 result names a source you cannot find in `curaition_list_sources(project_id=...)`, that is why: it came in through the domain match, and it does not belong in a roster claim.
+
+> **Changed 2026-08-25 (superseded the same day — read the second note).** Tier 1
+> previously pointed at `Partner Ecosystem`
+> (`83472bde-a285-42cd-bba0-f7b92728e728`). Every Partner Pulse edition before
+> this date was scoped to that project.
 >
-> Do **not** revert this to reinstate "missing" creators. 129 of those 170
-> source rows are people already present here under a cleaned-up canonical row;
-> only ~16-18 people are genuinely absent, and that gap is being resolved
-> separately against Gymshark's own roster of record. Note also that the
-> archived project was **not** women-only despite its description saying so.
+> **Correction, 2026-08-25 (evening).** The first version of this note said the
+> archived project had "170 sources, none of them still syncing". That was
+> wrong, and it was wrong in a way worth recording: 46 of its 170 rows were
+> ALSO linked to this Creator Dashboard project, and those 46 were ACTIVE and
+> syncing hourly — the archived project's apparent liveness was entirely
+> borrowed from Creator Dashboard membership. The remaining 124 rows were
+> PAUSED, stopping at 2026-07-30. A `last_sync desc` page of the first 15 rows
+> showed only the live 46 and read as "all of them are current"; the sort order
+> hid the split. Check a status histogram, never the head of a sorted page.
+>
+> The same note claimed 129 of the 170 rows were duplicates of people already
+> here, leaving a real gap of ~16-18. At the CHANNEL level that was also wrong:
+> 124 rows were genuinely unlinked, and NONE of them was a same-platform
+> duplicate of an existing row (`handle × platform` overlap was exactly zero).
+> 48 matched an existing handle on a *different* platform — the same person's
+> other channel, e.g. Whitney Simmons, whose Instagram row was here while her
+> TikTok and YouTube rows were not. 73 matched nothing at all.
+>
+> **Resolved 2026-08-25.** All 124 were linked into this project. Partner
+> Ecosystem is now fully contained here and this is Gymshark's SINGLE roster
+> project — there is no second roster to consult, and nothing should be scoped
+> to `83472bde` again.
+
+---
+
+### Tier 1 Alt: Gymshark Owned Channels (optional — for own-channel audits)
+
+```
+org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
+project_id: "<gymshark_owned_channels_project_id>"   # set up separately; not yet provisioned
+source_scope: "my_sources"
+```
+
+**Use for:** `curaition_compare(dimension="themes", project_id_a=<owned>, project_id_b=<roster>)` — Prompt 4 "audit the brand's own channels against the partner ecosystem." Surfaces which themes the brand under/over-indexes on its owned feed vs the athletes.
+
+**Setup path:** The owned-channels project is created separately via the admin dashboard (Sources → Add Project) or by a super-admin operator using `curaition_queue_source_ingest(platform, handle, project_id)`. Until that project is provisioned, skip the own-channel section of the digest — do not fabricate a comparison from a single-tier read.
+
+**When to skip:** If the owned-channels project does not exist or has fewer than 20 recent content items, the log-odds-ratio comparison will be statistically noisy. State the gap exists in the digest narrative; do not quote a metric.
 
 ---
 
@@ -74,6 +111,7 @@ source_scope: "all"    (or "global" for CurAItion baseline only)
 | Partner Pulse — Signal 1 (cross-domain, mandatory) | Tier 3 |
 | Partner Pulse — Signals 2-3 | Tier 1 or Tier 2 |
 | Partner Pulse — Who to Watch (verify existing partners) | Tier 1 |
+| Partner Pulse — Own-Channel Gap (Prompt 4, optional) | Tier 1 + Tier 1 Alt via `curaition_compare` |
 | Market Pulse — Competitive Landscape, Brand Teardowns | Tier 2 |
 | Market Pulse — Cross-Domain Signals | Tier 3 |
 | Market Pulse — The Watchlist (verify existing tracking) | Tier 2 |

@@ -1,7 +1,7 @@
 ---
 name: gymshark-market-pulse
 version: 0.2.0
-description: "Generate Gymshark Market Pulse digests — competitive landscape intelligence briefings for Gymshark's Social Media and Content Marketing team, powered by CurAItion MCP tools. Analyses Gymshark's tracked competitors and adjacent brands from the evergreen content sources (NOT the Partner Ecosystem project), provides brand-level benchmarking, content strategy teardowns, and cross-domain signals from CurAItion's wider intelligence. Use this skill whenever the user asks for a competitor analysis, market pulse, competitive intelligence report, brand benchmarking, or cross-domain trend briefing for Gymshark. Also trigger for 'what are our competitors doing', 'market update', 'competitive landscape', 'Market Pulse', or any request combining Gymshark competitive data with strategic analysis."
+description: "Generate Gymshark Market Pulse digests — competitive landscape intelligence briefings for Gymshark's Social Media and Content Marketing team, powered by CurAItion MCP tools. Analyses Gymshark's tracked competitors and adjacent brands from the evergreen content sources (NOT the Gymshark roster project), provides brand-level benchmarking, content strategy teardowns, and cross-domain signals from CurAItion's wider intelligence. Use this skill whenever the user asks for a competitor analysis, market pulse, competitive intelligence report, brand benchmarking, or cross-domain trend briefing for Gymshark. Also trigger for 'what are our competitors doing', 'market update', 'competitive landscape', 'Market Pulse', or any request combining Gymshark competitive data with strategic analysis."
 ---
 
 <!--
@@ -31,7 +31,7 @@ You create competitive intelligence briefings for Gymshark's Social Media and Co
 
 The Gymshark CurAItion org contains two layers of content:
 
-1. **Creator roster (Project `0bdbc3d2`)**: 1,436 source rows (~880 distinct creators). Covered by Partner Pulse. DO NOT analyse these here. (Was `Partner Ecosystem` / `83472bde` until 2026-08-25; that project is archived.)
+1. **Gymshark roster (Project `0bdbc3d2`, "Gymshark Creator Dashboard")**: 1,560 source rows (~1,172 distinct handles), ~39,000 items. Gymshark's SINGLE roster project — signed athletes, ambassadors and discovery-pool creators. Covered by Partner Pulse. DO NOT analyse these here. (Tier 1 pointed at `Partner Ecosystem` / `83472bde` until 2026-08-25; that project's 170 rows were folded into `0bdbc3d2` the same day and it is now empty of anything unique.)
 2. **Evergreen Sources (Non-Project)**: ~1,200+ items from ~40+ competitor and adjacent brand accounts. THIS is Market Pulse's territory.
 
 The evergreen sources include direct competitors, adjacent athleisure/running/outdoor brands, and supplement/nutrition brands that overlap. **The exact roster is dynamic** — query it at runtime via Phase 2, do not assume from this file.
