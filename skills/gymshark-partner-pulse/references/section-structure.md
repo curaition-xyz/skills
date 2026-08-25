@@ -213,7 +213,7 @@ These should be specific and measurable: "If X is still doing Y by Issue #N, the
     <strong>Sources & Methodology:</strong><br>
     [List each CurAItion tool used and its parameters]<br>
     [Note any limitations: no historical baseline, manual deduplication, etc.]<br>
-    All data scoped to org_id: 297e242a / project_id: 83472bde<br>
+    All data scoped to org_id: 297e242a / project_id: 0bdbc3d2<br>
     All hyperlinks verified against CurAItion content URLs
   </div>
 </div>

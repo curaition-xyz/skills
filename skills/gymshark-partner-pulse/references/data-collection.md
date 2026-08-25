@@ -2,7 +2,7 @@
 
 All calls must include:
 - `org_id`: `297e242a-4f5b-4012-8f82-10f717eeade7`
-- `project_id`: `83472bde-a285-42cd-bba0-f7b92728e728`
+- `project_id`: `0bdbc3d2-1360-4430-b634-dea95841c9ba`
 - `source_scope`: `my_sources` (where applicable)
 
 See `_shared/gymshark-config.md` for the full three-tier scoping strategy.
@@ -13,7 +13,7 @@ See `_shared/gymshark-config.md` for the full three-tier scoping strategy.
 ```
 curaition_get_stats
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
 ```
 Returns: total content items, format breakdown (TikTok videos, IG reels, IG carousels, long-form, etc.), source count. Use the total from get_stats as the canonical content count — it may differ from list_content pagination totals.
@@ -22,7 +22,7 @@ Returns: total content items, format breakdown (TikTok videos, IG reels, IG caro
 ```
 curaition_get_cited_themes
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   aggregate: true
   min_weight: 0.5
@@ -34,7 +34,7 @@ Returns: themes with citation counts and weights. Higher citation count = more e
 ```
 curaition_entity_cooccurrence
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   entity_name: "Gymshark"
   limit: 50
@@ -45,7 +45,7 @@ Returns: entities that co-occur with Gymshark in content, ranked by frequency. T
 ```
 curaition_search_entities
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   entity_type: "person"
   limit: 200
@@ -59,7 +59,7 @@ For each athlete you want to feature, run:
 ```
 curaition_entity_cooccurrence
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   entity_name: "[Athlete Name]"
   limit: 20
@@ -70,7 +70,7 @@ This reveals what brands, concepts, and other athletes cluster around each indiv
 ```
 curaition_semantic_search
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   query: "[specific topic or theme]"
   limit: 10
@@ -81,7 +81,7 @@ Use this to find specific content related to themes identified in Batch 1. Run m
 ```
 curaition_detect_patterns
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   time_window: "7d" or "14d"
 ```
@@ -91,7 +91,7 @@ Returns structural patterns forming across the ecosystem. Good for the "Three Si
 ```
 curaition_trend_analysis
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   recent_days: 7
   entity_type: "person"
@@ -146,7 +146,7 @@ Run targeted searches for every story you plan to reference. Collect the `source
 ```
 curaition_list_content
   org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-  project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
   source_scope: "my_sources"
   limit: 50
   sort_by: "created_at"

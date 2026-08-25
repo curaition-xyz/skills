@@ -21,8 +21,8 @@ A specific, measurable observation with a clear time-bound trigger condition. No
 A ready-to-run query the reader can paste into Claude (with CurAItion MCP access) to investigate the signal further right now. Present in a styled code block.
 
 ```
-Ask Claude: "Using CurAItion, search the Gymshark Partner Ecosystem
-(org_id: 297e242a, project_id: 83472bde) for all content where 'mental health'
+Ask Claude: "Using CurAItion, search the Gymshark creator roster
+(org_id: 297e242a, project_id: 0bdbc3d2) for all content where 'mental health'
 or 'vulnerability' appears as a theme in the last 14 days. Show me the top 10
 by engagement with source links and which athletes created them."
 ```

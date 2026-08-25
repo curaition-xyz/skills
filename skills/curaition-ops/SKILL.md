@@ -184,7 +184,7 @@ os.chmod(cred_file, 0o600)
 
 ### CurAItion MCP — Gymshark
 - org_id: `297e242a-4f5b-4012-8f82-10f717eeade7`
-- Partner project_id: `83472bde-a285-42cd-bba0-f7b92728e728`
+- Creator Dashboard project_id: `0bdbc3d2-1360-4430-b634-dea95841c9ba` (active; replaced the archived `Partner Ecosystem` 2026-08-25)
 - Partner Pulse: `source_scope: my_sources` with both IDs
 - Market Pulse: evergreen sources only (no project_id)
 - Cross-domain intelligence: `source_scope: all` without project_id
