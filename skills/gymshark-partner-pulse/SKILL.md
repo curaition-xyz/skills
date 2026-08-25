@@ -1,7 +1,52 @@
 ---
 name: gymshark-partner-pulse
-description: "Generate Gymshark Partner Pulse digests — internal cultural intelligence briefings for Gymshark's Social Media and Content Marketing team, powered by CurAItion MCP tools. Analyses the Gymshark Partner Ecosystem: athlete content, brand co-occurrences, cultural themes, and creator activity across TikTok, Instagram, and YouTube. Use this skill whenever the user asks for a Gymshark digest, partner pulse, partner ecosystem report, athlete content analysis, Gymshark newsletter, or any cultural intelligence briefing about Gymshark's ambassador/athlete network. Also trigger for 'what are our athletes doing', 'partner update', 'athlete content report', 'Gymshark digest', 'Partner Pulse', 'Edition #2', or any request combining Gymshark partner data with editorial analysis."
+version: 0.3.0
+description: "Generate Gymshark Partner Pulse digests — internal cultural intelligence briefings for Gymshark's Social Media and Content Marketing team, powered by CurAItion MCP tools. Analyses the Gymshark Creator Dashboard, the single CurAItion project holding Gymshark's whole athlete and creator roster: athlete content, brand co-occurrences, cultural themes, and creator activity across TikTok, Instagram and YouTube. Use this skill whenever the user asks for a Gymshark digest, partner pulse, roster or partner ecosystem report, athlete content analysis, Gymshark newsletter, or any cultural intelligence briefing about Gymshark's ambassador/athlete network. Also trigger for 'what are our athletes doing', 'partner update', 'athlete content report', 'Gymshark digest', 'Partner Pulse', 'Edition #2', or any request combining Gymshark roster data with editorial analysis."
 ---
+
+<!--
+CHANGELOG
+0.3.0 (2026-08-25)
+  - MERGE of two divergent lineages. The GitHub/claude.ai copy had been the 0.1.x
+    March baseline since the repo was seeded; the 0.2.0 hardening (below) lived
+    only in a local working copy and had never been committed, so the skill that
+    actually ran in production was missing Phase 2.6 entirely. This release
+    carries 0.2.0's Phase 1.6, Phase 2.6, the gated Creator Scouting section,
+    Common Mistakes 11-13, and the Instagram embed.js pattern onto the copy that
+    already had the corrected project UUID.
+  - Tier 1 is the `Gymshark Creator Dashboard` project
+    (`0bdbc3d2-1360-4430-b634-dea95841c9ba`) — Gymshark's SINGLE roster project.
+    The 124 source rows that lived only in the archived `Partner Ecosystem`
+    project were linked into it on 2026-08-25, so Tier 1 is now the whole
+    roster: 1,560 source rows / ~1,172 distinct handles / ~39,000 items.
+  - 123 of those newly-linked rows are PAUSED and stop at 2026-07-30. Their
+    history is readable; their feeds are not live. See gymshark-config.md.
+
+0.2.0 (2026-06-02)
+  - Added Phase 2.6 (Who-to-Watch Pre-Flight) — 4 mandatory gates after Issue #6
+    failure where all three Who-to-Watch candidates (Lucy Davis, Zoe Rae, Lexi
+    Bell) had material factual errors. Root cause: trusted a single broad
+    WebSearch's AI-generated summary paragraph as factual ground truth for
+    handles, follower counts, and sponsorship status. Re-verification handle-by-
+    handle showed: Lucy Davis was PUMA-sponsored (not MyProtein as claimed);
+    Zoe Rae may have an existing Gymshark relationship (cannot recommend
+    without internal check); Lexi Bell is already an On Running ambassador
+    (a Tier 2 competitor, not "the open lane"). This phase mirrors the
+    gymshark-market-pulse v0.2.0 Phase 2.5d hardening but is scoped to
+    external-creator scouting rather than competitor-brand tracking.
+  - Common Mistakes expanded from 10 to 13 — added "never trust the WebSearch
+    summary paragraph", "never recommend a Watchlist candidate without
+    cross-checking competitor sponsorships", and "never assume a candidate's
+    handle from their display name".
+  - Updated Creator Scouting section header to reference Phase 2.6 as the
+    non-skippable gate, replacing the prior loose-process description.
+
+0.1.x (Mar 2026 baseline) — initial skill, including Phase 1.5 Contextual
+  Verification (the Alive App rule). The Alive App rule prevented one class
+  of factual error (mistaking athlete-owned brands for third-party platforms);
+  Phase 2.6 now closes the symmetric error on the external-creator side.
+-->
+
 
 # Gymshark Partner Pulse — Cultural Intelligence Digest
 
@@ -123,6 +168,35 @@ CurAItion co-occurrence data tells you WHAT appears together. It does NOT tell y
 - If WebSearch reveals ownership that co-occurrence data doesn't distinguish, rewrite your editorial angle
 - If you cannot verify a relationship, state it neutrally — never infer
 
+### Phase 1.6: Own-Channel vs Ecosystem Gap (Optional — Prompt 4)
+
+Run this only when a Gymshark Owned Channels project is provisioned alongside the Creator Dashboard roster project (see `_shared/gymshark-config.md`, Tier 1 Alt). If no owned-channels project exists yet, skip — do not fabricate a comparison from a single-tier read.
+
+When the owned-channels project exists, run:
+
+```
+curaition_compare
+  dimension: "themes"
+  project_id_a: "<gymshark_owned_channels_project_id>"
+  project_id_b: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
+  window: { created_after: "YYYY-MM-DD", created_before: "YYYY-MM-DD", tz: "Europe/London" }
+  min_significance: 1.28    # 80% CI — looser than default for smaller projects
+  min_weight: 0.3
+  limit: 30
+```
+
+Returns three buckets with log-odds-ratio + z-score per theme:
+- `shared` — themes present in both, ranked by magnitude of skew
+- `only_in_a` — themes over-indexed in owned channels (what the brand leads with)
+- `only_in_b` — themes over-indexed in the ecosystem (what athletes talk about that the brand doesn't)
+
+**The `only_in_b` bucket is the goldmine.** A theme the ecosystem is running with but the brand's own feed ignores is a structural gap — exactly the kind of pattern that passes the Obviousness Filter and can anchor a Big Story. Converse direction (`only_in_a` — brand emphasises, ecosystem doesn't) is a drift signal: the brand may be out of step with its own athlete network.
+
+**Interpretation rules:**
+- If both projects have <100 items in the window, treat the numbers as directional only. Do not quote z-scores in the digest.
+- Statistical significance (|z| > 1.96) with low raw count (<5 mentions) is a cold spot, not a reliable signal — ignore.
+- Always cross-reference a compare-surfaced theme against Phase 1.5 verification before editorializing; the theme label itself may conflate distinct phenomena.
+
 ### Phase 2: Entity Deduplication
 
 CurAItion tracks individual channels (TikTok, Instagram, YouTube). Many athletes run 2-3 channels. The raw person entity count will be inflated.
@@ -163,6 +237,74 @@ The best stories in CurAItion data are the ones that are counter-intuitive or st
 Every insight in the digest must pass this test: **"What should the Gymshark team do differently on Monday morning because of this?"** If the answer is "nothing, because they already knew," cut it. If the answer is specific and actionable — "reach out to these 3 athletes who are independently creating HYROX content to explore a coordinated moment" or "the running content theme is accelerating across 8 athletes and none of them are tagging Gymshark Running" — it belongs.
 
 Write the "So What?" as a callout box in every major section. Not vague ("consider leveraging this trend") but specific: who, what, when, and why now.
+
+### Phase 2.6: Who-to-Watch Pre-Flight (MANDATORY — non-skippable gate)
+
+This phase exists because Who-to-Watch failure is one of the highest-risk errors in this digest. Recommending a creator the Gymshark social team already knows is a "have you been reading our own roster?" credibility hit. Recommending a creator who's already an ambassador for a Tier 2 competitor (and framing them as "an open lane") is a worse one. Recommending a creator whose claimed sponsorship is fabricated from a WebSearch summary is the worst of the three.
+
+**Why this exists:** In Issue #6 (June 2026), all three Who-to-Watch candidates had material factual errors. Lucy Davis was claimed as MyProtein-sponsored — she is in fact PUMA-sponsored (PUMA is in your Tier 2 competitor set, see Market Pulse Issue #6). Zoe Rae was recommended as an external candidate — one source on re-verification indicated she may already have a Gymshark partnership, which would make her ineligible by definition. Lexi Bell was framed as "unsponsored / the open lane" — she is in fact an active On Running ambassador. The root cause across all three was the same: the verification step used a single broad WebSearch and trusted the search tool's AI-generated summary paragraph as if it were factual ground truth. This phase makes that class of error non-repeatable.
+
+**Gate 1 — CurAItion entity registry check:**
+For every Who-to-Watch candidate, run:
+```
+curaition_search_entities
+  query: "[candidate display name]"
+  org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
+  source_scope: "my_sources"
+  entity_type: "person"
+```
+If ANY result returns with content_count >= 1 → candidate is already tracked on the Gymshark roster → REMOVE from list. Also try common handle variants (with/without dots, with/without "fit", with/without numerals).
+
+**Gate 2 — CurAItion content registry check:**
+For every remaining candidate, run:
+```
+curaition_list_content
+  search: "[candidate display name]"
+  org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
+  source_scope: "my_sources"
+  limit: 5
+```
+If ANY content matches and the source URL contains the candidate's handle → tracked → REMOVE.
+
+**Gate 3 — Per-candidate handle-specific primary-source verification:**
+For every remaining candidate, run an individual WebSearch keyed on the candidate's likely handle, NOT on a broad category search:
+```
+WebSearch: "[candidate handle]" instagram     ← per-handle, not category
+WebSearch: "[candidate display name]" official instagram tiktok
+```
+Then visit the candidate's actual social URL via `mcp__workspace__web_fetch` or read the search-result titles and excerpts directly. Extract: real handle (verified by appearing in a primary-source link title), follower count if available, and current sponsorships visible in bio text or post content.
+
+**Rules for Gate 3 (the cardinal ones):**
+- **Do NOT trust the WebSearch tool's AI-generated summary paragraph as a source of fact.** That paragraph is a model output, not a citation. Use it as a navigation hint to find primary sources, never as the source itself. Issue #6's failures all came from this exact misuse.
+- **Do NOT cite a follower count from a WebSearch snippet.** Snippets are routinely stale or wrong. If you need a follower count, either get it from a primary-source bio you can name, or omit the count entirely.
+- **Do NOT assume a candidate's handle from their display name.** "Lucy Davis" does not imply `@lucydavis` (it could be `@lucydavisfit`, `@lucydavis_fit`, `@thefemurge`, etc.). Verify the handle from a search-result link title or by visiting the URL.
+- **Quote the bio you cited.** If you claim a candidate is "PUMA-sponsored" or "On Running ambassador," the digest must be able to point at the bio or post line that says so. If you can't, the claim doesn't ship.
+
+**Gate 4 — Competitor sponsorship cross-check:**
+For each candidate's verified sponsorships from Gate 3, cross-check against the Gymshark Tier 2 competitor set (use the latest Market Pulse TRACKED_BRANDS registry, or at minimum the named competitor list: Nike, Adidas, PUMA, ON Running, Lululemon, Alo Yoga, Vuori, Tracksmith, Satisfy, Sweaty Betty, HOKA, New Balance, ASICS, Salomon, MyProtein, RAW Nutrition, ESN). Classify the candidate into one of:
+- **OPEN LANE** — no sponsorship from a Tier 2 competitor or Gymshark co-occurrence brand. Recommendable.
+- **COMPETITIVE INTEL** — sponsored by a Tier 2 competitor. Track for awareness only, frame explicitly as "for intelligence, not signing." Do not bury the competitor relationship in the card.
+- **GREY ZONE** — sponsored by a brand that frequently co-occurs with Gymshark athletes (MyProtein, RAW Nutrition, Bratz, etc.). Recommend ONLY after internal-records check to confirm no existing Gymshark relationship; flag the grey-zone status in the card.
+
+**Output:** a `WHO_TO_WATCH_VERIFICATION_LOG` in HTML comments at the top of the Who-to-Watch section, structured as:
+```html
+<!--
+WHO_TO_WATCH_VERIFICATION_LOG (Phase 2.6):
+- Candidate: [name]
+  - Gate 1 (entity check): PASS | FAIL (matched: [entity_id], content_count: N)
+  - Gate 2 (content check): PASS | FAIL (matched: [content_id])
+  - Gate 3 (handle-specific WebSearch): handle [verified|unverified] via [source URL],
+       bio claims cited: [list], NOT trusting any AI-summary paragraph
+  - Gate 4 (competitor cross-check): OPEN LANE | COMPETITIVE INTEL | GREY ZONE
+       Sponsors verified: [list with source URLs]
+- ...
+-->
+```
+This log is the audit trail. Future runs can inspect it.
+
+**Failure mode:** If fewer than 2 candidates pass all 4 gates as OPEN LANE, the Who-to-Watch section is shorter, deferred, or written up as an honest verification-failure note (see Issue #6 published version for the template). **Never pad the Who-to-Watch with unverified or competitively-conflicted candidates.** A 1-candidate Watchlist with rigorous verification beats a 3-candidate Watchlist with one fabrication.
 
 ### Phase 2.75: Link Resolution & Embed Preparation (MANDATORY)
 
@@ -213,25 +355,39 @@ Follow the base digest skill's HTML patterns (Playfair Display + Inter fonts, 66
 - Link to TikTok and YouTube content via direct URLs
 - Each major section should have at least one visual embed
 
-## Creator Scouting (Who to Watch Section)
+## Creator Scouting (Who to Watch Section) — gated by Phase 2.6
 
-This section must contain creators who are genuinely NOT Gymshark athletes and NOT in CurAItion. Use WebSearch to find real candidates:
+**Read Phase 2.6 (Who-to-Watch Pre-Flight) above first.** It is the non-skippable verification gate for everything in this section. The process below describes what the section contains; Phase 2.6 describes how each candidate must be verified before it can enter the section.
+
+This section must contain creators who are genuinely NOT Gymshark athletes and NOT in CurAItion. Use WebSearch as a navigation hint to identify candidates, then verify each one individually under Phase 2.6 gates.
 
 **Process:**
-1. Identify the 3-5 content patterns that generated the most resonance in the ecosystem data
-2. For each pattern, search for creators who match it but aren't Gymshark affiliated
-3. Verify sponsorship status — check their bios and recent posts for brand affiliations
-4. Note where the apparel/athleisure lane is open (nutrition sponsors don't conflict)
-5. Include: name, handles, follower counts, current sponsors, and exactly WHY they map to a pattern in the data
+1. Identify the 3-5 content patterns that generated the most resonance in the ecosystem data.
+2. For each pattern, search for creators who match it but aren't Gymshark affiliated.
+3. **Run every candidate through Phase 2.6 Gates 1-4 before writing about them.** No exceptions.
+4. Note where the apparel/athleisure lane is open (Gate 4 OPEN LANE classification).
+5. Each entry must include: verified name and handle (Gate 3), follower count cited to a named primary source or omitted entirely, current sponsorships quoted to a bio or post, and the specific data pattern from the ecosystem that justifies the recommendation.
 
-**Search queries to try:**
-- `"[pattern] creator TikTok Instagram [year] fitness influencer"`
-- `"[specific sport] athlete social media sponsor [year]"`
-- `"female [sport] influencer not Gymshark"`
+**Search query hygiene (avoiding the Issue #6 trap):**
+- **First search the handle, then the name.** `"@candidatehandle" instagram` before `"Candidate Name" official instagram`. Handle-first searches return primary-source links; name-first searches return aggregator summaries that have hallucinated specific claims in production.
+- **One search per candidate, not one search per category.** A single broad search ("hybrid athlete female creator not Gymshark") returns a summary paragraph that aggregates claims across multiple candidates. The aggregation hides errors. Per-candidate searches expose them.
+- **Read titles and excerpts, never the summary paragraph.** Search-result titles are real link metadata. The summary paragraph at the top is a model output. Issue #6's three-card Watchlist failure all came from trusting summary paragraphs.
 
-**Include one competitive intelligence recommendation** — a creator contracted to a competitor (Myprotein, Nike Training, Lululemon, etc.) worth tracking for strategic awareness, clearly labelled as "for intelligence, not signing."
+**Include competitive intelligence recommendations** when Phase 2.6 Gate 4 surfaces a candidate as COMPETITIVE INTEL — a creator contracted to a competitor (MyProtein, On Running, Nike Training, Lululemon, PUMA, etc.) worth tracking for strategic awareness, clearly labelled as "for intelligence, not signing." Do NOT bury the competitor relationship in the recommendation card — lead with it.
 
-**Include a callout box** explaining how to enable systematic creator discovery (MCP server wrapping TikTok Research API, Instagram Graph API, YouTube Data API v3) for future issues.
+**Include a callout box** describing the follow-through path: when the team decides to track a recommended creator, a CurAItion super-admin operator can queue them for ingestion with:
+
+```
+curaition_queue_source_ingest
+  platform: "instagram" | "tiktok" | "youtube"
+  handle: "@creator_handle"         # youtube requires channel_id (UC...)
+  organization_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
+  window_days: 30                    # 1-90
+  priority: "normal"
+```
+
+The call returns a `job_id` with a pre-flight cost estimate and an ETA — poll `curaition_get_ingest_status(job_id)` until status is `completed`. The creator then flows into the next digest cycle automatically. This closes the loop: Who to Watch is no longer a "for future issues" placeholder — it's an actionable recommendation the team can commit to on Monday morning.
 
 ## Common Mistakes to Avoid
 
@@ -256,6 +412,12 @@ These are lessons learned from previous editions. Do not repeat them:
 9. **Never assume a co-occurring brand is an external entity without web verification.** CurAItion co-occurrence data shows entities appearing together — it does NOT indicate the nature of the relationship. Many Gymshark athletes have their own businesses (apps, supplement lines, clothing brands) that appear as separate entities in CurAItion. If you editorialize about an athlete's relationship with a brand without first checking whether they OWN that brand, you will produce fundamentally wrong analysis. See Phase 1.5 above. This is the single most important quality gate in the entire process.
 
 10. **Never frame an athlete's own business as a competitive threat or third-party dependency.** If an athlete co-founded a training app and other Gymshark athletes use it, that's the ecosystem working — athletes supporting each other's businesses while wearing Gymshark. Framing it as "building audiences on a third-party platform" when the athlete IS the platform is a credibility-destroying error.
+
+11. **Never trust the WebSearch tool's AI-generated summary paragraph as a source of fact for Who-to-Watch claims.** The summary paragraph at the top of WebSearch results is a model output, not a citation. It has aggregated claims across multiple candidates and has — in production, Issue #6 — confidently stated wrong handles (`@lucydavisfit` instead of `@lucydavis`), wrong sponsorships (Lucy Davis = MyProtein instead of PUMA), and wrong availability framing (Lexi Bell = "unsponsored open lane" instead of On Running ambassador). The summary is useful as a navigation hint, never as the source itself. Phase 2.6 Gate 3 enforces handle-specific per-candidate verification with this exact failure mode in mind.
+
+12. **Never recommend a Watchlist candidate without cross-checking their current sponsorships against the Tier 2 competitor set.** Phase 2.6 Gate 4 is the check. A candidate already contracted to On Running, PUMA, Nike, or another Gymshark competitor is not "an open lane" — they're competitive intelligence, and the digest must lead with that classification rather than hide it. Same logic applies in reverse for GREY ZONE candidates already partnered with brands that co-occur with Gymshark athletes (MyProtein, RAW Nutrition, Bratz) — those require an internal-records check before recommending.
+
+13. **Never assume a candidate's handle from their display name.** "Lucy Davis" does not imply `@lucydavis` — in Issue #6 the correct handle was `@lucydavis` (no suffix), but the digest claimed `@lucydavisfit`, which is the X/Twitter handle, not Instagram. Always verify the handle from a primary-source link title (i.e. an Instagram or TikTok URL returned in WebSearch as a direct hit), or from `mcp__workspace__web_fetch` on the candidate URL. Display-name-to-handle inference is the easiest credibility error in the digest and the hardest one to spot in review.
 
 ## File Naming
 

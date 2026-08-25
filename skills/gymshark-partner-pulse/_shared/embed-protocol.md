@@ -26,28 +26,73 @@ All embed URLs must come from CurAItion data:
 
 ## Embed Formats by Platform
 
-### Instagram (PREFERRED — most reliable)
+### Instagram (PREFERRED — official `blockquote` + `embed.js`, not raw iframe)
 
-Extract the shortcode from the URL. For `https://www.instagram.com/p/DWGKOYsDGmD/`, the shortcode is `DWGKOYsDGmD`.
+**Use Instagram's official embed pattern**, not the `/embed/` iframe URL. The iframe approach requires you to guess width and height — and you'll guess wrong, because real posts come in mixed aspect ratios (9:16 reels, 1:1 photos, 4:5 portrait carousels) and a single hard-coded size will distort at least one of them. Issue 6 (2026-06-02) shipped twice with broken iframe dimensions (first height=540 clipped chrome, then 540×800 gave a 1:1 video the wrong proportions) before switching to this pattern.
+
+`blockquote` + `embed.js` lets Instagram render each post at its real aspect ratio and respects `max-width: 540px` automatically via inline styles Instagram bakes into the blockquote.
+
+**`.embed-card` CSS** (Instagram brings its own border/shadow, so the wrapper just centers and caps width):
+
+```css
+.embed-card {
+  max-width: 540px;       /* Instagram's native embed render width */
+  margin: 22px auto;      /* center inside the 660px article column */
+  background: transparent;
+}
+/* If you also have non-IG "visual citation" cards in the digest, give them a
+   different class (e.g. .embed-card.cite) so they keep their framed look. */
+.embed-card.cite {
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fafafa;
+}
+.embed-caption {
+  padding: 12px 16px;
+  margin-top: 8px;        /* sits below the IG blockquote with a small gap */
+  font-size: 12px;
+  color: #555;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+.embed-card.cite .embed-caption { margin-top: 0; border: 0; border-top: 1px solid #eee; border-radius: 0; }
+```
+
+**The embed itself** — extract the shortcode (e.g. `DWGKOYsDGmD` from `https://www.instagram.com/p/DWGKOYsDGmD/`) and use:
 
 ```html
 <div class="embed-card">
-  <iframe
-    src="https://www.instagram.com/p/DWGKOYsDGmD/embed/"
-    width="100%"
-    height="480"
-    frameborder="0"
-    scrolling="no"
-    allowtransparency="true"
-    style="border: none; overflow: hidden;">
-  </iframe>
+  <blockquote class="instagram-media"
+    data-instgrm-permalink="https://www.instagram.com/p/DWGKOYsDGmD/"
+    data-instgrm-version="14"
+    style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin:0; max-width:540px; min-width:326px; padding:0; width:100%;">
+    <a href="https://www.instagram.com/p/DWGKOYsDGmD/" target="_blank">View this post on Instagram</a>
+  </blockquote>
   <div class="embed-caption">
     <a href="https://www.instagram.com/p/DWGKOYsDGmD/">@handle</a> — Brief context about why this content matters
   </div>
 </div>
 ```
 
-For Instagram Reels: `https://www.instagram.com/reel/SHORTCODE/embed/`
+**Include the `embed.js` script ONCE per digest**, just before `</body>`:
+
+```html
+<script async src="https://www.instagram.com/embed.js"></script>
+```
+
+This script replaces every `blockquote.instagram-media` on the page with a correctly-sized iframe. It only needs to be loaded once.
+
+**For Instagram Reels:** use `/p/SHORTCODE/` in the `data-instgrm-permalink` and the fallback `<a href>`. Do NOT use `/reel/SHORTCODE/embed/` — `embed.js` handles the routing.
+
+**Why this pattern, not the iframe URL:**
+- `/embed/` iframe forces a fixed width and height that you have to guess. Mixed aspect ratios in the same digest break this.
+- `embed.js` reads the real post dimensions from Instagram's CDN and renders at the true ratio.
+- `max-width: 540px` is baked into Instagram's blockquote inline styles, so even if your CSS is overridden by a downstream renderer, the cap holds.
+- This is the same code Instagram's own "Embed" share-sheet generates. Use what they ship.
+
+**Fallback when JavaScript is disabled** (e.g. some email clients): the blockquote degrades to a styled "View this post on Instagram" link via the `<a>` tag. The text-only fallback is acceptable — better than a broken iframe.
 
 ### TikTok
 

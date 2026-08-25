@@ -154,6 +154,60 @@ curaition_list_content
 ```
 Use to supplement URL collection when semantic search doesn't surface a specific piece of content.
 
+## Batch 4: Own-Channel Gap Analysis (Optional — Prompt 4)
+
+Run this only if a Gymshark Owned Channels project is provisioned. See `_shared/gymshark-config.md` → Tier 1 Alt. If the project does not yet exist, skip this batch.
+
+### Compare Owned vs Ecosystem Themes
+
+```
+curaition_compare
+  dimension: "themes"
+  project_id_a: "<gymshark_owned_channels_project_id>"
+  project_id_b: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
+  created_after: "YYYY-MM-DD"   # digest window start
+  created_before: "YYYY-MM-DD"  # digest window end
+  tz: "Europe/London"
+  min_significance: 1.28         # 80% CI — relax from 1.96 default for smaller projects
+  min_weight: 0.3
+  limit: 30
+```
+
+Returns `{ shared[], only_in_a[], only_in_b[], metadata, significance_method: "log-odds-ratio" }`. Each theme carries `{ theme, count_a, count_b, log_odds_ratio, z_score, direction }`.
+
+**What to feature in the digest:**
+- `only_in_b` with high |z| — themes the ecosystem leads on that the brand's feed ignores. Strongest Big Story candidates.
+- `only_in_a` with high |z| — themes the brand pushes that the athletes don't echo. Drift signal.
+- `shared` with large log_odds_ratio magnitude — themes both sides cover, but with a pronounced skew.
+
+**What to ignore:**
+- Any theme with raw count <5 on either side — statistical noise.
+- |z| < 1.28 when both sides have <50 items total — underpowered comparison.
+
+### Queueing a Discovered Source (Super-Admin Only)
+
+When "Who to Watch" surfaces a creator the team wants to track, the super-admin operator can queue them for CurAItion ingestion:
+
+```
+curaition_queue_source_ingest
+  platform: "instagram" | "tiktok" | "youtube"
+  handle: "@creator_handle"       # youtube requires channel_id (UC...)
+  organization_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
+  project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
+  window_days: 30
+  priority: "normal"
+```
+
+Returns `{ job_id, estimated_cost_usd, estimated_items, estimated_completion_at }`. Poll:
+
+```
+curaition_get_ingest_status(job_id: "<returned_id>")
+```
+
+Status progression: `queued → apify_running → apify_complete → writing → completed`. Typical completion: 5-20 minutes for Instagram / TikTok with window_days=30.
+
+**Scope:** Super-admin only. Regular digest operators should capture the recommendation in the digest and flag it to the CurAItion team for queueing — do not attempt the call as a non-super-admin operator (returns 403).
+
 ## Known Issues and Workarounds
 
 1. **get_content "Content not found"**: Some content_ids from other tool results may not resolve in get_content. Use the source URLs from semantic_search and list_content as primary link sources instead.
@@ -163,3 +217,5 @@ Use to supplement URL collection when semantic search doesn't surface a specific
 3. **Content count discrepancy**: list_content pagination may show fewer items than get_stats reports. Always use get_stats as the canonical total.
 
 4. **Generic person entities**: The entity system detects many generic person references ("Speaker", "Woman in gym", "Creator"). These inflate the person count. Filter them out during deduplication.
+
+5. **YouTube handle format**: `curaition_queue_source_ingest` for YouTube currently requires a channel_id (e.g., `UCxxxxxxxxxxxxxxxxxxxxxx`) — `@handle` style is not accepted. Find the channel_id via the channel's About page → "Share channel" → "Copy channel ID". Handle-to-channel-id resolution is a follow-up capability.
