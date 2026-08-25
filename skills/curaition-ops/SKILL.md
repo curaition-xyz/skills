@@ -46,8 +46,24 @@ if args.profile:
 
 ## CurAItion Skill Library
 
-### Location
-All CurAItion skills are under `~/.hermes/skills/curaition/`:
+### Location — skills are installed on THREE surfaces
+
+A skill is not "updated" until every surface that runs it has been updated.
+Committing to GitHub updates none of them. This has bitten twice; assume it
+will again.
+
+| Surface | Path / where | How it updates | Survives? |
+|---|---|---|---|
+| **Hermes (Railway)** | `~/.hermes/skills/curaition/` on the container | clone + `cp -r` (below) | yes — `/data` is a persistent volume |
+| **claude.ai skill library** | server-side, per-skill `skillId` | manual zip upload (below) | yes |
+| **Claude Desktop plugin cache** | `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/<uuid>/<uuid>/skills/` | synced DOWN from claude.ai | **no** — a local edit is reverted on the next sync |
+
+The Desktop cache is Anthropic-managed (`manifest.json` carries `skillId` and
+`updatedAt` per skill). Editing files there works for the current session and is
+a legitimate stopgap, but it is NOT an install — update claude.ai, or the next
+sync silently reverts you.
+
+The Hermes skills:
 
 | Skill | Role |
 |-------|------|
@@ -76,6 +92,28 @@ All CurAItion skills are under `~/.hermes/skills/curaition/`:
 cd /tmp && git clone https://github.com/curaition/skills.git
 cp -r skills/skills/* ~/.hermes/skills/curaition/
 ```
+
+**To claude.ai (required — the Desktop app reads from here):**
+
+Not scriptable; there is no upload API. Package each changed skill and upload it
+by hand:
+
+```bash
+cd /path/to/skills/skills
+zip -qr /tmp/<skill-name>.zip <skill-name> -x '*.DS_Store'
+```
+
+Then **claude.ai → Settings → Capabilities → Skills**, find the skill, upload the
+zip as a replacement. The zip must contain the skill FOLDER at its root
+(`<skill-name>/SKILL.md`), not the loose files.
+
+Two gotchas:
+- **The `description:` frontmatter is capped at 1024 characters** and the upload
+  is rejected past it. Check before packaging:
+  `python3 -c "import re,pathlib;t=pathlib.Path('SKILL.md').read_text();print(len(re.search(r'^description:\s*(.*?)\n(?=\w+:|---)',t,re.S|re.M).group(1).strip().strip(chr(34))))"`
+- **Update every skill the change touched, not just the obvious one.** Shared
+  protocol files are duplicated per skill (see Shared Protocol Architecture), so
+  a one-line edit routinely spans two or three skills.
 
 **From Google Drive (fallback):**
 ```bash
@@ -127,7 +165,22 @@ The two Gymshark skills share protocol files under `_shared/`:
 - `embed-protocol.md` — Real embeds, minimum 3 per digest
 - `activation-format.md` — Actionable "What We're Tracking Next" format
 
-**Known overlap:** `gymshark-partner-pulse/_shared/` is the canonical copy. `gymshark-market-pulse` references these protocols but maintains its own. Consolidating to `curaition/_shared/` would let updates propagate to both skills automatically. Noted for future refactoring.
+**Known overlap — this has a measured cost now.** `gymshark-partner-pulse/_shared/`
+is the canonical copy; `gymshark-market-pulse` references the same protocols but
+maintains its own duplicate.
+
+Concrete: on 2026-08-25 the Gymshark Tier 1 `project_id` moved off an archived
+project. That one-value change touched **8 files across 3 skills** — both
+`_shared/` trees plus `curaition-ops`'s own Key Configuration block — and the
+first sweep still missed two sites, because they wrote the id in a **truncated**
+form (`project_id: 83472bde`) that a full-UUID search does not match. Every one
+of those files then had to be re-uploaded to claude.ai separately.
+
+Two things follow:
+- **When changing a shared value, grep for the truncated form too**, not just the
+  full UUID: `grep -rn "83472bde" skills/` catches what `grep -rn "83472bde-a285-…"` misses.
+- **Consolidating to `curaition/_shared/`** would collapse this to one file and one
+  upload. Still un-actioned; the cost is now known rather than theoretical.
 
 ## GitHub
 
