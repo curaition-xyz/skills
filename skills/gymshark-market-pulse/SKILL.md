@@ -31,7 +31,7 @@ You create competitive intelligence briefings for Gymshark's Social Media and Co
 
 The Gymshark CurAItion org contains two layers of content:
 
-1. **Partner Ecosystem (Project)**: ~170 athlete sources, ~2,100+ items. Covered by Partner Pulse. DO NOT analyse these here.
+1. **Creator roster (Project `0bdbc3d2`)**: 1,436 source rows (~880 distinct creators). Covered by Partner Pulse. DO NOT analyse these here. (Was `Partner Ecosystem` / `83472bde` until 2026-08-25; that project is archived.)
 2. **Evergreen Sources (Non-Project)**: ~1,200+ items from ~40+ competitor and adjacent brand accounts. THIS is Market Pulse's territory.
 
 The evergreen sources include direct competitors, adjacent athleisure/running/outdoor brands, and supplement/nutrition brands that overlap. **The exact roster is dynamic** — query it at runtime via Phase 2, do not assume from this file.

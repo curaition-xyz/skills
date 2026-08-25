@@ -36,9 +36,9 @@ Gymshark66 is a 66-day habit-forming challenge that doubles as the brand's athle
 
 Read `_shared/gymshark-config.md` for the full three-tier scoping strategy. The essentials for Partner Pulse:
 
-**Primary data (partner ecosystem):** Use Tier 1 scoping:
+**Primary data (creator roster):** Use Tier 1 scoping:
 - `org_id`: `297e242a-4f5b-4012-8f82-10f717eeade7`
-- `project_id`: `83472bde-a285-42cd-bba0-f7b92728e728`
+- `project_id`: `0bdbc3d2-1360-4430-b634-dea95841c9ba`
 - `source_scope`: `my_sources` (restricts to project sources only)
 
 **Cross-domain intelligence (Signal 1, mandatory):** Use Tier 3 scoping:

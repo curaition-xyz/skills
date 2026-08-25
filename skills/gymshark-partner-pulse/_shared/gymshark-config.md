@@ -9,17 +9,28 @@ This file is the single source of truth for CurAItion scoping across all Gymshar
 
 ## Three-Tier Scoping (MANDATORY)
 
-### Tier 1: Partner Ecosystem (athletes)
+### Tier 1: Gymshark Creator Dashboard (creators)
 
 ```
 org_id: "297e242a-4f5b-4012-8f82-10f717eeade7"
-project_id: "83472bde-a285-42cd-bba0-f7b92728e728"
+project_id: "0bdbc3d2-1360-4430-b634-dea95841c9ba"
 source_scope: "my_sources"
 ```
 
-**Use for:** Partner Pulse athlete data, roster, content analysis, theme extraction, co-occurrences within the athlete ecosystem.
+**Use for:** Partner Pulse creator data, roster, content analysis, theme extraction, co-occurrences within the creator ecosystem.
 
-**Returns:** ~170 athlete sources, content from TikTok, Instagram, YouTube across the Gymshark partner network.
+**Returns:** 1,436 source rows across TikTok, Instagram and YouTube. That is a **channel** count, not a person count — most creators hold two or three rows, one per platform, so the roster is roughly **880 distinct people**. There is no canonical-person field on a source, so any "N creators" claim has to be deduped by hand (see Phase 2 in SKILL.md).
+
+> **Changed 2026-08-25.** Tier 1 previously pointed at `Partner Ecosystem`
+> (`83472bde-a285-42cd-bba0-f7b92728e728`), which was **archived** with 170
+> sources, none of them still syncing. Every Partner Pulse edition before this
+> date was therefore scoped to a dead, ~12%-sized slice of the roster.
+>
+> Do **not** revert this to reinstate "missing" creators. 129 of those 170
+> source rows are people already present here under a cleaned-up canonical row;
+> only ~16-18 people are genuinely absent, and that gap is being resolved
+> separately against Gymshark's own roster of record. Note also that the
+> archived project was **not** women-only despite its description saying so.
 
 ---
 
